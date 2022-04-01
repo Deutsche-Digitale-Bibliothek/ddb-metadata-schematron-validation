@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xsl:stylesheet xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                xmlns:saxon="http://saxon.sf.net/"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:schold="http://www.ascc.net/xml/schematron"
+<xsl:stylesheet xmlns:dv="http://dfg-viewer.de/"
                 xmlns:iso="http://purl.oclc.org/dsdl/schematron"
-                xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                xmlns:maps="dcg:maps"
                 xmlns:mets="http://www.loc.gov/METS/"
                 xmlns:mods="http://www.loc.gov/mods/v3"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:dv="http://dfg-viewer.de/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:maps="dcg:maps"
                 xmlns:oai="http://www.openarchives.org/OAI/2.0/"
+                xmlns:saxon="http://saxon.sf.net/"
+                xmlns:schold="http://www.ascc.net/xml/schematron"
+                xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0"><!--Implementers: please note that overriding process-prolog or process-root is 
     the preferred method for meta-stylesheets to use where possible. -->
    <xsl:param name="archiveDirParameter"/>
@@ -190,7 +190,7 @@
    <xsl:template match="/">
       <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                               title="Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS Anwendungsprofil für digitalisierte Medien"
-                              schemaVersion="v2022-02-24T09:25:40">
+                              schemaVersion="v2022-04-01T08:15:03">
          <xsl:comment>
             <xsl:value-of select="$archiveDirParameter"/>   
 		 <xsl:value-of select="$archiveNameParameter"/>  
@@ -729,6 +729,27 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M105"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M106"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M107"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M108"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -789,6 +810,8 @@
          <license_uri>https://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
          <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
          <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
+         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
+         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
       </license_uris>
    </xsl:variable>
    <xsl:variable name="iso639-1_codes">
@@ -1113,8 +1136,6 @@
          <iso639-2_code>cus</iso639-2_code>
          <iso639-2_code>wel</iso639-2_code>
          <iso639-2_code>cym</iso639-2_code>
-         <iso639-2_code>cze</iso639-2_code>
-         <iso639-2_code>ces</iso639-2_code>
          <iso639-2_code>dak</iso639-2_code>
          <iso639-2_code>dan</iso639-2_code>
          <iso639-2_code>dar</iso639-2_code>
@@ -1145,8 +1166,6 @@
          <iso639-2_code>enm</iso639-2_code>
          <iso639-2_code>epo</iso639-2_code>
          <iso639-2_code>est</iso639-2_code>
-         <iso639-2_code>baq</iso639-2_code>
-         <iso639-2_code>eus</iso639-2_code>
          <iso639-2_code>ewe</iso639-2_code>
          <iso639-2_code>ewo</iso639-2_code>
          <iso639-2_code>fan</iso639-2_code>
@@ -1159,8 +1178,6 @@
          <iso639-2_code>fin</iso639-2_code>
          <iso639-2_code>fiu</iso639-2_code>
          <iso639-2_code>fon</iso639-2_code>
-         <iso639-2_code>fre</iso639-2_code>
-         <iso639-2_code>fra</iso639-2_code>
          <iso639-2_code>fre</iso639-2_code>
          <iso639-2_code>fra</iso639-2_code>
          <iso639-2_code>frm</iso639-2_code>
@@ -1176,8 +1193,6 @@
          <iso639-2_code>gem</iso639-2_code>
          <iso639-2_code>geo</iso639-2_code>
          <iso639-2_code>kat</iso639-2_code>
-         <iso639-2_code>ger</iso639-2_code>
-         <iso639-2_code>deu</iso639-2_code>
          <iso639-2_code>gez</iso639-2_code>
          <iso639-2_code>gil</iso639-2_code>
          <iso639-2_code>gla</iso639-2_code>
@@ -1191,8 +1206,6 @@
          <iso639-2_code>got</iso639-2_code>
          <iso639-2_code>grb</iso639-2_code>
          <iso639-2_code>grc</iso639-2_code>
-         <iso639-2_code>gre</iso639-2_code>
-         <iso639-2_code>ell</iso639-2_code>
          <iso639-2_code>grn</iso639-2_code>
          <iso639-2_code>gsw</iso639-2_code>
          <iso639-2_code>guj</iso639-2_code>
@@ -1213,8 +1226,6 @@
          <iso639-2_code>hsb</iso639-2_code>
          <iso639-2_code>hun</iso639-2_code>
          <iso639-2_code>hup</iso639-2_code>
-         <iso639-2_code>arm</iso639-2_code>
-         <iso639-2_code>hye</iso639-2_code>
          <iso639-2_code>iba</iso639-2_code>
          <iso639-2_code>ibo</iso639-2_code>
          <iso639-2_code>ice</iso639-2_code>
@@ -1233,8 +1244,6 @@
          <iso639-2_code>ipk</iso639-2_code>
          <iso639-2_code>ira</iso639-2_code>
          <iso639-2_code>iro</iso639-2_code>
-         <iso639-2_code>ice</iso639-2_code>
-         <iso639-2_code>isl</iso639-2_code>
          <iso639-2_code>ita</iso639-2_code>
          <iso639-2_code>jav</iso639-2_code>
          <iso639-2_code>jbo</iso639-2_code>
@@ -1249,8 +1258,6 @@
          <iso639-2_code>kan</iso639-2_code>
          <iso639-2_code>kar</iso639-2_code>
          <iso639-2_code>kas</iso639-2_code>
-         <iso639-2_code>geo</iso639-2_code>
-         <iso639-2_code>kat</iso639-2_code>
          <iso639-2_code>kau</iso639-2_code>
          <iso639-2_code>kaw</iso639-2_code>
          <iso639-2_code>kaz</iso639-2_code>
@@ -1320,8 +1327,6 @@
          <iso639-2_code>mic</iso639-2_code>
          <iso639-2_code>min</iso639-2_code>
          <iso639-2_code>mis</iso639-2_code>
-         <iso639-2_code>mac</iso639-2_code>
-         <iso639-2_code>mkd</iso639-2_code>
          <iso639-2_code>mkh</iso639-2_code>
          <iso639-2_code>mlg</iso639-2_code>
          <iso639-2_code>mlt</iso639-2_code>
@@ -1331,17 +1336,11 @@
          <iso639-2_code>moh</iso639-2_code>
          <iso639-2_code>mon</iso639-2_code>
          <iso639-2_code>mos</iso639-2_code>
-         <iso639-2_code>mao</iso639-2_code>
-         <iso639-2_code>mri</iso639-2_code>
-         <iso639-2_code>may</iso639-2_code>
-         <iso639-2_code>msa</iso639-2_code>
          <iso639-2_code>mul</iso639-2_code>
          <iso639-2_code>mun</iso639-2_code>
          <iso639-2_code>mus</iso639-2_code>
          <iso639-2_code>mwl</iso639-2_code>
          <iso639-2_code>mwr</iso639-2_code>
-         <iso639-2_code>bur</iso639-2_code>
-         <iso639-2_code>mya</iso639-2_code>
          <iso639-2_code>myn</iso639-2_code>
          <iso639-2_code>myv</iso639-2_code>
          <iso639-2_code>nah</iso639-2_code>
@@ -1358,8 +1357,6 @@
          <iso639-2_code>nia</iso639-2_code>
          <iso639-2_code>nic</iso639-2_code>
          <iso639-2_code>niu</iso639-2_code>
-         <iso639-2_code>dut</iso639-2_code>
-         <iso639-2_code>nld</iso639-2_code>
          <iso639-2_code>nno</iso639-2_code>
          <iso639-2_code>nob</iso639-2_code>
          <iso639-2_code>nog</iso639-2_code>
@@ -1390,8 +1387,6 @@
          <iso639-2_code>pap</iso639-2_code>
          <iso639-2_code>pau</iso639-2_code>
          <iso639-2_code>peo</iso639-2_code>
-         <iso639-2_code>per</iso639-2_code>
-         <iso639-2_code>fas</iso639-2_code>
          <iso639-2_code>phi</iso639-2_code>
          <iso639-2_code>phn</iso639-2_code>
          <iso639-2_code>pli</iso639-2_code>
@@ -1409,8 +1404,6 @@
          <iso639-2_code>roa</iso639-2_code>
          <iso639-2_code>roh</iso639-2_code>
          <iso639-2_code>rom</iso639-2_code>
-         <iso639-2_code>rum</iso639-2_code>
-         <iso639-2_code>ron</iso639-2_code>
          <iso639-2_code>rum</iso639-2_code>
          <iso639-2_code>ron</iso639-2_code>
          <iso639-2_code>run</iso639-2_code>
@@ -1439,8 +1432,6 @@
          <iso639-2_code>sla</iso639-2_code>
          <iso639-2_code>slo</iso639-2_code>
          <iso639-2_code>slk</iso639-2_code>
-         <iso639-2_code>slo</iso639-2_code>
-         <iso639-2_code>slk</iso639-2_code>
          <iso639-2_code>slv</iso639-2_code>
          <iso639-2_code>sma</iso639-2_code>
          <iso639-2_code>sme</iso639-2_code>
@@ -1457,8 +1448,6 @@
          <iso639-2_code>son</iso639-2_code>
          <iso639-2_code>sot</iso639-2_code>
          <iso639-2_code>spa</iso639-2_code>
-         <iso639-2_code>alb</iso639-2_code>
-         <iso639-2_code>sqi</iso639-2_code>
          <iso639-2_code>srd</iso639-2_code>
          <iso639-2_code>srn</iso639-2_code>
          <iso639-2_code>srp</iso639-2_code>
@@ -1484,8 +1473,6 @@
          <iso639-2_code>tgk</iso639-2_code>
          <iso639-2_code>tgl</iso639-2_code>
          <iso639-2_code>tha</iso639-2_code>
-         <iso639-2_code>tib</iso639-2_code>
-         <iso639-2_code>bod</iso639-2_code>
          <iso639-2_code>tig</iso639-2_code>
          <iso639-2_code>tir</iso639-2_code>
          <iso639-2_code>tiv</iso639-2_code>
@@ -1524,8 +1511,6 @@
          <iso639-2_code>wal</iso639-2_code>
          <iso639-2_code>war</iso639-2_code>
          <iso639-2_code>was</iso639-2_code>
-         <iso639-2_code>wel</iso639-2_code>
-         <iso639-2_code>cym</iso639-2_code>
          <iso639-2_code>wen</iso639-2_code>
          <iso639-2_code>wln</iso639-2_code>
          <iso639-2_code>wol</iso639-2_code>
@@ -1541,8 +1526,6 @@
          <iso639-2_code>zen</iso639-2_code>
          <iso639-2_code>zgh</iso639-2_code>
          <iso639-2_code>zha</iso639-2_code>
-         <iso639-2_code>chi</iso639-2_code>
-         <iso639-2_code>zho</iso639-2_code>
          <iso639-2_code>znd</iso639-2_code>
          <iso639-2_code>zul</iso639-2_code>
          <iso639-2_code>zun</iso639-2_code>
@@ -1820,14 +1803,15 @@
    </xsl:variable>
    <xsl:variable name="mets_ap_dv_license_values">
       <mets_ap_dv_license_values xmlns="dcg:maps" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
-         <mets_ap_dv_license_value>pdm</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc0</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-sa</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nd</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nc</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nc-sa</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nc-nd</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>reserved</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/publicdomain/mark/1.0/">pdm</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/publicdomain/zero/1.0/">cc0</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by/4.0/">cc-by</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-sa/4.0/">cc-by-sa</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nd/4.0/">cc-by-nd</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nc/4.0/">cc-by-nc</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nc-sa/4.0/">cc-by-nc-sa</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nc-nd/4.0/">cc-by-nc-nd</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://rightsstatements.org/vocab/CNE/1.0/">reserved</mets_ap_dv_license_value>
       </mets_ap_dv_license_values>
    </xsl:variable>
    <xsl:variable name="work_dmdid">
@@ -1919,10 +1903,11 @@
                </xsl:attribute>
                <svrl:text>In der obersten MODS-Ebene werden MODS-Elemente verwendet, die dort nicht zulässig sind. Da diese zu Problemen in der Verarbeitung der Datensätze führen kann, werden sie nicht in die DDB eingespielt.</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="local_name">
-                  <xsl:value-of select="local-name()"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="local-name()"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -1950,7 +1935,8 @@
                </xsl:attribute>
                <svrl:text>Das Attribut valueURI muss immer einen URL enthalten. Enthält es keinen URL, wird valueURI bei der Transformation der Daten entfernt.</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2010,7 +1996,8 @@
                </xsl:attribute>
                <svrl:text>Die primäre mets:dmdSec von Monographien, Handschriften u.Ä. muss ein mods:titleInfo ohne Attribut type oder mit dem Attribut type mit dem Wert "uniform" besitzen. Darüber hinaus muss das mods:titleInfo das Unterelement mods:title enthalten. Bände von mehrteiligen Monografien und Zeitschriften können alternativ ein mods:relatedItem type="host" enthalten, das auf den Datensatz des übergeordneten Werks verweist. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2041,7 +2028,8 @@
                </xsl:attribute>
                <svrl:text>Die bibliographische Beschreibung von Teilen eines Werks wird nur dann in die DDB eingespielt, wenn mods:titleInfo/mods:title mit einem aussagekräftigen Titel vorhanden ist. Ist dies nicht der Fall, wird die mets:dmdSec, die die Beschreibung des Teils enthält, aus dem METS-Datensatz entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2101,10 +2089,11 @@
                </xsl:attribute>
                <svrl:text>In mods:titleInfo dürfen in dem Attribut type nur die im MODS-Anwendungsprofil genannten Werte verwendet werden. Diese Werte sind: "abbreviated", "translated", "alternative", "uniform". Werden andere Werte verwendet, wird mods:titleInfo bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="type">
-                  <xsl:value-of select="./@type"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@type"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2191,7 +2180,8 @@
                </xsl:attribute>
                <svrl:text>Der Text in mods:title ist als Titel nicht aussagekräftig. In der DDB erzeugt jede mets:dmdSec ein Objekt und der Wert in mods:title wird prominent und ggf. unabhängig vom Gesamtobjekt in der Trefferliste angezeigt. Daher erschweren nicht aussagekräftige Titel die Nutzung Ihrer Objekte in der DDB. Handelt es sich bei dem Text in mods:title um eine Abkürzung verwenden Sie bitte mods:titleInfo[@type='abbreviated']. Enthält mods:title eine Bandzählung muss diese in mods:part angegeben werden. Nicht aussagekräftige Titel verhindern nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich tatsächlich um einen Titel handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2220,7 +2210,8 @@
                </xsl:attribute>
                <svrl:text>mods:name muss entweder mods:namePart oder mods:displayForm enthalten. Ist keines der beiden Elemente vorhanden, wird mods:name bei der Transformation aus den Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2303,7 +2294,8 @@
                </xsl:attribute>
                <svrl:text>MODS unterscheidet zwischen Namen von Personen, Körperschaften u.a. Diese Unterscheidung erfolgt durch das Attribut type im Element mods:name. Die laut Anwendungsprofil zulässigen Werte des Attributs type sind: "personal" für Personen, "corporate" für Organisationen, "conference" für Konferenzen, "family" für Familien. Das Fehlen des Attributs type verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2327,10 +2319,11 @@
                </xsl:attribute>
                <svrl:text>MODS unterscheidet zwischen Namen von Personen, Körperschaften u.a. Diese Unterscheidung erfolgt durch das Attribut type im Element mods:name. Die laut Anwendungsprofil zulässigen Werte des Attributs type sind: "personal" für Personen, "corporate" für Organisationen, "conference" für Konferenzen, "family" für Familien. Die Verwendung falscher Attributwerte verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="type">
-                  <xsl:value-of select="./@type"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@type"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2388,7 +2381,8 @@
                </xsl:attribute>
                <svrl:text>Bei Personennamen (mods:name type="personal") sollte mods:namePart wiederholt werden, um die verschiedenen Bestandteile eines persönlichen Namens zu unterscheiden. Es ist daher verpflichtend, in diesen Fällen das Attribut type in mods:namePart zu verwenden. Folgende Werte sind in diesem Attribut type erlaubt: "family" für den Nachnamen, "given" für den Vornamen, "termsOfAddress" für Titel und andere Namenszusätze, "date" für Lebensdaten der Person. Sollen die Bestandteile eines Namens in der DDB in einer bestimmten Reihenfolge angezeigt werden, verwenden Sie bitte mods:displayForm. Die Daten werden in diesen Fällen auch ohne Attribut type in die DDB eingespielt, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2414,10 +2408,11 @@
                </xsl:attribute>
                <svrl:text>Bei Personennamen (mods:name type="personal") sollte mods:namePart wiederholt werden, um die verschiedenen Bestandteile eines persönlichen Namens zu unterscheiden. Es ist daher verpflichtend, in diesen Fällen das Attribut type in mods:namePart zu verwenden. Folgende Werte sind in diesem Attribut type erlaubt: "family" für den Nachnamen, "given" für den Vornamen, "termsOfAddress" für Titel und andere Namenszusätze, "date" für Lebensdaten der Person. Wird in dem Attribut type in mods:namePart ein anderer Wert verwendet, dann wird mods:namePart bei der Transformation entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="type">
-                  <xsl:value-of select="./@type"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@type"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2471,7 +2466,8 @@
                </xsl:attribute>
                <svrl:text>Die URIs, die in dem Attribut valueURI in mods:name verwendet werden, werden in der DDB nur dann ausgewertet, wenn es sich um http-URIs der GND handelt. Handelt es sich nicht um einen GND-URI, wird der URI bei der Transformation der Daten entfernt.</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2501,7 +2497,8 @@
                </xsl:attribute>
                <svrl:text>Jedes mods:name muss mindestens ein mods:role mit dem Unterelement mods:roleTerm enthalten, in dem die Rolle beschrieben wird, die eine Person oder Organisation bei der Entstehung des Werks hatte. Die Daten werden auch ohne mods:role in die DDB eingespielt, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.3</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2527,7 +2524,8 @@
                </xsl:attribute>
                <svrl:text>In jedem mods:role muss mindestens ein mods:roleTerm mit dem Attribut type und dem Wert "code" , sowie das Attribut authority mit dem Wert "marcrelator" enthalten sein. Ist dies nicht der Fall, wird mods:role bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.4.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2553,10 +2551,11 @@
                </xsl:attribute>
                <svrl:text>Für die Beschreibung der Rolle, die eine Person oder Organisation bei der Entstehung des Werks hatte, müssen die Codes der "MARC Code List for Relators" verwendet werden. Diese müssen in mods:roleTerm type="code" enthalten sein. Ist dies nicht der Fall, wird mods:role bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.4.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="text">
-                  <xsl:value-of select="text()"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="text()"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2616,7 +2615,8 @@
                </xsl:attribute>
                <svrl:text>Die Datumsangaben in mods:dateIssued, mods:dateCreated und mods:dateCaptured müssen ISO 8601 konform sein. Ist dies nicht der Fall, kann es vorkommen, dass bei der Transformation der Daten Datumsangaben verloren gehen.  Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.4 – 2.4.2.6</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2703,7 +2703,8 @@
                </xsl:attribute>
                <svrl:text>Wenn das Erscheinungsdatum in mods:dateIssued bzw. das Entstehungsdatum in mods:dateCreated später als 2000 liegt, ist es wahrscheinlich, dass es sich nicht um das Datum der originalen Ausgabe handelt, sondern um das Entstehungsdatum der digitalen Ausgabe. In diesem Fall muss das Datum in einem eigenen mods:originInfo enthalten sein, das den eventType="digitization" enthält sowie das Element mods:edition mit dem Wert (Electronic ed.]. Dieser Fehler verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, zu prüfen, ob es sich tatsächlich um das richtige Datum handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2734,7 +2735,8 @@
                </xsl:attribute>
                <svrl:text>Ortsnamen stehen in dem Unterelement mods:placeTerm, das in mods:place enthalten ist. Dieses Unterelement muss zudem das Attribut type="text" enthalten. Ist dies nicht der Fall, wird mods:place bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2765,7 +2767,8 @@
                </xsl:attribute>
                <svrl:text>Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Bitte beachten: Im Kontext der DDB und Europeana fallen auch Noten unter den Dokumenttyp Text. Falls die Noten keinen Sprachtext enthalten, verwenden Sie bitte den Code "zxx" für "Kein linguistischer Inhalt" (s. \url{http://id.loc.gov/vocabulary/iso639-2/zxx}). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2796,10 +2799,11 @@
                </xsl:attribute>
                <svrl:text>mods:language/mods:languageTerm muss einen Code aus ISO 639-2 enthalten. Sollen mehrere Sprachen angegeben werden, muss mods:language/mods:languageTerm wiederholt werden. Die Angaben von mehreren Sprachen in einem mod:languageTerm Element ist nicht erlaubt. Handelt es sich bei dem Eintrag in mods:language/mods:languageTerm um einen anderen Wert als die oben genannten Codes bzw. sind mehrere Codes enthalten, wird mods:language bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="text">
-                  <xsl:value-of select="text()"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="text()"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2841,11 +2845,11 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:note[ancestor::mods:mods or ancestor::mods:physicalDescription][not(@type)]"
+   <xsl:template match="mods:note[parent::mods:mods or parent::mods:physicalDescription][not(@type)]"
                  priority="1001"
                  mode="M60">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mods:note[ancestor::mods:mods or ancestor::mods:physicalDescription][not(@type)]"/>
+                       context="mods:note[parent::mods:mods or parent::mods:physicalDescription][not(@type)]"/>
       <!--ASSERT error-->
       <xsl:choose>
          <xsl:when test="@type"/>
@@ -2858,7 +2862,8 @@
                </xsl:attribute>
                <svrl:text>mods:note muss ein Attribut type enthalten. Erlaubt sind in diesem Attribut nur Werte aus der Liste der MODS Note Type (\url{http://www.loc.gov/standards/mods/mods-notes.html}). Ist kein Attribut type mit einem der erlaubten Werte vorhanden, wird mods:note bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.8</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2866,11 +2871,11 @@
       <xsl:apply-templates select="*" mode="M60"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="mods:note[ancestor::mods:mods or ancestor::mods:physicalDescription][@type]"
+   <xsl:template match="mods:note[parent::mods:mods or parent::mods:physicalDescription][@type]"
                  priority="1000"
                  mode="M60">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mods:note[ancestor::mods:mods or ancestor::mods:physicalDescription][@type]"/>
+                       context="mods:note[parent::mods:mods or parent::mods:physicalDescription][@type]"/>
       <!--ASSERT error-->
       <xsl:choose>
          <xsl:when test="@type = ( 'accrual method', 'accrual policy', 'acquisition', 'action', 'additional physical form', 'admin', 'bibliographic history', 'bibliography', 'biographical/historical', 'citation/reference', 'conservation history', 'content', 'creation/production credits', 'date', 'exhibitions', 'funding', 'handwritten', 'language', 'numbering', 'date/sequential designation', 'original location', 'original version', 'ownership', 'performers', 'preferred citation', 'publications', 'reproduction', 'restriction', 'source characteristics', 'source dimensions', 'source identifier', 'source note', 'source type', 'statement of responsibility', 'subject completeness', 'system details', 'thesis', 'venue', 'version identification', 'condition', 'marks', 'medium', 'organization', 'physical description', 'physical details', 'presentation', 'script', 'support', 'technique' )"/>
@@ -2884,10 +2889,11 @@
                </xsl:attribute>
                <svrl:text>In dem Attribut type in mods:note sind nur Werte aus der Liste der MODS Note Type (\url{http://www.loc.gov/standards/mods/mods-notes.html}) erlaubt. Enthält das Attribut type andere Werte, wird mods:note bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.8.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="type">
-                  <xsl:value-of select="./@type"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@type"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2918,7 +2924,8 @@
                </xsl:attribute>
                <svrl:text>mods:subject wird in der DDB nur dann berücksichtigt, wenn es Schlagworte aus der GND enthält. Diese müssen in dem Unterelement zu mods:subject stehen und dort mittels GND-URI in dem Attribut valueURI eindeutig identifiziert werden. Ist dies nicht der Fall, wird mods:subject bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.9</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2949,7 +2956,8 @@
                </xsl:attribute>
                <svrl:text>Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss eine mets:dmdSec, die einen solchen Band bzw. eine solche Ausgabe beschreibt, ein mods:relatedItem type="host" enthalten, das den mods:recordInfo/mods:recordIdentifier der Gesamtaufnahme enthält. Zudem muss mods:recordIdentifier das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlt mods:relatedItem type="host" odermods:recordIdentifier oder das Attribut source, so lassen sich die Daten der Bände bzw. Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Der METS-Datensatz wird daher nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2980,7 +2988,8 @@
                </xsl:attribute>
                <svrl:text>Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss mods:relatedItem type="host" den mods:recordInfo/mods:recordIdentifier der Gesamtaufnahme enthalten. Zudem muss mods:recordIdentifier das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlen mods:recordIdentifier oder das Attribut source, lassen sich die Daten der Bände bzw. Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Der METS-Datensatz wird daher nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3005,7 +3014,8 @@
                </xsl:attribute>
                <svrl:text>Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Dieser Identifier muss durch den Inhalt in dem Attribut source eindeutig identifiziert werden. Der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlt das Attribut source, lassen sich die Daten der Bände bzw. Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Der METS-Datensatz wird daher nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3031,7 +3041,8 @@
                </xsl:attribute>
                <svrl:text>mods:relatedItem wird in der DDB nur dann berücksichtigt, wenn ein Attribut type vorhanden ist und dieses den Wert "host" oder den Wert "series" enthält. Ist dies nicht der Fall, wird mods:relatedItem bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3062,7 +3073,8 @@
                </xsl:attribute>
                <svrl:text>mods:relatedItem type="series" muss immer mindestens ein mods:titleInfo/mods:title enthalten. Ist dies nicht der Fall, wird mods:relatedItem type="series" bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3092,7 +3104,8 @@
                </xsl:attribute>
                <svrl:text>Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen müssen Informationen zur Bandzählung enthalten. Diese Information muss in mods:part/mods:detail/mods:number zur Verfügung gestellt werden. Zudem muss mods:part das Attribut order enthalten, in dem die Zählung in maschinenlesbarer Form (als integer) bereitgestellt wird. Diese Fehler verhindern nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3117,7 +3130,8 @@
                </xsl:attribute>
                <svrl:text>Um Bände bei Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Bandzählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss mods:part das Attribut order enthalten, dessen Wert ein integer ist. Das Fehlen des Attributs verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3142,7 +3156,8 @@
                </xsl:attribute>
                <svrl:text>Um Bände bei Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Bandzählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss mods:part das Attribut order enthalten, dessen Wert ein integer ist. Handelt es sich um einen Wert, der nicht maschinenlesbar ist, so verhindert dies nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3172,7 +3187,8 @@
                </xsl:attribute>
                <svrl:text>Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen müssen Informationen zur Bandzählung enthalten. Diese Information muss in mods:part/mods:detail/mods:number zur Verfügung gestellt werden. Ist dies nicht der Fall, dann wird mods:part bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14.2.1 und 2.14.2.2</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3198,7 +3214,8 @@
                </xsl:attribute>
                <svrl:text>In mods:part muss das Unterelement mods:detail ein Attribut type enthalten, dessen Wert volume oder issue sein muss. Die Verwendung anderer Werte verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3229,10 +3246,11 @@
                </xsl:attribute>
                <svrl:text>mods:identifier muss ein Attribut type enthalten. Nur die folgenden Werte werden bei der Transformation der Daten für die DDB berücksichtigt: purl, urn, isbn, issn, doi, handle, zdb, vd16, vd17 und vd18. Fehlt das Attribut type oder werden andere Werte verwendet, wird mods:identifier bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.12</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
                <svrl:property id="type">
-                  <xsl:value-of select="./@type"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@type"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3263,7 +3281,8 @@
                </xsl:attribute>
                <svrl:text>mods:location muss entweder mods:url oder mods:physicalLocation enthalten. Ist keines der beiden Elemente vorhanden, wird mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3288,7 +3307,8 @@
                </xsl:attribute>
                <svrl:text>Wenn mods:location für die Angabe der Signatur mods:shelfLocator enthält, muss auch mods:physicalLocation enthalten sein, da sich nur so der genaue Standort identifizieren lässt. Ist mods:physicalLocation nicht vorhanden, wird mods:shelfLocator bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3319,7 +3339,8 @@
                </xsl:attribute>
                <svrl:text>Ist kein mods:location mit dem Unterelement mods:physicalLocation in der obersten mets:dmdSec vorhanden, kann der Standort eines Bandes bzw. eines Objekts nicht in der DDB angezeigt werden. Das Fehlen von mods:physicalLocation verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3350,7 +3371,8 @@
                </xsl:attribute>
                <svrl:text>Wenn mods:physicalLocation den ISIL der Institution enthalten soll, in der sich der digitalisierte Band bzw. das digitalisierte Objekt befindet, dann muss dieser ISIL in Form des http-URI in dem Attribut valueURI stehen. Das Fehlen der valueURI verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.  Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3409,7 +3431,8 @@
                </xsl:attribute>
                <svrl:text>Die mets:dmdSec, die das gesamte Werk beschreibt, muss ein mods:recordInfo mit dem Unterelement mods:recordIdentifier enthalten. Dieser mods:recordIdentifier muss durch den Wert im Attribut source eindeutig identifizierbar sein. Wenn mods:recordIdentifier und/oder das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3440,7 +3463,8 @@
                </xsl:attribute>
                <svrl:text>mods:recordIdentifier muss das Attribut source enthalten. Der Wert dieses Attribut muss die Herkunft des Identifiers des Datensatzes eindeutig identifizieren. Wenn das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15.2.1</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3501,7 +3525,8 @@
                </xsl:attribute>
                <svrl:text>Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und/oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und/oder Sonderzeichen enthalten, nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15</svrl:text>
                <svrl:property id="dmd_id">
-                  <xsl:value-of select="ancestor-or-self::mets:dmdSec/@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -3514,7 +3539,33 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M76">
+   <xsl:template match="mets:xmlData/mods:mods" priority="1000" mode="M76">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:xmlData/mods:mods"/>
+      <!--REPORT error-->
+      <xsl:if test="mods:recordInfo[2]">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="mods:recordInfo[2]">
+            <xsl:attribute name="id">recordInfo_05</xsl:attribute>
+            <xsl:attribute name="role">error</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Das Element mods:mods darf das Element mods:recordInfo nur einmal enthalten. Enthält mods:mods mehr als ein mods:recordInfo, werden bei der Bereinigung des Datensatzes die Unterelemente aller mods:recordInfo im erste Vorkommen zusammengefasst und die weiteren Vorkommen von mods:recordInfo entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15.1</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M76"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M76"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M76">
+      <xsl:apply-templates select="*" mode="M76"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:mets" priority="1001" mode="M77">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -3531,12 +3582,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M76"/>
+      <xsl:apply-templates select="*" mode="M77"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']"
                  priority="1000"
-                 mode="M76">
+                 mode="M77">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']"/>
       <!--ASSERT fatal-->
@@ -3553,17 +3604,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M76"/>
+      <xsl:apply-templates select="*" mode="M77"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M76"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M76">
-      <xsl:apply-templates select="*" mode="M76"/>
+   <xsl:template match="text()" priority="-1" mode="M77"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M77">
+      <xsl:apply-templates select="*" mode="M77"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"
                  priority="1000"
-                 mode="M77">
+                 mode="M78">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"/>
       <!--ASSERT fatal-->
@@ -3579,22 +3630,22 @@
                </xsl:attribute>
                <svrl:text>Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der mets:structMap TYPE="LOGICAL" durch ineinander verschachtelte mets:div repräsentiert werden. Jede dieser mets:div muss in dem Attribut ID einen eindeutigen Identifier enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M77"/>
+      <xsl:apply-templates select="*" mode="M78"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M77"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M77">
-      <xsl:apply-templates select="*" mode="M77"/>
+   <xsl:template match="text()" priority="-1" mode="M78"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M78">
+      <xsl:apply-templates select="*" mode="M78"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div[@DMDID] | key('structMap_LOGICAL_dmdids', $work_dmdid)[@DMDID]"
                  priority="1001"
-                 mode="M78">
+                 mode="M79">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div[@DMDID] | key('structMap_LOGICAL_dmdids', $work_dmdid)[@DMDID]"/>
       <!--ASSERT fatal-->
@@ -3610,17 +3661,17 @@
                </xsl:attribute>
                <svrl:text>Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer mets:div in der structMap TYPE="LOGICAL" im mets:structLink den jeweiligen Identifiern der Seiten zugeordnet werden. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.3</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M78"/>
+      <xsl:apply-templates select="*" mode="M79"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div | key('structMap_LOGICAL_dmdids', $work_dmdid)"
                  priority="1000"
-                 mode="M78">
+                 mode="M79">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div | key('structMap_LOGICAL_dmdids', $work_dmdid)"/>
       <!--ASSERT warn-->
@@ -3636,22 +3687,22 @@
                </xsl:attribute>
                <svrl:text>Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer mets:div in der structMap TYPE="LOGICAL" im mets:structLink den jeweiligen Identifiern der Seiten zugeordnet werden. Fehlende Zuordnungen verhindern nicht das Einspielen der Daten in die DDB, führen dort aber zu Anzeigeproblemen im Viewer. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.3</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M78"/>
+      <xsl:apply-templates select="*" mode="M79"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M78"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M78">
-      <xsl:apply-templates select="*" mode="M78"/>
+   <xsl:template match="text()" priority="-1" mode="M79"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M79">
+      <xsl:apply-templates select="*" mode="M79"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]"
                  priority="1002"
-                 mode="M79">
+                 mode="M80">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]"/>
       <!--ASSERT fatal-->
@@ -3666,17 +3717,17 @@
                </xsl:attribute>
                <svrl:text>Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der mets:div in dem Attribut TYPE. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen. Fehlt das Attribut TYPE in einem der mets:div, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M79"/>
+      <xsl:apply-templates select="*" mode="M80"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]"
                  priority="1001"
-                 mode="M79">
+                 mode="M80">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]"/>
       <!--ASSERT error-->
@@ -3692,20 +3743,20 @@
                </xsl:attribute>
                <svrl:text>Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der mets:div in dem Attribut TYPE. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen (s. dort die Spalte XML). Werden in dem Attribut TYPE andere Begriffe als die in der Liste vorgesehenen verwendet, wird er bei der Bereinigung der Daten durch den Strukturtyp "section" ersetzt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
                <svrl:property id="TYPE">
-                  <xsl:value-of select="./@TYPE"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@TYPE"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M79"/>
+      <xsl:apply-templates select="*" mode="M80"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"
                  priority="1000"
-                 mode="M79">
+                 mode="M80">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"/>
       <!--REPORT fatal-->
@@ -3723,17 +3774,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M79"/>
+      <xsl:apply-templates select="*" mode="M80"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M79"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M79">
-      <xsl:apply-templates select="*" mode="M79"/>
+   <xsl:template match="text()" priority="-1" mode="M80"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M80">
+      <xsl:apply-templates select="*" mode="M80"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"
                  priority="1000"
-                 mode="M80">
+                 mode="M81">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"/>
       <!--ASSERT warn-->
@@ -3749,25 +3800,25 @@
                </xsl:attribute>
                <svrl:text>Beschreibt der METS-Datensatz einen Band/Teil einer Zeitschrift, eines mehrbändigen Werkes oder einer Zeitung, muss das Attribut TYPE in der dazugehörigen mets:div in der mets:structMap TYPE="LOGICAL" den Wert "volume" oder "year" oder "issue" haben. Ist dies nicht der Fall, wird der Datensatz dennoch in die DDB eingespielt, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS Strukturdatenset</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
                <svrl:property id="type">
-                  <xsl:value-of select="./@type"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@type"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M80"/>
+      <xsl:apply-templates select="*" mode="M81"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M80"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M80">
-      <xsl:apply-templates select="*" mode="M80"/>
+   <xsl:template match="text()" priority="-1" mode="M81"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M81">
+      <xsl:apply-templates select="*" mode="M81"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"
                  priority="1000"
-                 mode="M81">
+                 mode="M82">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"/>
       <!--ASSERT fatal-->
@@ -3783,22 +3834,22 @@
                </xsl:attribute>
                <svrl:text>Beschreibt der METS-Datensatz einen Band/Teil einer Zeitschrift, eines mehrbändigen Werkes oder einer Zeitung, muss in der structMap TYPE="LOGICAL" eine eigene mets:div für die Gesamtaufnahme enthalten sein, die in dem Unterelement mets:mptr auf den Datensatz der Titelaufnahme des Gesamtwerks verweist. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS Strukturdatenset</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M81"/>
+      <xsl:apply-templates select="*" mode="M82"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M81"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M81">
-      <xsl:apply-templates select="*" mode="M81"/>
+   <xsl:template match="text()" priority="-1" mode="M82"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M82">
+      <xsl:apply-templates select="*" mode="M82"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"
                  priority="1000"
-                 mode="M82">
+                 mode="M83">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"/>
       <!--ASSERT error-->
@@ -3814,22 +3865,22 @@
                </xsl:attribute>
                <svrl:text>Ist das Attribut DMDID des Elements mets:div in der mets:structMap type="LOGICAL" vorhanden, muss es eine dazugehörige mets:dmdSec mit dem gleichen Wert im Attribut ID geben. Ist dies nicht der Fall, wird die Verknüpfung in der mets:structMap type="LOGICAL" entfernt.</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M82"/>
+      <xsl:apply-templates select="*" mode="M83"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M82"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M82">
-      <xsl:apply-templates select="*" mode="M82"/>
+   <xsl:template match="text()" priority="-1" mode="M83"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M83">
+      <xsl:apply-templates select="*" mode="M83"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[mets:mptr]"
                  priority="1000"
-                 mode="M83">
+                 mode="M84">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[mets:mptr]"/>
       <!--REPORT fatal-->
@@ -3847,17 +3898,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M83"/>
+      <xsl:apply-templates select="*" mode="M84"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M83"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M83">
-      <xsl:apply-templates select="*" mode="M83"/>
+   <xsl:template match="text()" priority="-1" mode="M84"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M84">
+      <xsl:apply-templates select="*" mode="M84"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='periodical']"
                  priority="1000"
-                 mode="M84">
+                 mode="M85">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='periodical']"/>
       <!--REPORT fatal-->
@@ -3875,17 +3926,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M84"/>
+      <xsl:apply-templates select="*" mode="M85"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M84"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M84">
-      <xsl:apply-templates select="*" mode="M84"/>
+   <xsl:template match="text()" priority="-1" mode="M85"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M85">
+      <xsl:apply-templates select="*" mode="M85"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='multivolume_work']"
                  priority="1000"
-                 mode="M85">
+                 mode="M86">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='multivolume_work']"/>
       <!--REPORT fatal-->
@@ -3903,17 +3954,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M85"/>
+      <xsl:apply-templates select="*" mode="M86"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M85"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M85">
-      <xsl:apply-templates select="*" mode="M85"/>
+   <xsl:template match="text()" priority="-1" mode="M86"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M86">
+      <xsl:apply-templates select="*" mode="M86"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:mptr"
                  priority="1000"
-                 mode="M86">
+                 mode="M87">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:mptr"/>
       <!--ASSERT fatal-->
@@ -3929,22 +3980,22 @@
                </xsl:attribute>
                <svrl:text>Die mets:mptr Elemente in der mets:structMap TYPE="LOGICAL" müssen im Attribut xlink:href eine valide URL einer externen METS-Datei enthalten. Ist dies nicht der Fall können wichtige Informationen daraus nicht geladen werden und der Datensatz wird nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.2</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M86"/>
+      <xsl:apply-templates select="*" mode="M87"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M86"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M86">
-      <xsl:apply-templates select="*" mode="M86"/>
+   <xsl:template match="text()" priority="-1" mode="M87"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M87">
+      <xsl:apply-templates select="*" mode="M87"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"
                  priority="1000"
-                 mode="M87">
+                 mode="M88">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"/>
       <!--REPORT fatal-->
@@ -3962,15 +4013,15 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M87"/>
+      <xsl:apply-templates select="*" mode="M88"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M87"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M87">
-      <xsl:apply-templates select="*" mode="M87"/>
+   <xsl:template match="text()" priority="-1" mode="M88"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M88">
+      <xsl:apply-templates select="*" mode="M88"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1002" mode="M88">
+   <xsl:template match="mets:mets" priority="1002" mode="M89">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -3987,12 +4038,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M88"/>
+      <xsl:apply-templates select="*" mode="M89"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL'][not(mets:div[@TYPE='physSequence'])]"
                  priority="1001"
-                 mode="M88">
+                 mode="M89">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][not(mets:div[@TYPE='physSequence'])]"/>
       <!--ASSERT fatal-->
@@ -4010,12 +4061,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M88"/>
+      <xsl:apply-templates select="*" mode="M89"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                  priority="1000"
-                 mode="M88">
+                 mode="M89">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']"/>
       <!--ASSERT fatal-->
@@ -4033,17 +4084,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M88"/>
+      <xsl:apply-templates select="*" mode="M89"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M88"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M88">
-      <xsl:apply-templates select="*" mode="M88"/>
+   <xsl:template match="text()" priority="-1" mode="M89"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M89">
+      <xsl:apply-templates select="*" mode="M89"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div"
                  priority="1000"
-                 mode="M89">
+                 mode="M90">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div"/>
       <!--ASSERT fatal-->
@@ -4059,22 +4110,22 @@
                </xsl:attribute>
                <svrl:text>Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" muss in dem Attribut ID einen eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M89"/>
+      <xsl:apply-templates select="*" mode="M90"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M89"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M89">
-      <xsl:apply-templates select="*" mode="M89"/>
+   <xsl:template match="text()" priority="-1" mode="M90"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M90">
+      <xsl:apply-templates select="*" mode="M90"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page'][not(@ORDER)]"
                  priority="1001"
-                 mode="M90">
+                 mode="M91">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page'][not(@ORDER)]"/>
       <!--ASSERT warn-->
@@ -4089,17 +4140,17 @@
                </xsl:attribute>
                <svrl:text>Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" die das Attribut TYPE mit dem Wert "page" enthält, muss auch ein Attribut order enthalten. Das Fehlen des Attributs order verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M90"/>
+      <xsl:apply-templates select="*" mode="M91"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"
                  priority="1000"
-                 mode="M90">
+                 mode="M91">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"/>
       <!--ASSERT warn-->
@@ -4114,22 +4165,22 @@
                </xsl:attribute>
                <svrl:text>In der structMap TYPE="PHYSICAL" muss der Wert in dem Attribut order innerhalb der mets:div mit TYPE="page" immer ein integer sein. Ist dies nicht der Fall, verhindert es nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen, da es Probleme bei der Anzeige der Seiten im Viewer nach sich ziehen kann. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M90"/>
+      <xsl:apply-templates select="*" mode="M91"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M90"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M90">
-      <xsl:apply-templates select="*" mode="M90"/>
+   <xsl:template match="text()" priority="-1" mode="M91"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M91">
+      <xsl:apply-templates select="*" mode="M91"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"
                  priority="1000"
-                 mode="M91">
+                 mode="M92">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"/>
       <!--ASSERT fatal-->
@@ -4145,22 +4196,22 @@
                </xsl:attribute>
                <svrl:text>Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL", die das Attribut TYPE="page" enthält, muss das Unterelement mets:fptr enthalten, das in den Attributen FILEID den Identifier enthält, der auf die jeweiligen Bilder in der mets:fileSec verlinkt. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M91"/>
+      <xsl:apply-templates select="*" mode="M92"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M91"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M91">
-      <xsl:apply-templates select="*" mode="M91"/>
+   <xsl:template match="text()" priority="-1" mode="M92"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M92">
+      <xsl:apply-templates select="*" mode="M92"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL'][//mets:div[@TYPE='page'][starts-with(@CONTENTIDS, 'urn:')]]//mets:div[@TYPE='page']"
                  priority="1000"
-                 mode="M92">
+                 mode="M93">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][//mets:div[@TYPE='page'][starts-with(@CONTENTIDS, 'urn:')]]//mets:div[@TYPE='page']"/>
       <!--ASSERT fatal-->
@@ -4176,20 +4227,20 @@
                </xsl:attribute>
                <svrl:text>Wenn in einem Datensatz URNs auf Seitenebene vergeben werden, muss für jede Seite eine URN vorhanden sein. Das bedeutet, wenn in der mets:structMap TYPE="PHYSICAL" mindestens ein mets:div mit dem Attribut TYPE und dem Wert "page" zusätzlich ein Attribut CONTENTIDS mit einer URN enthält, müssen alle mets:div mit dem Attribut TYPE und dem Wert "page" ebenfalls ein Attribut CONTENTIDS mit einer URN enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M92"/>
+      <xsl:apply-templates select="*" mode="M93"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M92"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M92">
-      <xsl:apply-templates select="*" mode="M92"/>
+   <xsl:template match="text()" priority="-1" mode="M93"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M93">
+      <xsl:apply-templates select="*" mode="M93"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1003" mode="M93">
+   <xsl:template match="mets:mets" priority="1003" mode="M94">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4206,12 +4257,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M93"/>
+      <xsl:apply-templates select="*" mode="M94"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structLink[not(mets:smLink)]"
                  priority="1002"
-                 mode="M93">
+                 mode="M94">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structLink[not(mets:smLink)]"/>
       <!--ASSERT fatal-->
@@ -4228,12 +4279,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M93"/>
+      <xsl:apply-templates select="*" mode="M94"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structLink/mets:smLink[not(string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0)]"
                  priority="1001"
-                 mode="M93">
+                 mode="M94">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structLink/mets:smLink[not(string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0)]"/>
       <!--ASSERT fatal-->
@@ -4251,12 +4302,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M93"/>
+      <xsl:apply-templates select="*" mode="M94"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structLink/mets:smLink"
                  priority="1000"
-                 mode="M93">
+                 mode="M94">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structLink/mets:smLink"/>
       <!--ASSERT fatal-->
@@ -4274,15 +4325,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M93"/>
+      <xsl:apply-templates select="*" mode="M94"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M93"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M93">
-      <xsl:apply-templates select="*" mode="M93"/>
+   <xsl:template match="text()" priority="-1" mode="M94"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M94">
+      <xsl:apply-templates select="*" mode="M94"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1002" mode="M94">
+   <xsl:template match="mets:mets" priority="1002" mode="M95">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4299,12 +4350,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M94"/>
+      <xsl:apply-templates select="*" mode="M95"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='DEFAULT'])]"
                  priority="1001"
-                 mode="M94">
+                 mode="M95">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='DEFAULT'])]"/>
       <!--ASSERT fatal-->
@@ -4322,12 +4373,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M94"/>
+      <xsl:apply-templates select="*" mode="M95"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']"
                  priority="1000"
-                 mode="M94">
+                 mode="M95">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']"/>
       <!--REPORT fatal-->
@@ -4342,17 +4393,17 @@
             <svrl:text>In der mets:fileSec sind innerhalb der mets:fileGrp die einzelnen Bilder gelistet. Die mets:fileGrp use="DEFAULT" muss mindestens ein mets:file enthalten und dieses muss in dem Unterelement mets:FLocat das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt mets:file mit dem Attribut xlink:href im Unterelement mets:FLocat, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.3</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M94"/>
+      <xsl:apply-templates select="*" mode="M95"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M94"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M94">
-      <xsl:apply-templates select="*" mode="M94"/>
+   <xsl:template match="text()" priority="-1" mode="M95"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M95">
+      <xsl:apply-templates select="*" mode="M95"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:fileSec/mets:fileGrp/mets:file"
                  priority="1000"
-                 mode="M95">
+                 mode="M96">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:fileSec/mets:fileGrp/mets:file"/>
       <!--ASSERT fatal-->
@@ -4368,20 +4419,20 @@
                </xsl:attribute>
                <svrl:text>Jedes mets:file in der mets:fileSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.2</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M95"/>
+      <xsl:apply-templates select="*" mode="M96"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M95"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M95">
-      <xsl:apply-templates select="*" mode="M95"/>
+   <xsl:template match="text()" priority="-1" mode="M96"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M96">
+      <xsl:apply-templates select="*" mode="M96"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M96">
+   <xsl:template match="mets:mets" priority="1001" mode="M97">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4396,17 +4447,17 @@
                </xsl:attribute>
                <svrl:text>Die mets:dmdSec enthält die bibliographische Beschreibung des Werks. Innerhalb eines METS-Datensatzes muss es mindestens eine mets:dmdSec geben, die MODS-Daten enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M96"/>
+      <xsl:apply-templates select="*" mode="M97"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[not(@ID=$work_dmdid)]"
                  priority="1000"
-                 mode="M96">
+                 mode="M97">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[not(@ID=$work_dmdid)]"/>
       <!--ASSERT error-->
@@ -4422,20 +4473,20 @@
                </xsl:attribute>
                <svrl:text>Jede mets:dmdSec muss das Unterelement mets:mdWrap mit dem Unterelement mets:xmlData enthalten. Und mets:xmlData muss das Unterelement mods:mods enthalten. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5.2.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M96"/>
+      <xsl:apply-templates select="*" mode="M97"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M96"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M96">
-      <xsl:apply-templates select="*" mode="M96"/>
+   <xsl:template match="text()" priority="-1" mode="M97"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M97">
+      <xsl:apply-templates select="*" mode="M97"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:dmdSec" priority="1000" mode="M97">
+   <xsl:template match="mets:dmdSec" priority="1000" mode="M98">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:dmdSec"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4452,15 +4503,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M97"/>
+      <xsl:apply-templates select="*" mode="M98"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M97"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M97">
-      <xsl:apply-templates select="*" mode="M97"/>
+   <xsl:template match="text()" priority="-1" mode="M98"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M98">
+      <xsl:apply-templates select="*" mode="M98"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:dmdSec" priority="1000" mode="M98">
+   <xsl:template match="mets:dmdSec" priority="1000" mode="M99">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:dmdSec"/>
       <!--ASSERT error-->
       <xsl:choose>
@@ -4475,20 +4526,20 @@
                </xsl:attribute>
                <svrl:text>Jede mets:dmdSec muss über ihren Identifier mit der dazugehörigen logischen Ebene verknüpft werden. Der Identifier der mets:dmdSec muss darum in der mets:div, die die logische Ebene beschreibt in dem Attribut DMDID vorkommen. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt.</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M98"/>
+      <xsl:apply-templates select="*" mode="M99"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M98"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M98">
-      <xsl:apply-templates select="*" mode="M98"/>
+   <xsl:template match="text()" priority="-1" mode="M99"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M99">
+      <xsl:apply-templates select="*" mode="M99"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M99">
+   <xsl:template match="mets:mets" priority="1001" mode="M100">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4504,10 +4555,10 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M99"/>
+      <xsl:apply-templates select="*" mode="M100"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="mets:amdSec" priority="1000" mode="M99">
+   <xsl:template match="mets:amdSec" priority="1000" mode="M100">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:amdSec"/>
       <!--ASSERT warn-->
       <xsl:choose>
@@ -4522,22 +4573,22 @@
                </xsl:attribute>
                <svrl:text>Jede mets:amdSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Das Fehlen der ID verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.6.1</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M99"/>
+      <xsl:apply-templates select="*" mode="M100"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M99"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M99">
-      <xsl:apply-templates select="*" mode="M99"/>
+   <xsl:template match="text()" priority="-1" mode="M100"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M100">
+      <xsl:apply-templates select="*" mode="M100"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]"
                  priority="1001"
-                 mode="M100">
+                 mode="M101">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]"/>
       <!--ASSERT error-->
@@ -4555,12 +4606,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M100"/>
+      <xsl:apply-templates select="*" mode="M101"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]"
                  priority="1000"
-                 mode="M100">
+                 mode="M101">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]"/>
       <!--ASSERT error-->
@@ -4578,17 +4629,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M100"/>
+      <xsl:apply-templates select="*" mode="M101"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M100"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M100">
-      <xsl:apply-templates select="*" mode="M100"/>
+   <xsl:template match="text()" priority="-1" mode="M101"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M101">
+      <xsl:apply-templates select="*" mode="M101"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:amdSec[@ID=$work_amdid]/mets:digiprovMD | mets:amdSec[not(@ID=$work_amdid)][1]/mets:digiprovMD"
                  priority="1000"
-                 mode="M101">
+                 mode="M102">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:amdSec[@ID=$work_amdid]/mets:digiprovMD | mets:amdSec[not(@ID=$work_amdid)][1]/mets:digiprovMD"/>
       <!--ASSERT error-->
@@ -4604,22 +4655,22 @@
                </xsl:attribute>
                <svrl:text>In der mets:amdSec des primären logischen Strukturelements enthält das Unterelement mets:digiprovMD einen Link zu dem Digitalisat beim Datenpartner. Dieser Link muss in Form eines http- oder https-URI in dv:presentation oder dv:reference vorhanden sein. Beide Elemente sind Unterelemente von dv:links, das ein Unterelement von mets:xmlData ist, welches ein Unterelement von mets:mdWrap ist welches ein Unterelement von mets:digiprovMD ist. Ist weder dv:presentation noch dv:reference vorhanden bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird mets:digiprovMD bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.4</svrl:text>
                <svrl:property id="id">
-                  <xsl:value-of select="./@ID"/>
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M101"/>
+      <xsl:apply-templates select="*" mode="M102"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M101"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M101">
-      <xsl:apply-templates select="*" mode="M101"/>
+   <xsl:template match="text()" priority="-1" mode="M102"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M102">
+      <xsl:apply-templates select="*" mode="M102"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"
                  priority="1000"
-                 mode="M102">
+                 mode="M103">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"/>
       <!--REPORT fatal-->
@@ -4636,17 +4687,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M102"/>
+      <xsl:apply-templates select="*" mode="M103"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M102"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M102">
-      <xsl:apply-templates select="*" mode="M102"/>
+   <xsl:template match="text()" priority="-1" mode="M103"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M103">
+      <xsl:apply-templates select="*" mode="M103"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets[mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][contains(@ADMID, ' ')]]"
                  priority="1002"
-                 mode="M103">
+                 mode="M104">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][contains(@ADMID, ' ')]]"/>
       <!--REPORT fatal-->
@@ -4661,12 +4712,12 @@
             <svrl:text>Sind mit dem primären Strukturelement (das primäre mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" mehrere mets:amdSec verlinkt, ist keine eindeutige Zuordnung der adminstrativen Metadaten zum METS-Datensatz möglich. Er kann daher nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1 und 2.6.1</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M103"/>
+      <xsl:apply-templates select="*" mode="M104"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets[not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]]"
                  priority="1001"
-                 mode="M103">
+                 mode="M104">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]]"/>
       <!--REPORT fatal-->
@@ -4681,10 +4732,10 @@
             <svrl:text>Der Datensatz enthält mehrere mets:amdSec, die nicht von einem mets:div in der mets:structMap[@TYPE='LOGICAL'] über das Attribut "ADMID" referenziert werden. Darüber hinaus fehlt die Verlinkung des primären Strukturelements (primäres mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" mit einer mets:amdSec. Daher ist keine eindeutige Zuordnung der adminstrativen Metadaten zum METS-Datensatz möglich und er kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1 und 2.6.1</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M103"/>
+      <xsl:apply-templates select="*" mode="M104"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1000" mode="M103">
+   <xsl:template match="mets:mets" priority="1000" mode="M104">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT error-->
       <xsl:choose>
@@ -4701,17 +4752,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M103"/>
+      <xsl:apply-templates select="*" mode="M104"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M103"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M103">
-      <xsl:apply-templates select="*" mode="M103"/>
+   <xsl:template match="text()" priority="-1" mode="M104"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M104">
+      <xsl:apply-templates select="*" mode="M104"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(contains(@DMDID, $work_dmdid))][@ADMID]"
                  priority="1000"
-                 mode="M104">
+                 mode="M105">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(contains(@DMDID, $work_dmdid))][@ADMID]"/>
       <!--REPORT info-->
@@ -4726,17 +4777,17 @@
             <svrl:text>Die administrativen Metadaten in der mets:amdSec werden für den METS-Datensatz ausschließlich aus der mets:amdSec abgeleitet, die mit dem primären Strukturelement (primäres mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" verlinkt ist. Besitzt der Datensatz darüber hinaus weitere mets:amdSec, die mit anderen Strukturelementen verlinkt sind, werden deren administrative Metadaten von der DDB zurzeit nicht berücksichtigt.</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M104"/>
+      <xsl:apply-templates select="*" mode="M105"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M104"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M104">
-      <xsl:apply-templates select="*" mode="M104"/>
+   <xsl:template match="text()" priority="-1" mode="M105"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M105">
+      <xsl:apply-templates select="*" mode="M105"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"
                  priority="1000"
-                 mode="M105">
+                 mode="M106">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"/>
       <!--REPORT error-->
@@ -4748,15 +4799,67 @@
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element dv:rights darf das Element dv:license nur einmal enthalten. Enthält dv:rights mehr als ein dv:license, wird bei der Bereinigung des Datensatzes das erste Vorkommen von dv:license mit gültiger Lizenz-URI übernommen, alle anderen dv:license werden entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.2.11</svrl:text>
-            <svrl:property id="id">
-               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M106"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M106"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M106">
+      <xsl:apply-templates select="*" mode="M106"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href[contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
+                 priority="1000"
+                 mode="M107">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href[contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
+      <!--REPORT warn-->
+      <xsl:if test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910">
+            <xsl:attribute name="id">amdSec_13</xsl:attribute>
+            <xsl:attribute name="role">warn</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Die Lizenzen aus dem Lizenzkorb der DDB können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen. Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im „Lizenzkorb“ enthaltene Rechtehinweis "Public Domain Mark" in Frage. Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M105"/>
+      <xsl:apply-templates select="*" mode="M107"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M105"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M105">
-      <xsl:apply-templates select="*" mode="M105"/>
+   <xsl:template match="text()" priority="-1" mode="M107"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M107">
+      <xsl:apply-templates select="*" mode="M107"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:mets" priority="1000" mode="M108">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
+      <!--REPORT fatal-->
+      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@xlink:href, 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@xlink:href, '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to, key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@xlink:href, 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@xlink:href, '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to, key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+            <xsl:attribute name="id">amdSec_14</xsl:attribute>
+            <xsl:attribute name="role">fatal</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Ein Datensatz muss eindeutige Rechteangaben zu den Digitalisaten enthalten. Enthält ein Datensatz unterschiedliche URIs aus dem Lizenzkorb der DDB wird er nicht in die DDB eingespielt.</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M108"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M108"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M108">
+      <xsl:apply-templates select="*" mode="M108"/>
    </xsl:template>
 </xsl:stylesheet>

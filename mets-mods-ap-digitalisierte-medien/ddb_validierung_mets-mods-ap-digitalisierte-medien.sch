@@ -2,7 +2,7 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2022-02-24T09:25:40"
+            schemaVersion="v2022-04-01T08:15:02"
             queryBinding="xslt2">
    <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS Anwendungsprofil für digitalisierte Medien</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>
@@ -79,6 +79,8 @@
          <license_uri>https://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
          <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
          <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
+         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
+         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
       </license_uris>
    </sch:let>
    <sch:let name="iso639-1_codes">
@@ -403,8 +405,6 @@
          <iso639-2_code>cus</iso639-2_code>
          <iso639-2_code>wel</iso639-2_code>
          <iso639-2_code>cym</iso639-2_code>
-         <iso639-2_code>cze</iso639-2_code>
-         <iso639-2_code>ces</iso639-2_code>
          <iso639-2_code>dak</iso639-2_code>
          <iso639-2_code>dan</iso639-2_code>
          <iso639-2_code>dar</iso639-2_code>
@@ -435,8 +435,6 @@
          <iso639-2_code>enm</iso639-2_code>
          <iso639-2_code>epo</iso639-2_code>
          <iso639-2_code>est</iso639-2_code>
-         <iso639-2_code>baq</iso639-2_code>
-         <iso639-2_code>eus</iso639-2_code>
          <iso639-2_code>ewe</iso639-2_code>
          <iso639-2_code>ewo</iso639-2_code>
          <iso639-2_code>fan</iso639-2_code>
@@ -449,8 +447,6 @@
          <iso639-2_code>fin</iso639-2_code>
          <iso639-2_code>fiu</iso639-2_code>
          <iso639-2_code>fon</iso639-2_code>
-         <iso639-2_code>fre</iso639-2_code>
-         <iso639-2_code>fra</iso639-2_code>
          <iso639-2_code>fre</iso639-2_code>
          <iso639-2_code>fra</iso639-2_code>
          <iso639-2_code>frm</iso639-2_code>
@@ -466,8 +462,6 @@
          <iso639-2_code>gem</iso639-2_code>
          <iso639-2_code>geo</iso639-2_code>
          <iso639-2_code>kat</iso639-2_code>
-         <iso639-2_code>ger</iso639-2_code>
-         <iso639-2_code>deu</iso639-2_code>
          <iso639-2_code>gez</iso639-2_code>
          <iso639-2_code>gil</iso639-2_code>
          <iso639-2_code>gla</iso639-2_code>
@@ -481,8 +475,6 @@
          <iso639-2_code>got</iso639-2_code>
          <iso639-2_code>grb</iso639-2_code>
          <iso639-2_code>grc</iso639-2_code>
-         <iso639-2_code>gre</iso639-2_code>
-         <iso639-2_code>ell</iso639-2_code>
          <iso639-2_code>grn</iso639-2_code>
          <iso639-2_code>gsw</iso639-2_code>
          <iso639-2_code>guj</iso639-2_code>
@@ -503,8 +495,6 @@
          <iso639-2_code>hsb</iso639-2_code>
          <iso639-2_code>hun</iso639-2_code>
          <iso639-2_code>hup</iso639-2_code>
-         <iso639-2_code>arm</iso639-2_code>
-         <iso639-2_code>hye</iso639-2_code>
          <iso639-2_code>iba</iso639-2_code>
          <iso639-2_code>ibo</iso639-2_code>
          <iso639-2_code>ice</iso639-2_code>
@@ -523,8 +513,6 @@
          <iso639-2_code>ipk</iso639-2_code>
          <iso639-2_code>ira</iso639-2_code>
          <iso639-2_code>iro</iso639-2_code>
-         <iso639-2_code>ice</iso639-2_code>
-         <iso639-2_code>isl</iso639-2_code>
          <iso639-2_code>ita</iso639-2_code>
          <iso639-2_code>jav</iso639-2_code>
          <iso639-2_code>jbo</iso639-2_code>
@@ -539,8 +527,6 @@
          <iso639-2_code>kan</iso639-2_code>
          <iso639-2_code>kar</iso639-2_code>
          <iso639-2_code>kas</iso639-2_code>
-         <iso639-2_code>geo</iso639-2_code>
-         <iso639-2_code>kat</iso639-2_code>
          <iso639-2_code>kau</iso639-2_code>
          <iso639-2_code>kaw</iso639-2_code>
          <iso639-2_code>kaz</iso639-2_code>
@@ -610,8 +596,6 @@
          <iso639-2_code>mic</iso639-2_code>
          <iso639-2_code>min</iso639-2_code>
          <iso639-2_code>mis</iso639-2_code>
-         <iso639-2_code>mac</iso639-2_code>
-         <iso639-2_code>mkd</iso639-2_code>
          <iso639-2_code>mkh</iso639-2_code>
          <iso639-2_code>mlg</iso639-2_code>
          <iso639-2_code>mlt</iso639-2_code>
@@ -621,17 +605,11 @@
          <iso639-2_code>moh</iso639-2_code>
          <iso639-2_code>mon</iso639-2_code>
          <iso639-2_code>mos</iso639-2_code>
-         <iso639-2_code>mao</iso639-2_code>
-         <iso639-2_code>mri</iso639-2_code>
-         <iso639-2_code>may</iso639-2_code>
-         <iso639-2_code>msa</iso639-2_code>
          <iso639-2_code>mul</iso639-2_code>
          <iso639-2_code>mun</iso639-2_code>
          <iso639-2_code>mus</iso639-2_code>
          <iso639-2_code>mwl</iso639-2_code>
          <iso639-2_code>mwr</iso639-2_code>
-         <iso639-2_code>bur</iso639-2_code>
-         <iso639-2_code>mya</iso639-2_code>
          <iso639-2_code>myn</iso639-2_code>
          <iso639-2_code>myv</iso639-2_code>
          <iso639-2_code>nah</iso639-2_code>
@@ -648,8 +626,6 @@
          <iso639-2_code>nia</iso639-2_code>
          <iso639-2_code>nic</iso639-2_code>
          <iso639-2_code>niu</iso639-2_code>
-         <iso639-2_code>dut</iso639-2_code>
-         <iso639-2_code>nld</iso639-2_code>
          <iso639-2_code>nno</iso639-2_code>
          <iso639-2_code>nob</iso639-2_code>
          <iso639-2_code>nog</iso639-2_code>
@@ -680,8 +656,6 @@
          <iso639-2_code>pap</iso639-2_code>
          <iso639-2_code>pau</iso639-2_code>
          <iso639-2_code>peo</iso639-2_code>
-         <iso639-2_code>per</iso639-2_code>
-         <iso639-2_code>fas</iso639-2_code>
          <iso639-2_code>phi</iso639-2_code>
          <iso639-2_code>phn</iso639-2_code>
          <iso639-2_code>pli</iso639-2_code>
@@ -699,8 +673,6 @@
          <iso639-2_code>roa</iso639-2_code>
          <iso639-2_code>roh</iso639-2_code>
          <iso639-2_code>rom</iso639-2_code>
-         <iso639-2_code>rum</iso639-2_code>
-         <iso639-2_code>ron</iso639-2_code>
          <iso639-2_code>rum</iso639-2_code>
          <iso639-2_code>ron</iso639-2_code>
          <iso639-2_code>run</iso639-2_code>
@@ -729,8 +701,6 @@
          <iso639-2_code>sla</iso639-2_code>
          <iso639-2_code>slo</iso639-2_code>
          <iso639-2_code>slk</iso639-2_code>
-         <iso639-2_code>slo</iso639-2_code>
-         <iso639-2_code>slk</iso639-2_code>
          <iso639-2_code>slv</iso639-2_code>
          <iso639-2_code>sma</iso639-2_code>
          <iso639-2_code>sme</iso639-2_code>
@@ -747,8 +717,6 @@
          <iso639-2_code>son</iso639-2_code>
          <iso639-2_code>sot</iso639-2_code>
          <iso639-2_code>spa</iso639-2_code>
-         <iso639-2_code>alb</iso639-2_code>
-         <iso639-2_code>sqi</iso639-2_code>
          <iso639-2_code>srd</iso639-2_code>
          <iso639-2_code>srn</iso639-2_code>
          <iso639-2_code>srp</iso639-2_code>
@@ -774,8 +742,6 @@
          <iso639-2_code>tgk</iso639-2_code>
          <iso639-2_code>tgl</iso639-2_code>
          <iso639-2_code>tha</iso639-2_code>
-         <iso639-2_code>tib</iso639-2_code>
-         <iso639-2_code>bod</iso639-2_code>
          <iso639-2_code>tig</iso639-2_code>
          <iso639-2_code>tir</iso639-2_code>
          <iso639-2_code>tiv</iso639-2_code>
@@ -814,8 +780,6 @@
          <iso639-2_code>wal</iso639-2_code>
          <iso639-2_code>war</iso639-2_code>
          <iso639-2_code>was</iso639-2_code>
-         <iso639-2_code>wel</iso639-2_code>
-         <iso639-2_code>cym</iso639-2_code>
          <iso639-2_code>wen</iso639-2_code>
          <iso639-2_code>wln</iso639-2_code>
          <iso639-2_code>wol</iso639-2_code>
@@ -831,8 +795,6 @@
          <iso639-2_code>zen</iso639-2_code>
          <iso639-2_code>zgh</iso639-2_code>
          <iso639-2_code>zha</iso639-2_code>
-         <iso639-2_code>chi</iso639-2_code>
-         <iso639-2_code>zho</iso639-2_code>
          <iso639-2_code>znd</iso639-2_code>
          <iso639-2_code>zul</iso639-2_code>
          <iso639-2_code>zun</iso639-2_code>
@@ -1110,14 +1072,15 @@
    </sch:let>
    <sch:let name="mets_ap_dv_license_values">
       <mets_ap_dv_license_values xmlns="dcg:maps">
-         <mets_ap_dv_license_value>pdm</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc0</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-sa</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nd</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nc</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nc-sa</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>cc-by-nc-nd</mets_ap_dv_license_value>
-         <mets_ap_dv_license_value>reserved</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/publicdomain/mark/1.0/">pdm</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/publicdomain/zero/1.0/">cc0</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by/4.0/">cc-by</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-sa/4.0/">cc-by-sa</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nd/4.0/">cc-by-nd</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nc/4.0/">cc-by-nc</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nc-sa/4.0/">cc-by-nc-sa</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://creativecommons.org/licenses/by-nc-nd/4.0/">cc-by-nc-nd</mets_ap_dv_license_value>
+         <mets_ap_dv_license_value to="http://rightsstatements.org/vocab/CNE/1.0/">reserved</mets_ap_dv_license_value>
       </mets_ap_dv_license_values>
    </sch:let>
    <sch:properties>
@@ -1511,7 +1474,7 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mods:note[ancestor::mods:mods or ancestor::mods:physicalDescription][not(@type)]">
+      <sch:rule context="mods:note[parent::mods:mods or parent::mods:physicalDescription][not(@type)]">
             <!-- Attribut type fehlt in mods:note -->
          <sch:assert id="note_01"
                      role="error"
@@ -1519,7 +1482,7 @@
                      properties="dmd_id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/note">mods:note muss ein Attribut type enthalten. Erlaubt sind in diesem Attribut nur Werte aus der Liste der MODS Note Type (\url{http://www.loc.gov/standards/mods/mods-notes.html}). Ist kein Attribut type mit einem der erlaubten Werte vorhanden, wird mods:note bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.8</sch:assert>
       </sch:rule>
-      <sch:rule context="mods:note[ancestor::mods:mods or ancestor::mods:physicalDescription][@type]">
+      <sch:rule context="mods:note[parent::mods:mods or parent::mods:physicalDescription][@type]">
             <!-- Falscher Attributwert in mods:note -->
          <sch:assert id="note_02"
                      role="error"
@@ -1724,6 +1687,16 @@
                      test="matches(text()[1], '^[a-zA-Z_0-9:\-]+$')"
                      properties="dmd_id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und/oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und/oder Sonderzeichen enthalten, nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:xmlData/mods:mods">
+            <!-- mods:recordInfo ist in mods:mods mehrmals vorhanden -->
+         <sch:report id="recordInfo_05"
+                     role="error"
+                     test="mods:recordInfo[2]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Das Element mods:mods darf das Element mods:recordInfo nur einmal enthalten. Enthält mods:mods mehr als ein mods:recordInfo, werden bei der Bereinigung des Datensatzes die Unterelemente aller mods:recordInfo im erste Vorkommen zusammengefasst und die weiteren Vorkommen von mods:recordInfo entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15.1</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -2138,8 +2111,25 @@
          <sch:report id="amdSec_12"
                      role="error"
                      test="dv:license[2]"
-                     properties="id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element dv:rights darf das Element dv:license nur einmal enthalten. Enthält dv:rights mehr als ein dv:license, wird bei der Bereinigung des Datensatzes das erste Vorkommen von dv:license mit gültiger Lizenz-URI übernommen, alle anderen dv:license werden entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.2.11</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href[contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
+            <!-- Hinweis auf möglicherweise ungültige Rechteangabe -->
+         <sch:report id="amdSec_13"
+                     role="warn"
+                     test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910"
+                     properties="dmd_id">Die Lizenzen aus dem Lizenzkorb der DDB können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen. Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im „Lizenzkorb“ enthaltene Rechtehinweis "Public Domain Mark" in Frage. Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets">
+            <!-- Widersprüchliche Rechteangaben -->
+         <sch:report id="amdSec_14"
+                     role="fatal"
+                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@xlink:href, 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@xlink:href, '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to, key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
+                     properties="dmd_id">Ein Datensatz muss eindeutige Rechteangaben zu den Digitalisaten enthalten. Enthält ein Datensatz unterschiedliche URIs aus dem Lizenzkorb der DDB wird er nicht in die DDB eingespielt.</sch:report>
       </sch:rule>
    </sch:pattern>
 </sch:schema>
