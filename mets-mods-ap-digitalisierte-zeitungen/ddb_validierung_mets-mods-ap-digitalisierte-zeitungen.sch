@@ -105,7 +105,6 @@
          <iso639-1_code>bm</iso639-1_code>
          <iso639-1_code>bn</iso639-1_code>
          <iso639-1_code>bo</iso639-1_code>
-         <iso639-1_code>bo</iso639-1_code>
          <iso639-1_code>br</iso639-1_code>
          <iso639-1_code>bs</iso639-1_code>
          <iso639-1_code>ca</iso639-1_code>
@@ -114,32 +113,25 @@
          <iso639-1_code>co</iso639-1_code>
          <iso639-1_code>cr</iso639-1_code>
          <iso639-1_code>cs</iso639-1_code>
-         <iso639-1_code>cs</iso639-1_code>
          <iso639-1_code>cu</iso639-1_code>
          <iso639-1_code>cv</iso639-1_code>
          <iso639-1_code>cy</iso639-1_code>
-         <iso639-1_code>cy</iso639-1_code>
          <iso639-1_code>da</iso639-1_code>
-         <iso639-1_code>de</iso639-1_code>
          <iso639-1_code>de</iso639-1_code>
          <iso639-1_code>dv</iso639-1_code>
          <iso639-1_code>dz</iso639-1_code>
          <iso639-1_code>ee</iso639-1_code>
-         <iso639-1_code>el</iso639-1_code>
          <iso639-1_code>el</iso639-1_code>
          <iso639-1_code>en</iso639-1_code>
          <iso639-1_code>eo</iso639-1_code>
          <iso639-1_code>es</iso639-1_code>
          <iso639-1_code>et</iso639-1_code>
          <iso639-1_code>eu</iso639-1_code>
-         <iso639-1_code>eu</iso639-1_code>
-         <iso639-1_code>fa</iso639-1_code>
          <iso639-1_code>fa</iso639-1_code>
          <iso639-1_code>ff</iso639-1_code>
          <iso639-1_code>fi</iso639-1_code>
          <iso639-1_code>fj</iso639-1_code>
          <iso639-1_code>fo</iso639-1_code>
-         <iso639-1_code>fr</iso639-1_code>
          <iso639-1_code>fr</iso639-1_code>
          <iso639-1_code>fy</iso639-1_code>
          <iso639-1_code>ga</iso639-1_code>
@@ -156,7 +148,6 @@
          <iso639-1_code>ht</iso639-1_code>
          <iso639-1_code>hu</iso639-1_code>
          <iso639-1_code>hy</iso639-1_code>
-         <iso639-1_code>hy</iso639-1_code>
          <iso639-1_code>hz</iso639-1_code>
          <iso639-1_code>ia</iso639-1_code>
          <iso639-1_code>id</iso639-1_code>
@@ -166,12 +157,10 @@
          <iso639-1_code>ik</iso639-1_code>
          <iso639-1_code>io</iso639-1_code>
          <iso639-1_code>is</iso639-1_code>
-         <iso639-1_code>is</iso639-1_code>
          <iso639-1_code>it</iso639-1_code>
          <iso639-1_code>iu</iso639-1_code>
          <iso639-1_code>ja</iso639-1_code>
          <iso639-1_code>jv</iso639-1_code>
-         <iso639-1_code>ka</iso639-1_code>
          <iso639-1_code>ka</iso639-1_code>
          <iso639-1_code>kg</iso639-1_code>
          <iso639-1_code>ki</iso639-1_code>
@@ -199,23 +188,18 @@
          <iso639-1_code>mg</iso639-1_code>
          <iso639-1_code>mh</iso639-1_code>
          <iso639-1_code>mi</iso639-1_code>
-         <iso639-1_code>mi</iso639-1_code>
-         <iso639-1_code>mk</iso639-1_code>
          <iso639-1_code>mk</iso639-1_code>
          <iso639-1_code>ml</iso639-1_code>
          <iso639-1_code>mn</iso639-1_code>
          <iso639-1_code>mr</iso639-1_code>
          <iso639-1_code>ms</iso639-1_code>
-         <iso639-1_code>ms</iso639-1_code>
          <iso639-1_code>mt</iso639-1_code>
-         <iso639-1_code>my</iso639-1_code>
          <iso639-1_code>my</iso639-1_code>
          <iso639-1_code>na</iso639-1_code>
          <iso639-1_code>nb</iso639-1_code>
          <iso639-1_code>nd</iso639-1_code>
          <iso639-1_code>ne</iso639-1_code>
          <iso639-1_code>ng</iso639-1_code>
-         <iso639-1_code>nl</iso639-1_code>
          <iso639-1_code>nl</iso639-1_code>
          <iso639-1_code>nn</iso639-1_code>
          <iso639-1_code>no</iso639-1_code>
@@ -236,7 +220,6 @@
          <iso639-1_code>rm</iso639-1_code>
          <iso639-1_code>rn</iso639-1_code>
          <iso639-1_code>ro</iso639-1_code>
-         <iso639-1_code>ro</iso639-1_code>
          <iso639-1_code>ru</iso639-1_code>
          <iso639-1_code>rw</iso639-1_code>
          <iso639-1_code>sa</iso639-1_code>
@@ -246,12 +229,10 @@
          <iso639-1_code>sg</iso639-1_code>
          <iso639-1_code>si</iso639-1_code>
          <iso639-1_code>sk</iso639-1_code>
-         <iso639-1_code>sk</iso639-1_code>
          <iso639-1_code>sl</iso639-1_code>
          <iso639-1_code>sm</iso639-1_code>
          <iso639-1_code>sn</iso639-1_code>
          <iso639-1_code>so</iso639-1_code>
-         <iso639-1_code>sq</iso639-1_code>
          <iso639-1_code>sq</iso639-1_code>
          <iso639-1_code>sr</iso639-1_code>
          <iso639-1_code>ss</iso639-1_code>
@@ -286,7 +267,6 @@
          <iso639-1_code>yi</iso639-1_code>
          <iso639-1_code>yo</iso639-1_code>
          <iso639-1_code>za</iso639-1_code>
-         <iso639-1_code>zh</iso639-1_code>
          <iso639-1_code>zh</iso639-1_code>
          <iso639-1_code>zu</iso639-1_code>
       </iso639-1_codes>
