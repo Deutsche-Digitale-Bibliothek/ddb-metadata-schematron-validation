@@ -3,6 +3,12 @@ Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Ze
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+
+## v2022-04-07T08:19:29
+
+### Changed
+- Dubletten aus den Listen der ISO 639-1 und ISO 639-2 Sprachcodes entfernt ([Pull Request #2](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/2))
+
 ## v2022-04-01T08:15:02
 
 ### Added
