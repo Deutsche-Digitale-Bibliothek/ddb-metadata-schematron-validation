@@ -3,4 +3,4 @@ Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden S
 
 Fehler und weitere Hinweise können Sie uns gerne direkt in GitHub über ein Issue bzw. Pull request oder per E-Mail an die [Fachstelle Bibliothek](mailto:bibliothek@deutsche-digitale-bibliothek.de) mitteilen. Wir übernehmen Ihre Korrekturen soweit möglich in die nächste Version.
 
-Die Veröffentlichung neuer Versionen erfolt unregelmäßig.
+Die Veröffentlichung neuer Versionen erfolgt unregelmäßig.

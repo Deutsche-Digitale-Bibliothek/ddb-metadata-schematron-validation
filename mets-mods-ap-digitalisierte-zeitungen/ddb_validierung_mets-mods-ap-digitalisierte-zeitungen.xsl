@@ -3266,7 +3266,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:dmdSec der Ausgabe enthält ihre bibliographische Beschreibung. Sie muss mit dem mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" verlinkt sein. Ein Datensatz darf es nur ein mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" enthalten. Sind diese Vorraussetzungen nicht erfüllt, wird der Datensatz nicht in das Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap</svrl:text>
+               <svrl:text>Die mets:dmdSec der Ausgabe enthält ihre bibliographische Beschreibung. Sie muss mit dem mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" verlinkt sein. Ein Datensatz darf nur ein mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" enthalten. Sind diese Vorraussetzungen nicht erfüllt, wird der Datensatz nicht in das Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
