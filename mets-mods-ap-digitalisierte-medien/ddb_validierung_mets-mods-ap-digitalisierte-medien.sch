@@ -2,7 +2,7 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2022-04-07T08:19:29"
+            schemaVersion="v2022-06-03T07:55:42"
             queryBinding="xslt2">
    <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS Anwendungsprofil für digitalisierte Medien</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>
@@ -824,7 +824,6 @@
          <marc_relator_code>cas</marc_relator_code>
          <marc_relator_code>ccp</marc_relator_code>
          <marc_relator_code>chr</marc_relator_code>
-         <marc_relator_code>clb</marc_relator_code>
          <marc_relator_code>cli</marc_relator_code>
          <marc_relator_code>cll</marc_relator_code>
          <marc_relator_code>clr</marc_relator_code>
@@ -908,7 +907,6 @@
          <marc_relator_code>fpy</marc_relator_code>
          <marc_relator_code>frg</marc_relator_code>
          <marc_relator_code>gis</marc_relator_code>
-         <marc_relator_code>grt</marc_relator_code>
          <marc_relator_code>his</marc_relator_code>
          <marc_relator_code>hnr</marc_relator_code>
          <marc_relator_code>hst</marc_relator_code>
@@ -1014,6 +1012,13 @@
          <marc_relator_code>sad</marc_relator_code>
          <marc_relator_code>sce</marc_relator_code>
          <marc_relator_code>scl</marc_relator_code>
+         <marc_relator_code>scr</marc_relator_code>
+         <marc_relator_code>sds</marc_relator_code>
+         <marc_relator_code>sec</marc_relator_code>
+         <marc_relator_code>sgd</marc_relator_code>
+         <marc_relator_code>sgn</marc_relator_code>
+         <marc_relator_code>sht</marc_relator_code>
+         <marc_relator_code>sll</marc_relator_code>
          <marc_relator_code>sng</marc_relator_code>
          <marc_relator_code>spk</marc_relator_code>
          <marc_relator_code>spn</marc_relator_code>
@@ -1037,7 +1042,6 @@
          <marc_relator_code>uvp</marc_relator_code>
          <marc_relator_code>vac</marc_relator_code>
          <marc_relator_code>vdg</marc_relator_code>
-         <marc_relator_code>voc</marc_relator_code>
          <marc_relator_code>wac</marc_relator_code>
          <marc_relator_code>wal</marc_relator_code>
          <marc_relator_code>wam</marc_relator_code>

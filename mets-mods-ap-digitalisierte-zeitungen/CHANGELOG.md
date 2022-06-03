@@ -1,8 +1,14 @@
 # Changelog
-Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für digitalisierte Medien der Fachstelle Bibliothek.
+Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Zeitungen der Fachstelle Bibliothek.
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+
+## v2022-06-03T07:55:55
+
+### Changed
+- Liste der gültigen [MARC Relator Codes](https://id.loc.gov/vocabulary/relators.html) aktualisiert
+- Prüfung `dmdSec_01`: Text der Fehlermeldung korrigiert (https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/4))
 
 ## v2022-04-07T08:19:37
 
