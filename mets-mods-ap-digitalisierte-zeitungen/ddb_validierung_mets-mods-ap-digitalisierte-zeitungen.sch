@@ -1256,7 +1256,7 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@TYPE=('issue', 'additional')]">
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='newspaper']/mets:div[@TYPE='month']/mets:div[@TYPE='day']/mets:div[@TYPE=('issue', 'additional')]">
             <!-- Ausgabe enthält mets:mptr zur Ausgabe -->
          <sch:report id="structMapLogical_14"
                      role="error"
