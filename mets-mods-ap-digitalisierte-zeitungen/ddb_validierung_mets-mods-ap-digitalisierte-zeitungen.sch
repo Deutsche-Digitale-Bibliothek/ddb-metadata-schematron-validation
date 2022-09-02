@@ -1280,7 +1280,7 @@
             <!-- Ungültiger Verweis auf externe METS-Datei -->
          <sch:assert id="structMapLogical_17"
                      role="fatal"
-                     test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~])*$')"
+                     test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~:])*$')"
                      properties="id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Die mets:mptr Elemente in der mets:structMap TYPE="LOGICAL" müssen im Attribut xlink:href eine valide URL einer externen METS-Datei enthalten. Ist dies nicht der Fall können wichtige Informationen daraus nicht geladen werden und der Datensatz wird nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.2</sch:assert>
       </sch:rule>
