@@ -183,7 +183,7 @@
    <xsl:template match="/">
       <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                               title="Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS-Anwendungsprofil für Zeitungen"
-                              schemaVersion="v2022-06-03T07:55:55">
+                              schemaVersion="v2022-09-02T06:42:36">
          <xsl:comment>
             <xsl:value-of select="$archiveDirParameter"/>   
 		 <xsl:value-of select="$archiveNameParameter"/>  
@@ -2713,10 +2713,10 @@
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:mptr"/>
       <!--ASSERT fatal-->
       <xsl:choose>
-         <xsl:when test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~])*$')"/>
+         <xsl:when test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~:])*$')"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~])*$')">
+                                test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~:])*$')">
                <xsl:attribute name="id">structMapLogical_17</xsl:attribute>
                <xsl:attribute name="role">fatal</xsl:attribute>
                <xsl:attribute name="location">

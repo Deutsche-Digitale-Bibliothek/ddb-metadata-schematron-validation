@@ -2,7 +2,7 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2022-06-03T07:55:55"
+            schemaVersion="v2022-09-02T06:42:36"
             queryBinding="xslt2">
    <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS-Anwendungsprofil für Zeitungen</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>

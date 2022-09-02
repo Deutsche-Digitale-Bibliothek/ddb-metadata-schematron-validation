@@ -3,6 +3,10 @@ Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Ze
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+## v2022-09-02T06:42:36
+
+### Changed
+- Prüfung `structMapLogical_17`: Die Prüfung erlaubt nun auch `:` in URLs in `mets:mptr@xlink:href` ([Pull Request #7](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/7))
 
 ## v2022-06-03T07:55:55
 
