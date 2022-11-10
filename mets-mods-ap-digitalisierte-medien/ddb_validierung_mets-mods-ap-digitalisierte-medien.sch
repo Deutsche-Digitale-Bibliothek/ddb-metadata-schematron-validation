@@ -2,7 +2,7 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2022-06-03T07:55:42"
+            schemaVersion="v2022-11-10T08:51:13"
             queryBinding="xslt2">
    <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS Anwendungsprofil für digitalisierte Medien</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>
@@ -1102,12 +1102,9 @@
    <xsl:key name="mets_ids" match="mets:*[@ID]" use="@ID"/>
    <xsl:key name="dmdsec_ids" match="mets:dmdSec" use="@ID"/>
    <xsl:key name="amdsec_ids" match="mets:amdSec" use="@ID"/>
-   <xsl:key name="structLink_from_ids"
-            match="mets:structLink/mets:smLink"
-            use="@xlink:from"/>
-   <xsl:key name="structLink_to_ids"
-            match="mets:structLink/mets:smLink"
-            use="@xlink:to"/>
+   <xsl:key name="fileGrp_DEFAULT_file_ids"
+            match="mets:fileGrp[@USE='DEFAULT']/mets:file[@ID]"
+            use="@ID"/>
    <xsl:key name="structMap_PHYSICAL_ids"
             match="mets:structMap[@TYPE='PHYSICAL']//mets:div"
             use="@ID"/>
@@ -1117,6 +1114,12 @@
    <xsl:key name="structMap_LOGICAL_admids"
             match="mets:structMap[@TYPE='LOGICAL']//mets:div[@ADMID]"
             use="tokenize(@ADMID, ' ')"/>
+   <xsl:key name="structLink_from_ids"
+            match="mets:structLink/mets:smLink"
+            use="@xlink:from"/>
+   <xsl:key name="structLink_to_ids"
+            match="mets:structLink/mets:smLink"
+            use="@xlink:to"/>
    <xsl:key name="license_uris"
             match="maps:license_uris/maps:license_uri"
             use="text()"/>
@@ -1175,6 +1178,15 @@
                      role="error"
                      test=".[not(./ancestor::mods:extension)]"
                      properties="dmd_id">Das mods:mods Wurzelelement der mets:dmdSec enthält weitere mods:mods Elemente, die dort nicht zulässig sind. Sie werden bei der Transformation der Daten entfernt.</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mods:*[starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')]">
+            <!-- Ungültiger GND-URI im Attribut valueURI -->
+         <sch:assert id="all_06"
+                     role="error"
+                     test="matches(substring-after(@valueURI, '/gnd/'), '^[0-9]*-[0-9xX]{1}$|^[0-9xX]*$')"
+                     properties="dmd_id">Der Datensatz enthält valueURI Attribute mit einer ungültigen GND-URI. Diese valueURI-Attribute werden bei der Transformation der Daten entfernt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1428,13 +1440,25 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
+      <sch:rule context="mets:xmlData/mods:mods/mods:originInfo/mods:*[local-name() = ('dateIssued', 'dateCreated', 'dateOther') and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point]">
+         <sch:let name="point" value="./@point"/>
+         <sch:let name="name" value="./local-name()"/>
+         <!-- Wiederholung von Datumsangaben mit identischem Wert im Attribut point in mods:originInfo -->
+         <sch:report id="originInfo_15"
+                     role="error"
+                     test="./preceding-sibling::*[local-name() = $name and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point = $point]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Die Elemente mods:dateIssued, mods:dateCreated und mods:dateOther dürfen innerhalb eines Elements mods:originInfo nicht mit dem gleichen Wert im Attribut point wiederholt werden. Wird eines dieser Elemente mit dem gleichen Wert in point wiederholt, werden alle weiteren Vorkommen (XML-Reihenfolge) bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.4 – 2.4.2.6</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
             <!-- Die Angabe der Sprache fehlt -->
          <sch:assert id="language_01"
                      role="warn"
-                     test="mods:language/mods:languageTerm or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]"
+                     test="mods:language/mods:languageTerm[text() != 'und'] or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/language">Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Bitte beachten: Im Kontext der DDB und Europeana fallen auch Noten unter den Dokumenttyp Text. Falls die Noten keinen Sprachtext enthalten, verwenden Sie bitte den Code "zxx" für "Kein linguistischer Inhalt" (s. \url{http://id.loc.gov/vocabulary/iso639-2/zxx}). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/language">Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache, ist der Sprachcode "und" (Nicht zu entscheiden) bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Bitte beachten: Im Kontext der DDB und Europeana fallen auch Noten unter den Dokumenttyp Text. Falls die Noten keinen Sprachtext enthalten, verwenden Sie bitte den Code "zxx" für "Kein linguistischer Inhalt" (s. \url{http://id.loc.gov/vocabulary/iso639-2/zxx}). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1476,13 +1500,13 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:xmlData/mods:mods/mods:subject[mods:topic or mods:genre]">
-            <!-- Kein GND-URI in mods:subject -->
+      <sch:rule context="mets:xmlData/mods:mods/mods:subject[mods:topic]/mods:topic | mets:xmlData/mods:mods/mods:subject[mods:genre]/mods:genre">
+            <!-- Kein unterstützter URI in mods:subject -->
          <sch:assert id="subject_01"
                      role="info"
-                     test="starts-with(@valueURI, 'http://d-nb.info/gnd/') or mods:topic[starts-with(@valueURI, 'http://d-nb.info/gnd/')] or mods:genre[starts-with(@valueURI, 'http://d-nb.info/gnd/')]"
+                     test="starts-with(../@valueURI, 'http://d-nb.info/gnd/') or starts-with(../@valueURI, 'https://d-nb.info/gnd/') or starts-with(../@valueURI, 'http://www.wikidata.org/') or starts-with(../@valueURI, 'https://www.wikidata.org/') or starts-with(../@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(../@valueURI, 'https://vocab.getty.edu/aat/') or starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/') or starts-with(@valueURI, 'http://www.wikidata.org/') or starts-with(@valueURI, 'https://www.wikidata.org/') or starts-with(@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(@valueURI, 'https://vocab.getty.edu/aat/')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/subject">mods:subject wird in der DDB nur dann berücksichtigt, wenn es Schlagworte aus der GND enthält. Diese müssen in dem Unterelement zu mods:subject stehen und dort mittels GND-URI in dem Attribut valueURI eindeutig identifiziert werden. Ist dies nicht der Fall, wird mods:subject bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.9</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/subject">Die DDB berücksichtigt das Element mods:subject nur, wenn es Schlagworte aus der GND, Wikidata oder dem AAT enthält. Diese müssen in dem Unterelement zu mods:subject stehen und dort mittels einer der genannten URIs in dem Attribut valueURI eindeutig identifiziert werden. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.9</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1515,8 +1539,8 @@
       <sch:rule context="mets:xmlData/mods:mods/mods:relatedItem">
             <!-- Das Attribut type in mods:relatedItem ist nicht vorhanden oder enthält einen falschen Attributwert. -->
          <sch:assert id="relatedItem_04"
-                     role="info"
-                     test="@type = ('host', 'preceding', 'succeeding', 'series', 'original')"
+                     role="error"
+                     test="@type = ('enumerated', 'preceding', 'succeeding', 'original', 'host', 'constituent', 'series', 'otherVersion', 'otherFormat', 'isReferencedBy', 'references', 'reviewOf')"
                      properties="dmd_id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">mods:relatedItem wird in der DDB nur dann berücksichtigt, wenn ein Attribut type vorhanden ist und dieses den Wert "host" oder den Wert "series" enthält. Ist dies nicht der Fall, wird mods:relatedItem bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.1</sch:assert>
       </sch:rule>
@@ -1576,6 +1600,16 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
+      <sch:rule context="mods:mods/mods:part">
+            <!-- Wiederholung von mods:detail[@type='volume'] in mods:part -->
+         <sch:report id="part_12"
+                     role="error"
+                     test="mods:detail[@type='volume'][mods:number][2] or mods:detail[mods:number[@type='volume']][2]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Das Element mods:detail[@type='volume'] darf innerhalb von mods:part nicht wiederholt werden. Ist dies der Fall, werden bei der Transformation der Daten die weiteren Vorkommen von mods:detail[@type='volume'] entfernt und die Inhalte des Unterlements mods:number im ersten Vorkommen zusammengefasst. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.2.3.2</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:identifier">
             <!-- Attribut type fehlt in mods:identifier oder der Attributwert ist falsch -->
          <sch:assert id="identifier_01"
@@ -1586,21 +1620,13 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:xmlData/mods:mods/mods:location[not(mods:shelfLocator)]">
-            <!-- Unterelement in mods:location fehlt -->
+      <sch:rule context="mets:xmlData/mods:mods/mods:location">
+            <!--  mods:physicalLocation fehlt in mods:location -->
          <sch:assert id="location_01"
-                     role="error"
-                     test="mods:physicalLocation or mods:url"
-                     properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">mods:location muss entweder mods:url oder mods:physicalLocation enthalten. Ist keines der beiden Elemente vorhanden, wird mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</sch:assert>
-      </sch:rule>
-      <sch:rule context="mets:xmlData/mods:mods/mods:location[mods:shelfLocator]">
-            <!-- mods:physicalLocation fehlt -->
-         <sch:assert id="location_02"
                      role="error"
                      test="mods:physicalLocation"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Wenn mods:location für die Angabe der Signatur mods:shelfLocator enthält, muss auch mods:physicalLocation enthalten sein, da sich nur so der genaue Standort identifizieren lässt. Ist mods:physicalLocation nicht vorhanden, wird mods:shelfLocator bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">mods:location muss das Element mods:physicalLocation enthalten. Fehlt mods:physicalLocation, wird mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1610,7 +1636,7 @@
                      role="warn"
                      test="mods:location/mods:physicalLocation"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Ist kein mods:location mit dem Unterelement mods:physicalLocation in der obersten mets:dmdSec vorhanden, kann der Standort eines Bandes bzw. eines Objekts nicht in der DDB angezeigt werden. Das Fehlen von mods:physicalLocation verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Ist kein mods:location mit dem Unterelement mods:physicalLocation in der primären mets:dmdSec vorhanden, kann der Standort eines Bandes bzw. eines Objekts nicht in der DDB angezeigt werden. Das Fehlen von mods:physicalLocation verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1630,7 +1656,38 @@
                      role="error"
                      test="mods:physicalLocation[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Innerhalb eines mods:location darf mods:physicalLocation nicht wiederholt werden. Ist mehr als ein mods:physicalLocation in mods:location vorhanden, wird das erste Vorkommen bei der Transformation der Daten übernommen, alle anderen Vorkommen werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Innerhalb eines mods:location darf mods:physicalLocation nicht wiederholt werden. Ist mehr als ein mods:physicalLocation in mods:location vorhanden, wird das erste Vorkommen bei der Transformation der Daten berücksichtigt, alle anderen Vorkommen werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:xmlData/mods:mods/mods:location/mods:url">
+            <!-- mods:url mit ungültigem Wert im Attribut access -->
+         <sch:assert id="location_06"
+                     role="error"
+                     test="./@access = ('preview', 'object in context', 'raw object')"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Das Element mods:url wird zurzeit bei der Bearbeitung der Datensätze entfernt. Perspektivisch unterstützt die DDB mods:url nur mit einem gültigen Wert im Attribut access ("preview", "object in context" und "raw object"). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:xmlData/mods:mods/mods:location[mods:physicalLocation]">
+         <sch:let name="current_physicalLocation" value="mods:physicalLocation[1]"/>
+         <!-- mods:physicalLocation mit unterschiedlichen Werten -->
+         <sch:report id="location_07"
+                     role="error"
+                     test="./preceding-sibling::mods:location[mods:physicalLocation/text() != $current_physicalLocation]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Ein Datensatz darf im allen Unterelementen mods:physicalLocation von mods:location nur einen Wert enthalten. Enthält der Datensatz mehr als einen unterschiedlichen Wert in allen mods:physicalLocation, werden die weiteren Vorkommen (XML-Reihenfolge) von mods:physicalLocation bzw. die entsprechenden mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mods:accessCondition[@type='use and reproduction']/@*[local-name()= 'href']">
+            <!-- Falscher Namensraum für das Attribut href von mods:accessCondition -->
+         <sch:assert id="accessCondition_02"
+                     role="error"
+                     test="namespace-uri() = 'http://www.w3.org/1999/xlink'"
+                     properties="dmd_id"
+                     see="https://wiki.dnb.de/pages/viewpage.action?pageId=148607412#MODS(Empfehlung2.0)-Rechtehinweis/Lizenz">Das Attribut href des Elements mods:accessCondition muss zum Namensraum "http://www.w3.org/1999/xlink" gehören. Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs href in den Namensraum "http://www.w3.org/1999/xlink" gesetzt und entsprechend ausgewertet.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1668,7 +1725,7 @@
             <!-- Der Identifier des Datensatzes ist nicht valide -->
          <sch:assert id="recordInfo_04"
                      role="fatal"
-                     test="matches(text()[1], '^[a-zA-Z_0-9:\-]+$')"
+                     test="matches(text()[1], '^[^ /]+$')"
                      properties="dmd_id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und/oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und/oder Sonderzeichen enthalten, nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15</sch:assert>
       </sch:rule>
@@ -1834,6 +1891,21 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)]//mets:div[@DMDID]">
+         <sch:let name="logid" value="@ID"/>
+         <sch:let name="physical_div_id"
+                  value="./ancestor::mets:mets/mets:structLink/mets:smLink[@xlink:from = $logid][1]/@xlink:to"/>
+         <sch:let name="fileids"
+                  value="key('structMap_PHYSICAL_ids', $physical_div_id)/descendant-or-self::mets:div[mets:fptr][parent::mets:div][1]/mets:fptr/@FILEID"/>
+         <!-- Strukturelemente ohne mets:file in der mets:fileGrp[@USE='DEFAULT'] -->
+         <sch:assert id="structMapLogical_22"
+                     role="error"
+                     test="key('fileGrp_DEFAULT_file_ids', $fileids) or $is_anchor"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Jedes Strukturelement (mets:div in mets:structMap[@TYPE='LOGICAL']) muss für die Anzeige in der DDB mindestens ein mets:file Element im Element mets:fileGrp[@USE='DEFAULT'] zugewiesen sein. Ist dies nicht der Fall, wird das Strukturelement bei der Transformation des Datensatzes entfernt.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
       <sch:rule context="mets:mets">
             <!-- mets:structMap TYPE="PHYSICAL" fehlt -->
          <sch:assert id="structMapPhysical_01"
@@ -1968,6 +2040,15 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
+      <sch:rule context="mets:mets/mets:fileSec">
+            <!-- mets:file ohne Attribut MIMETYPE -->
+         <sch:report id="fileSec_08"
+                     role="warn"
+                     test="//mets:file[string-length(@MIMETYPE) = 0]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Jedes mets:file Element im Element mets:fileSec muss das Attribut MIMETYPE besitzen. Der Datensatz enthält mindestens ein mets:file ohne das Attribut MIMETYPE. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.2</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
       <sch:rule context="mets:mets">
             <!-- mets:dmdSec fehlt -->
          <sch:assert id="dmdSec_01"
@@ -2033,7 +2114,7 @@
             <!-- Rechteangabe weicht von den Vorgaben ab -->
          <sch:assert id="amdSec_05"
                      role="error"
-                     test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)"
+                     test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Die von der DDB akzeptierten Rechteangaben entsprechen der von Europeana veröffentlichten Liste der rights statements (s. \url{https://pro.europeana.eu/page/available-rights-statements}). Entsprechen die Rechteangaben in den Daten nicht den in dieser Liste erlaubten URIs, werden sie nach Rücksprache mit den Datengebern bei der Bereinigung der Daten in eine der dort genannten Lizenzen bzw. Rechteangaben konvertiert.</sch:assert>
       </sch:rule>
    </sch:pattern>
@@ -2099,7 +2180,7 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href[contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
+      <sch:rule context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
             <!-- Hinweis auf möglicherweise ungültige Rechteangabe -->
          <sch:report id="amdSec_13"
                      role="warn"
@@ -2108,12 +2189,34 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets">
-            <!-- Widersprüchliche Rechteangaben -->
+      <sch:rule context="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]">
+            <!-- Widersprüchliche Rechteangaben in dv:license -->
          <sch:report id="amdSec_14"
                      role="fatal"
-                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@xlink:href, 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@xlink:href, '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to, key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
-                     properties="dmd_id">Ein Datensatz muss eindeutige Rechteangaben zu den Digitalisaten enthalten. Enthält ein Datensatz unterschiedliche URIs aus dem Lizenzkorb der DDB wird er nicht in die DDB eingespielt.</sch:report>
+                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
+                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
+      </sch:rule>
+      <sch:rule context="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]">
+            <!-- Widersprüchliche Rechteangaben in mods:accessCondition[@type='use and reproduction'] -->
+         <sch:report id="amdSec_16"
+                     role="fatal"
+                     test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1"
+                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element mods:accessCondition[@type='use and reproduction'] widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
+      </sch:rule>
+      <sch:rule context="mets:mets">
+            <!-- Widersprüchliche Rechteangaben in dv:license -->
+         <sch:report id="amdSec_17"
+                     role="error"
+                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
+                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält in den Elementen mods:accessCondition[@type='use and reproduction'] und dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB. Bei der Transformation der Daten übernimmt die DDB in diesem Fall die Rechteangabe aus mods:accessCondition[@type='use and reproduction']. Bitte beachten Sie darüber hinaus, dass die DDB die codierten CC-Lizenz-Werte aus dem METS-AP für dv:license als Version 4.0 und den Wert "reserved" als "Urheberrechtsschutz nicht bewertet" (Europeana Rightstatement "CNE") interpretiert.</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets">
+            <!-- dv:presentation fehlt -->
+         <sch:assert id="amdSec_15"
+                     role="warn"
+                     test="mets:amdSec/mets:digiprovMD/mets:mdWrap/mets:xmlData/dv:links/dv:presentation[string-length(text()) &gt; 0]">Im Datensatz fehlt das Element dv:presentation mit dem URL zur Anzeige des Digitalisats bei Ihrer Institution. Daher fehlt in der DDB der Button "Objekt anzeigen" mit dem entsprechend Link zu Ihrer lokalen Präsentation.</sch:assert>
       </sch:rule>
    </sch:pattern>
 </sch:schema>

@@ -3,6 +3,25 @@ Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Ze
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+## v2022-11-10T08:51:24
+
+### Added
+- Prüfung `all_06` hinzugefügt: "Ungültiger GND-URI im Attribut valueURI"
+- Prüfung `accessCondition_02` hinzugefügt: "Falscher Namensraum für das Attribut href von mods:accessCondition"
+- Prüfung `originInfo_13` hinzugefügt: "Das Erscheinungsdatum der Ausgabe in mods:dateIssued liegt in der Zukunft"
+- Prüfung `originInfo_14` hinzugefügt: "Das Erscheinungsdatum enthält einen ungültigen Wert"
+- Prüfung `amdSec_16` hinzugefügt: "Widersprüchliche Rechteangaben in mods:accessCondition\[@type='use and reproduction'\]"
+- Prüfung `amdSec_17` hinzugefügt: "Widersprüchliche Rechteangaben"
+- Prüfung `fileSec_08` hinzugefügt: "mets:file ohne Attribut MIMETYPE"
+
+### Changed
+- Prüfung `accessCondition_01`: Die Prüfung berücksichtigt das Attribut `href`von `mods:accessCondition` nun unabhängig vom Namespace
+- Prüfung `originInfo_12`: Fehlermeldung präzisiert
+- Prüfung `recordInfo_04`: Die DDB erlaubt weitere Zeichen im Element `mods:recordIdentifier`. Prüfung entsprechend angepasst.
+- Prüfung `amdSec_05`: Die Prüfung berücksichtigt das Attribut `href`von `mods:accessCondition` nun unabhängig vom Namespace
+- Prüfung `amdSec_13`: Die Prüfung berücksichtigt das Attribut `href`von `mods:accessCondition` nun unabhängig vom Namespace
+- Prüfung `amdSec_14`: Die Prüfung geändert in "Widersprüchliche Rechteangaben in dv:license", sie testet nur noch dv:license
+
 ## v2022-09-02T06:42:36
 
 ### Changed

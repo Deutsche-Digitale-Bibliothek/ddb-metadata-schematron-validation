@@ -34,12 +34,9 @@
    <xsl:key name="mets_ids" match="mets:*[@ID]" use="@ID"/>
    <xsl:key name="dmdsec_ids" match="mets:dmdSec" use="@ID"/>
    <xsl:key name="amdsec_ids" match="mets:amdSec" use="@ID"/>
-   <xsl:key name="structLink_from_ids"
-            match="mets:structLink/mets:smLink"
-            use="@xlink:from"/>
-   <xsl:key name="structLink_to_ids"
-            match="mets:structLink/mets:smLink"
-            use="@xlink:to"/>
+   <xsl:key name="fileGrp_DEFAULT_file_ids"
+            match="mets:fileGrp[@USE='DEFAULT']/mets:file[@ID]"
+            use="@ID"/>
    <xsl:key name="structMap_PHYSICAL_ids"
             match="mets:structMap[@TYPE='PHYSICAL']//mets:div"
             use="@ID"/>
@@ -49,6 +46,12 @@
    <xsl:key name="structMap_LOGICAL_admids"
             match="mets:structMap[@TYPE='LOGICAL']//mets:div[@ADMID]"
             use="tokenize(@ADMID, ' ')"/>
+   <xsl:key name="structLink_from_ids"
+            match="mets:structLink/mets:smLink"
+            use="@xlink:from"/>
+   <xsl:key name="structLink_to_ids"
+            match="mets:structLink/mets:smLink"
+            use="@xlink:to"/>
    <xsl:key name="license_uris"
             match="maps:license_uris/maps:license_uri"
             use="text()"/>
@@ -190,7 +193,7 @@
    <xsl:template match="/">
       <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                               title="Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS Anwendungsprofil für digitalisierte Medien"
-                              schemaVersion="v2022-06-03T07:55:42">
+                              schemaVersion="v2022-11-10T08:51:13">
          <xsl:comment>
             <xsl:value-of select="$archiveDirParameter"/>   
 		 <xsl:value-of select="$archiveNameParameter"/>  
@@ -204,13 +207,6 @@
          <svrl:ns-prefix-in-attribute-values uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi"/>
          <svrl:ns-prefix-in-attribute-values uri="dcg:maps" prefix="maps"/>
          <svrl:ns-prefix-in-attribute-values uri="http://www.openarchives.org/OAI/2.0/" prefix="oai"/>
-         <svrl:active-pattern>
-            <xsl:attribute name="document">
-               <xsl:value-of select="document-uri(/)"/>
-            </xsl:attribute>
-            <xsl:apply-templates/>
-         </svrl:active-pattern>
-         <xsl:apply-templates select="/" mode="M31"/>
          <svrl:active-pattern>
             <xsl:attribute name="document">
                <xsl:value-of select="document-uri(/)"/>
@@ -750,6 +746,76 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M108"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M109"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M110"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M111"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M112"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M113"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M114"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M115"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M116"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M117"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M118"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -1816,7 +1882,7 @@
               select="//mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID = $work_dmdid]/@ADMID"/>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:*" priority="1000" mode="M31">
+   <xsl:template match="mods:*" priority="1000" mode="M32">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:*"/>
       <!--ASSERT warn-->
       <xsl:choose>
@@ -1837,15 +1903,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M31"/>
+      <xsl:apply-templates select="*" mode="M32"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M31"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M31">
-      <xsl:apply-templates select="*" mode="M31"/>
+   <xsl:template match="text()" priority="-1" mode="M32"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M32">
+      <xsl:apply-templates select="*" mode="M32"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:*[mods:*]" priority="1000" mode="M32">
+   <xsl:template match="mods:*[mods:*]" priority="1000" mode="M33">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:*[mods:*]"/>
       <!--REPORT error-->
       <xsl:if test="matches(string-join(text(), ''), '\w')">
@@ -1863,15 +1929,15 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M32"/>
+      <xsl:apply-templates select="*" mode="M33"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M32"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M32">
-      <xsl:apply-templates select="*" mode="M32"/>
+   <xsl:template match="text()" priority="-1" mode="M33"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M33">
+      <xsl:apply-templates select="*" mode="M33"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:*" priority="1000" mode="M33">
+   <xsl:template match="mets:xmlData/mods:mods/mods:*" priority="1000" mode="M34">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:*"/>
       <!--ASSERT fatal-->
@@ -1896,15 +1962,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M33"/>
+      <xsl:apply-templates select="*" mode="M34"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M33"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M33">
-      <xsl:apply-templates select="*" mode="M33"/>
+   <xsl:template match="text()" priority="-1" mode="M34"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M34">
+      <xsl:apply-templates select="*" mode="M34"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:*/@valueURI" priority="1000" mode="M34">
+   <xsl:template match="mods:*/@valueURI" priority="1000" mode="M35">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:*/@valueURI"/>
       <!--ASSERT error-->
       <xsl:choose>
@@ -1925,17 +1991,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M34"/>
+      <xsl:apply-templates select="*" mode="M35"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M34"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M34">
-      <xsl:apply-templates select="*" mode="M34"/>
+   <xsl:template match="text()" priority="-1" mode="M35"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M35">
+      <xsl:apply-templates select="*" mode="M35"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:*//mods:mods"
                  priority="1000"
-                 mode="M35">
+                 mode="M36">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:*//mods:mods"/>
       <!--REPORT error-->
@@ -1954,17 +2020,49 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M35"/>
+      <xsl:apply-templates select="*" mode="M36"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M35"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M35">
-      <xsl:apply-templates select="*" mode="M35"/>
+   <xsl:template match="text()" priority="-1" mode="M36"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M36">
+      <xsl:apply-templates select="*" mode="M36"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mods:*[starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')]"
+                 priority="1000"
+                 mode="M37">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mods:*[starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')]"/>
+      <!--ASSERT error-->
+      <xsl:choose>
+         <xsl:when test="matches(substring-after(@valueURI, '/gnd/'), '^[0-9]*-[0-9xX]{1}$|^[0-9xX]*$')"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="matches(substring-after(@valueURI, '/gnd/'), '^[0-9]*-[0-9xX]{1}$|^[0-9xX]*$')">
+               <xsl:attribute name="id">all_06</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Der Datensatz enthält valueURI Attribute mit einer ungültigen GND-URI. Diese valueURI-Attribute werden bei der Transformation der Daten entfernt.</svrl:text>
+               <svrl:property id="dmd_id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M37"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M37"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M37">
+      <xsl:apply-templates select="*" mode="M37"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M36">
+                 mode="M38">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT fatal-->
@@ -1986,17 +2084,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M36"/>
+      <xsl:apply-templates select="*" mode="M38"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M36"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M36">
-      <xsl:apply-templates select="*" mode="M36"/>
+   <xsl:template match="text()" priority="-1" mode="M38"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M38">
+      <xsl:apply-templates select="*" mode="M38"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID!=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M37">
+                 mode="M39">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID!=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT error-->
@@ -2018,17 +2116,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M37"/>
+      <xsl:apply-templates select="*" mode="M39"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M37"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M37">
-      <xsl:apply-templates select="*" mode="M37"/>
+   <xsl:template match="text()" priority="-1" mode="M39"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M39">
+      <xsl:apply-templates select="*" mode="M39"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M38">
+                 mode="M40">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--REPORT error-->
@@ -2047,17 +2145,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M38"/>
+      <xsl:apply-templates select="*" mode="M40"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M38"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M38">
-      <xsl:apply-templates select="*" mode="M38"/>
+   <xsl:template match="text()" priority="-1" mode="M40"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M40">
+      <xsl:apply-templates select="*" mode="M40"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:titleInfo[@type]"
                  priority="1000"
-                 mode="M39">
+                 mode="M41">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:titleInfo[@type]"/>
       <!--ASSERT error-->
@@ -2082,17 +2180,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M39"/>
+      <xsl:apply-templates select="*" mode="M41"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M39"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M39">
-      <xsl:apply-templates select="*" mode="M39"/>
+   <xsl:template match="text()" priority="-1" mode="M41"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M41">
+      <xsl:apply-templates select="*" mode="M41"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:titleInfo"
                  priority="1000"
-                 mode="M40">
+                 mode="M42">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:titleInfo"/>
       <!--REPORT error-->
@@ -2110,17 +2208,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M40"/>
+      <xsl:apply-templates select="*" mode="M42"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M40"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M40">
-      <xsl:apply-templates select="*" mode="M40"/>
+   <xsl:template match="text()" priority="-1" mode="M42"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M42">
+      <xsl:apply-templates select="*" mode="M42"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:titleInfo"
                  priority="1000"
-                 mode="M41">
+                 mode="M43">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:titleInfo"/>
       <!--REPORT error-->
@@ -2138,17 +2236,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M41"/>
+      <xsl:apply-templates select="*" mode="M43"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M41"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M41">
-      <xsl:apply-templates select="*" mode="M41"/>
+   <xsl:template match="text()" priority="-1" mode="M43"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M43">
+      <xsl:apply-templates select="*" mode="M43"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:titleInfo[not(@type='abbreviated')]/mods:title"
                  priority="1000"
-                 mode="M42">
+                 mode="M44">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:titleInfo[not(@type='abbreviated')]/mods:title"/>
       <!--ASSERT warn-->
@@ -2170,15 +2268,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M42"/>
+      <xsl:apply-templates select="*" mode="M44"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M42"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M42">
-      <xsl:apply-templates select="*" mode="M42"/>
+   <xsl:template match="text()" priority="-1" mode="M44"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M44">
+      <xsl:apply-templates select="*" mode="M44"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M43">
+   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M45">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name"/>
       <!--ASSERT error-->
@@ -2200,15 +2298,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M43"/>
+      <xsl:apply-templates select="*" mode="M45"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M43"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M43">
-      <xsl:apply-templates select="*" mode="M43"/>
+   <xsl:template match="text()" priority="-1" mode="M45"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M45">
+      <xsl:apply-templates select="*" mode="M45"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M44">
+   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M46">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name"/>
       <!--REPORT error-->
@@ -2226,15 +2324,15 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M44"/>
+      <xsl:apply-templates select="*" mode="M46"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M44"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M44">
-      <xsl:apply-templates select="*" mode="M44"/>
+   <xsl:template match="text()" priority="-1" mode="M46"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M46">
+      <xsl:apply-templates select="*" mode="M46"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M45">
+   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M47">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name"/>
       <!--REPORT info-->
@@ -2253,17 +2351,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M45"/>
+      <xsl:apply-templates select="*" mode="M47"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M45"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M45">
-      <xsl:apply-templates select="*" mode="M45"/>
+   <xsl:template match="text()" priority="-1" mode="M47"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M47">
+      <xsl:apply-templates select="*" mode="M47"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name[not(@type)]"
                  priority="1001"
-                 mode="M46">
+                 mode="M48">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name[not(@type)]"/>
       <!--ASSERT warn-->
@@ -2284,10 +2382,10 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M46"/>
+      <xsl:apply-templates select="*" mode="M48"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M46">
+   <xsl:template match="mets:xmlData/mods:mods/mods:name" priority="1000" mode="M48">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name"/>
       <!--ASSERT warn-->
@@ -2312,17 +2410,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M46"/>
+      <xsl:apply-templates select="*" mode="M48"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M46"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M46">
-      <xsl:apply-templates select="*" mode="M46"/>
+   <xsl:template match="text()" priority="-1" mode="M48"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M48">
+      <xsl:apply-templates select="*" mode="M48"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name[@type = ('corporate', 'family', 'conference')]"
                  priority="1000"
-                 mode="M47">
+                 mode="M49">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name[@type = ('corporate', 'family', 'conference')]"/>
       <!--REPORT error-->
@@ -2340,17 +2438,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M47"/>
+      <xsl:apply-templates select="*" mode="M49"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M47"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M47">
-      <xsl:apply-templates select="*" mode="M47"/>
+   <xsl:template match="text()" priority="-1" mode="M49"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M49">
+      <xsl:apply-templates select="*" mode="M49"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name[@type='personal']/mods:namePart[not(@type)]"
                  priority="1001"
-                 mode="M48">
+                 mode="M50">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name[@type='personal']/mods:namePart[not(@type)]"/>
       <!--ASSERT warn-->
@@ -2371,12 +2469,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M48"/>
+      <xsl:apply-templates select="*" mode="M50"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name[@type='personal']/mods:namePart"
                  priority="1000"
-                 mode="M48">
+                 mode="M50">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name[@type='personal']/mods:namePart"/>
       <!--ASSERT error-->
@@ -2401,17 +2499,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M48"/>
+      <xsl:apply-templates select="*" mode="M50"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M48"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M48">
-      <xsl:apply-templates select="*" mode="M48"/>
+   <xsl:template match="text()" priority="-1" mode="M50"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M50">
+      <xsl:apply-templates select="*" mode="M50"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name/mods:*[@valueURI]"
                  priority="1001"
-                 mode="M49">
+                 mode="M51">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name/mods:*[@valueURI]"/>
       <!--REPORT error-->
@@ -2429,12 +2527,12 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M49"/>
+      <xsl:apply-templates select="*" mode="M51"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name[@valueURI]"
                  priority="1000"
-                 mode="M49">
+                 mode="M51">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name[@valueURI]"/>
       <!--ASSERT error-->
@@ -2456,17 +2554,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M49"/>
+      <xsl:apply-templates select="*" mode="M51"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M49"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M49">
-      <xsl:apply-templates select="*" mode="M49"/>
+   <xsl:template match="text()" priority="-1" mode="M51"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M51">
+      <xsl:apply-templates select="*" mode="M51"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name[not(mods:role/mods:roleTerm)]"
                  priority="1002"
-                 mode="M50">
+                 mode="M52">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name[not(mods:role/mods:roleTerm)]"/>
       <!--ASSERT warn-->
@@ -2487,12 +2585,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M50"/>
+      <xsl:apply-templates select="*" mode="M52"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name/mods:role[not(mods:roleTerm[@type='code'][@authority='marcrelator'])]"
                  priority="1001"
-                 mode="M50">
+                 mode="M52">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name/mods:role[not(mods:roleTerm[@type='code'][@authority='marcrelator'])]"/>
       <!--ASSERT error-->
@@ -2514,12 +2612,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M50"/>
+      <xsl:apply-templates select="*" mode="M52"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:name/mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']"
                  priority="1000"
-                 mode="M50">
+                 mode="M52">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:name/mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']"/>
       <!--ASSERT error-->
@@ -2544,17 +2642,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M50"/>
+      <xsl:apply-templates select="*" mode="M52"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M50"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M50">
-      <xsl:apply-templates select="*" mode="M50"/>
+   <xsl:template match="text()" priority="-1" mode="M52"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M52">
+      <xsl:apply-templates select="*" mode="M52"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:originInfo"
                  priority="1000"
-                 mode="M51">
+                 mode="M53">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:originInfo"/>
       <!--REPORT error-->
@@ -2573,17 +2671,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M51"/>
+      <xsl:apply-templates select="*" mode="M53"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M51"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M51">
-      <xsl:apply-templates select="*" mode="M51"/>
+   <xsl:template match="text()" priority="-1" mode="M53"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M53">
+      <xsl:apply-templates select="*" mode="M53"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:originInfo/mods:dateIssued | mets:xmlData/mods:mods/mods:originInfo/mods:dateCreated | mets:xmlData/mods:mods/mods:originInfo/mods:dateCaptured"
                  priority="1000"
-                 mode="M52">
+                 mode="M54">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:originInfo/mods:dateIssued | mets:xmlData/mods:mods/mods:originInfo/mods:dateCreated | mets:xmlData/mods:mods/mods:originInfo/mods:dateCaptured"/>
       <!--ASSERT info-->
@@ -2605,17 +2703,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M52"/>
+      <xsl:apply-templates select="*" mode="M54"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M52"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M52">
-      <xsl:apply-templates select="*" mode="M52"/>
+   <xsl:template match="text()" priority="-1" mode="M54"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M54">
+      <xsl:apply-templates select="*" mode="M54"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:originInfo/mods:place/mods:placeTerm"
                  priority="1000"
-                 mode="M53">
+                 mode="M55">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:originInfo/mods:place/mods:placeTerm"/>
       <!--REPORT error-->
@@ -2633,17 +2731,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M53"/>
+      <xsl:apply-templates select="*" mode="M55"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M53"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M53">
-      <xsl:apply-templates select="*" mode="M53"/>
+   <xsl:template match="text()" priority="-1" mode="M55"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M55">
+      <xsl:apply-templates select="*" mode="M55"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:originInfo/mods:place/mods:placeTerm"
                  priority="1000"
-                 mode="M54">
+                 mode="M56">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:originInfo/mods:place/mods:placeTerm"/>
       <!--REPORT error-->
@@ -2661,17 +2759,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M54"/>
+      <xsl:apply-templates select="*" mode="M56"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M54"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M54">
-      <xsl:apply-templates select="*" mode="M54"/>
+   <xsl:template match="text()" priority="-1" mode="M56"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M56">
+      <xsl:apply-templates select="*" mode="M56"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:originInfo[ not(../mods:originInfo[@eventType='digitization'] or ../mods:originInfo[mods:edition[text()[1] = '[Electronic ed.]']]) and (mods:dateIssued[number(substring(text()[1], 1, 4)) &gt; 1999] or mods:dateCreated[number(substring(text()[1], 1, 4)) &gt; 1999]) ]"
                  priority="1000"
-                 mode="M55">
+                 mode="M57">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:originInfo[ not(../mods:originInfo[@eventType='digitization'] or ../mods:originInfo[mods:edition[text()[1] = '[Electronic ed.]']]) and (mods:dateIssued[number(substring(text()[1], 1, 4)) &gt; 1999] or mods:dateCreated[number(substring(text()[1], 1, 4)) &gt; 1999]) ]"/>
       <!--ASSERT warn-->
@@ -2693,17 +2791,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M55"/>
+      <xsl:apply-templates select="*" mode="M57"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M55"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M55">
-      <xsl:apply-templates select="*" mode="M55"/>
+   <xsl:template match="text()" priority="-1" mode="M57"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M57">
+      <xsl:apply-templates select="*" mode="M57"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:originInfo/mods:place"
                  priority="1000"
-                 mode="M56">
+                 mode="M58">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:originInfo/mods:place"/>
       <!--ASSERT error-->
@@ -2725,31 +2823,62 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M56"/>
+      <xsl:apply-templates select="*" mode="M58"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M56"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M56">
-      <xsl:apply-templates select="*" mode="M56"/>
+   <xsl:template match="text()" priority="-1" mode="M58"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M58">
+      <xsl:apply-templates select="*" mode="M58"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:xmlData/mods:mods/mods:originInfo/mods:*[local-name() = ('dateIssued', 'dateCreated', 'dateOther') and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point]"
+                 priority="1000"
+                 mode="M59">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:xmlData/mods:mods/mods:originInfo/mods:*[local-name() = ('dateIssued', 'dateCreated', 'dateOther') and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point]"/>
+      <xsl:variable name="point" select="./@point"/>
+      <xsl:variable name="name" select="./local-name()"/>
+      <!--REPORT error-->
+      <xsl:if test="./preceding-sibling::*[local-name() = $name and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point = $point]">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="./preceding-sibling::*[local-name() = $name and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point = $point]">
+            <xsl:attribute name="id">originInfo_15</xsl:attribute>
+            <xsl:attribute name="role">error</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Die Elemente mods:dateIssued, mods:dateCreated und mods:dateOther dürfen innerhalb eines Elements mods:originInfo nicht mit dem gleichen Wert im Attribut point wiederholt werden. Wird eines dieser Elemente mit dem gleichen Wert in point wiederholt, werden alle weiteren Vorkommen (XML-Reihenfolge) bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.4 – 2.4.2.6</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M59"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M59"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M59">
+      <xsl:apply-templates select="*" mode="M59"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M57">
+                 mode="M60">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT warn-->
       <xsl:choose>
-         <xsl:when test="mods:language/mods:languageTerm or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]"/>
+         <xsl:when test="mods:language/mods:languageTerm[text() != 'und'] or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mods:language/mods:languageTerm or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]">
+                                test="mods:language/mods:languageTerm[text() != 'und'] or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]">
                <xsl:attribute name="id">language_01</xsl:attribute>
                <xsl:attribute name="role">warn</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Bitte beachten: Im Kontext der DDB und Europeana fallen auch Noten unter den Dokumenttyp Text. Falls die Noten keinen Sprachtext enthalten, verwenden Sie bitte den Code "zxx" für "Kein linguistischer Inhalt" (s. \url{http://id.loc.gov/vocabulary/iso639-2/zxx}). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5</svrl:text>
+               <svrl:text>Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache, ist der Sprachcode "und" (Nicht zu entscheiden) bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Bitte beachten: Im Kontext der DDB und Europeana fallen auch Noten unter den Dokumenttyp Text. Falls die Noten keinen Sprachtext enthalten, verwenden Sie bitte den Code "zxx" für "Kein linguistischer Inhalt" (s. \url{http://id.loc.gov/vocabulary/iso639-2/zxx}). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2757,17 +2886,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M57"/>
+      <xsl:apply-templates select="*" mode="M60"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M57"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M57">
-      <xsl:apply-templates select="*" mode="M57"/>
+   <xsl:template match="text()" priority="-1" mode="M60"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M60">
+      <xsl:apply-templates select="*" mode="M60"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:language/mods:languageTerm"
                  priority="1000"
-                 mode="M58">
+                 mode="M61">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:language/mods:languageTerm"/>
       <!--ASSERT error-->
@@ -2792,17 +2921,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M58"/>
+      <xsl:apply-templates select="*" mode="M61"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M58"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M58">
-      <xsl:apply-templates select="*" mode="M58"/>
+   <xsl:template match="text()" priority="-1" mode="M61"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M61">
+      <xsl:apply-templates select="*" mode="M61"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:physicalDescription/mods:extent"
                  priority="1000"
-                 mode="M59">
+                 mode="M62">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:physicalDescription/mods:extent"/>
       <!--REPORT error-->
@@ -2821,17 +2950,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M59"/>
+      <xsl:apply-templates select="*" mode="M62"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M59"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M59">
-      <xsl:apply-templates select="*" mode="M59"/>
+   <xsl:template match="text()" priority="-1" mode="M62"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M62">
+      <xsl:apply-templates select="*" mode="M62"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mods:note[parent::mods:mods or parent::mods:physicalDescription][not(@type)]"
                  priority="1001"
-                 mode="M60">
+                 mode="M63">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mods:note[parent::mods:mods or parent::mods:physicalDescription][not(@type)]"/>
       <!--ASSERT error-->
@@ -2852,12 +2981,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M60"/>
+      <xsl:apply-templates select="*" mode="M63"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mods:note[parent::mods:mods or parent::mods:physicalDescription][@type]"
                  priority="1000"
-                 mode="M60">
+                 mode="M63">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mods:note[parent::mods:mods or parent::mods:physicalDescription][@type]"/>
       <!--ASSERT error-->
@@ -2882,31 +3011,31 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M60"/>
+      <xsl:apply-templates select="*" mode="M63"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M60"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M60">
-      <xsl:apply-templates select="*" mode="M60"/>
+   <xsl:template match="text()" priority="-1" mode="M63"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M63">
+      <xsl:apply-templates select="*" mode="M63"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:subject[mods:topic or mods:genre]"
+   <xsl:template match="mets:xmlData/mods:mods/mods:subject[mods:topic]/mods:topic | mets:xmlData/mods:mods/mods:subject[mods:genre]/mods:genre"
                  priority="1000"
-                 mode="M61">
+                 mode="M64">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:xmlData/mods:mods/mods:subject[mods:topic or mods:genre]"/>
+                       context="mets:xmlData/mods:mods/mods:subject[mods:topic]/mods:topic | mets:xmlData/mods:mods/mods:subject[mods:genre]/mods:genre"/>
       <!--ASSERT info-->
       <xsl:choose>
-         <xsl:when test="starts-with(@valueURI, 'http://d-nb.info/gnd/') or mods:topic[starts-with(@valueURI, 'http://d-nb.info/gnd/')] or mods:genre[starts-with(@valueURI, 'http://d-nb.info/gnd/')]"/>
+         <xsl:when test="starts-with(../@valueURI, 'http://d-nb.info/gnd/') or starts-with(../@valueURI, 'https://d-nb.info/gnd/') or starts-with(../@valueURI, 'http://www.wikidata.org/') or starts-with(../@valueURI, 'https://www.wikidata.org/') or starts-with(../@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(../@valueURI, 'https://vocab.getty.edu/aat/') or starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/') or starts-with(@valueURI, 'http://www.wikidata.org/') or starts-with(@valueURI, 'https://www.wikidata.org/') or starts-with(@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(@valueURI, 'https://vocab.getty.edu/aat/')"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="starts-with(@valueURI, 'http://d-nb.info/gnd/') or mods:topic[starts-with(@valueURI, 'http://d-nb.info/gnd/')] or mods:genre[starts-with(@valueURI, 'http://d-nb.info/gnd/')]">
+                                test="starts-with(../@valueURI, 'http://d-nb.info/gnd/') or starts-with(../@valueURI, 'https://d-nb.info/gnd/') or starts-with(../@valueURI, 'http://www.wikidata.org/') or starts-with(../@valueURI, 'https://www.wikidata.org/') or starts-with(../@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(../@valueURI, 'https://vocab.getty.edu/aat/') or starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/') or starts-with(@valueURI, 'http://www.wikidata.org/') or starts-with(@valueURI, 'https://www.wikidata.org/') or starts-with(@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(@valueURI, 'https://vocab.getty.edu/aat/')">
                <xsl:attribute name="id">subject_01</xsl:attribute>
                <xsl:attribute name="role">info</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mods:subject wird in der DDB nur dann berücksichtigt, wenn es Schlagworte aus der GND enthält. Diese müssen in dem Unterelement zu mods:subject stehen und dort mittels GND-URI in dem Attribut valueURI eindeutig identifiziert werden. Ist dies nicht der Fall, wird mods:subject bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.9</svrl:text>
+               <svrl:text>Die DDB berücksichtigt das Element mods:subject nur, wenn es Schlagworte aus der GND, Wikidata oder dem AAT enthält. Diese müssen in dem Unterelement zu mods:subject stehen und dort mittels einer der genannten URIs in dem Attribut valueURI eindeutig identifiziert werden. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.9</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2914,17 +3043,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M61"/>
+      <xsl:apply-templates select="*" mode="M64"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M61"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M61">
-      <xsl:apply-templates select="*" mode="M61"/>
+   <xsl:template match="text()" priority="-1" mode="M64"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M64">
+      <xsl:apply-templates select="*" mode="M64"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods [ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']/mets:div/mets:mptr]"
                  priority="1000"
-                 mode="M62">
+                 mode="M65">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods [ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']/mets:div/mets:mptr]"/>
       <!--ASSERT fatal-->
@@ -2946,17 +3075,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M62"/>
+      <xsl:apply-templates select="*" mode="M65"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M62"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M62">
-      <xsl:apply-templates select="*" mode="M62"/>
+   <xsl:template match="text()" priority="-1" mode="M65"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M65">
+      <xsl:apply-templates select="*" mode="M65"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:relatedItem[@type='host']"
                  priority="1002"
-                 mode="M63">
+                 mode="M66">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:relatedItem[@type='host']"/>
       <!--ASSERT fatal-->
@@ -2978,12 +3107,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M63"/>
+      <xsl:apply-templates select="*" mode="M66"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier"
                  priority="1001"
-                 mode="M63">
+                 mode="M66">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier"/>
       <!--ASSERT fatal-->
@@ -3004,22 +3133,22 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M63"/>
+      <xsl:apply-templates select="*" mode="M66"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:relatedItem"
                  priority="1000"
-                 mode="M63">
+                 mode="M66">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:relatedItem"/>
-      <!--ASSERT info-->
+      <!--ASSERT error-->
       <xsl:choose>
-         <xsl:when test="@type = ('host', 'preceding', 'succeeding', 'series', 'original')"/>
+         <xsl:when test="@type = ('enumerated', 'preceding', 'succeeding', 'original', 'host', 'constituent', 'series', 'otherVersion', 'otherFormat', 'isReferencedBy', 'references', 'reviewOf')"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="@type = ('host', 'preceding', 'succeeding', 'series', 'original')">
+                                test="@type = ('enumerated', 'preceding', 'succeeding', 'original', 'host', 'constituent', 'series', 'otherVersion', 'otherFormat', 'isReferencedBy', 'references', 'reviewOf')">
                <xsl:attribute name="id">relatedItem_04</xsl:attribute>
-               <xsl:attribute name="role">info</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
@@ -3031,17 +3160,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M63"/>
+      <xsl:apply-templates select="*" mode="M66"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M63"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M63">
-      <xsl:apply-templates select="*" mode="M63"/>
+   <xsl:template match="text()" priority="-1" mode="M66"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M66">
+      <xsl:apply-templates select="*" mode="M66"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:relatedItem[@type = 'series']"
                  priority="1000"
-                 mode="M64">
+                 mode="M67">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:relatedItem[@type = 'series']"/>
       <!--ASSERT error-->
@@ -3063,17 +3192,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M64"/>
+      <xsl:apply-templates select="*" mode="M67"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M64"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M64">
-      <xsl:apply-templates select="*" mode="M64"/>
+   <xsl:template match="text()" priority="-1" mode="M67"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M67">
+      <xsl:apply-templates select="*" mode="M67"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods[mods:relatedItem[@type='host']][not(mods:part)]"
                  priority="1002"
-                 mode="M65">
+                 mode="M68">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods[mods:relatedItem[@type='host']][not(mods:part)]"/>
       <!--ASSERT warn-->
@@ -3094,12 +3223,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M65"/>
+      <xsl:apply-templates select="*" mode="M68"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods[mods:relatedItem[@type='host']][not(mods:part[@order])]"
                  priority="1001"
-                 mode="M65">
+                 mode="M68">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods[mods:relatedItem[@type='host']][not(mods:part[@order])]"/>
       <!--ASSERT warn-->
@@ -3120,12 +3249,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M65"/>
+      <xsl:apply-templates select="*" mode="M68"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods[mods:relatedItem[@type='host']]/mods:part"
                  priority="1000"
-                 mode="M65">
+                 mode="M68">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods[mods:relatedItem[@type='host']]/mods:part"/>
       <!--ASSERT warn-->
@@ -3146,17 +3275,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M65"/>
+      <xsl:apply-templates select="*" mode="M68"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M65"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M65">
-      <xsl:apply-templates select="*" mode="M65"/>
+   <xsl:template match="text()" priority="-1" mode="M68"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M68">
+      <xsl:apply-templates select="*" mode="M68"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:part[not(mods:detail/mods:number)]"
                  priority="1001"
-                 mode="M66">
+                 mode="M69">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:part[not(mods:detail/mods:number)]"/>
       <!--ASSERT error-->
@@ -3177,12 +3306,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M66"/>
+      <xsl:apply-templates select="*" mode="M69"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:part/mods:detail"
                  priority="1000"
-                 mode="M66">
+                 mode="M69">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:part/mods:detail"/>
       <!--ASSERT warn-->
@@ -3204,17 +3333,43 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M66"/>
+      <xsl:apply-templates select="*" mode="M69"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M66"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M66">
-      <xsl:apply-templates select="*" mode="M66"/>
+   <xsl:template match="text()" priority="-1" mode="M69"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M69">
+      <xsl:apply-templates select="*" mode="M69"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mods:mods/mods:part" priority="1000" mode="M70">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:mods/mods:part"/>
+      <!--REPORT error-->
+      <xsl:if test="mods:detail[@type='volume'][mods:number][2] or mods:detail[mods:number[@type='volume']][2]">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="mods:detail[@type='volume'][mods:number][2] or mods:detail[mods:number[@type='volume']][2]">
+            <xsl:attribute name="id">part_12</xsl:attribute>
+            <xsl:attribute name="role">error</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Das Element mods:detail[@type='volume'] darf innerhalb von mods:part nicht wiederholt werden. Ist dies der Fall, werden bei der Transformation der Daten die weiteren Vorkommen von mods:detail[@type='volume'] entfernt und die Inhalte des Unterlements mods:number im ersten Vorkommen zusammengefasst. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.2.3.2</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M70"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M70"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M70">
+      <xsl:apply-templates select="*" mode="M70"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:identifier"
                  priority="1000"
-                 mode="M67">
+                 mode="M71">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:identifier"/>
       <!--ASSERT info-->
@@ -3239,57 +3394,30 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M67"/>
+      <xsl:apply-templates select="*" mode="M71"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M67"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M67">
-      <xsl:apply-templates select="*" mode="M67"/>
+   <xsl:template match="text()" priority="-1" mode="M71"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M71">
+      <xsl:apply-templates select="*" mode="M71"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:location[not(mods:shelfLocator)]"
-                 priority="1001"
-                 mode="M68">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:xmlData/mods:mods/mods:location[not(mods:shelfLocator)]"/>
-      <!--ASSERT error-->
-      <xsl:choose>
-         <xsl:when test="mods:physicalLocation or mods:url"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mods:physicalLocation or mods:url">
-               <xsl:attribute name="id">location_01</xsl:attribute>
-               <xsl:attribute name="role">error</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>mods:location muss entweder mods:url oder mods:physicalLocation enthalten. Ist keines der beiden Elemente vorhanden, wird mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
-               <svrl:property id="dmd_id">
-                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                                select="ancestor-or-self::mets:dmdSec/@ID"/>
-               </svrl:property>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="*" mode="M68"/>
-   </xsl:template>
-   <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:location[mods:shelfLocator]"
+   <xsl:template match="mets:xmlData/mods:mods/mods:location"
                  priority="1000"
-                 mode="M68">
+                 mode="M72">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:xmlData/mods:mods/mods:location[mods:shelfLocator]"/>
+                       context="mets:xmlData/mods:mods/mods:location"/>
       <!--ASSERT error-->
       <xsl:choose>
          <xsl:when test="mods:physicalLocation"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="mods:physicalLocation">
-               <xsl:attribute name="id">location_02</xsl:attribute>
+               <xsl:attribute name="id">location_01</xsl:attribute>
                <xsl:attribute name="role">error</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Wenn mods:location für die Angabe der Signatur mods:shelfLocator enthält, muss auch mods:physicalLocation enthalten sein, da sich nur so der genaue Standort identifizieren lässt. Ist mods:physicalLocation nicht vorhanden, wird mods:shelfLocator bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
+               <svrl:text>mods:location muss das Element mods:physicalLocation enthalten. Fehlt mods:physicalLocation, wird mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3297,17 +3425,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M68"/>
+      <xsl:apply-templates select="*" mode="M72"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M68"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M68">
-      <xsl:apply-templates select="*" mode="M68"/>
+   <xsl:template match="text()" priority="-1" mode="M72"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M72">
+      <xsl:apply-templates select="*" mode="M72"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M69">
+                 mode="M73">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT warn-->
@@ -3321,7 +3449,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ist kein mods:location mit dem Unterelement mods:physicalLocation in der obersten mets:dmdSec vorhanden, kann der Standort eines Bandes bzw. eines Objekts nicht in der DDB angezeigt werden. Das Fehlen von mods:physicalLocation verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
+               <svrl:text>Ist kein mods:location mit dem Unterelement mods:physicalLocation in der primären mets:dmdSec vorhanden, kann der Standort eines Bandes bzw. eines Objekts nicht in der DDB angezeigt werden. Das Fehlen von mods:physicalLocation verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3329,17 +3457,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M69"/>
+      <xsl:apply-templates select="*" mode="M73"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M69"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M69">
-      <xsl:apply-templates select="*" mode="M69"/>
+   <xsl:template match="text()" priority="-1" mode="M73"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M73">
+      <xsl:apply-templates select="*" mode="M73"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:location/mods:physicalLocation[starts-with(text()[1], 'DE-')]"
                  priority="1000"
-                 mode="M70">
+                 mode="M74">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:location/mods:physicalLocation[starts-with(text()[1], 'DE-')]"/>
       <!--ASSERT warn-->
@@ -3361,17 +3489,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M70"/>
+      <xsl:apply-templates select="*" mode="M74"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M70"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M70">
-      <xsl:apply-templates select="*" mode="M70"/>
+   <xsl:template match="text()" priority="-1" mode="M74"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M74">
+      <xsl:apply-templates select="*" mode="M74"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:location[mods:physicalLocation]"
                  priority="1000"
-                 mode="M71">
+                 mode="M75">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:location[mods:physicalLocation]"/>
       <!--REPORT error-->
@@ -3382,24 +3510,118 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Innerhalb eines mods:location darf mods:physicalLocation nicht wiederholt werden. Ist mehr als ein mods:physicalLocation in mods:location vorhanden, wird das erste Vorkommen bei der Transformation der Daten übernommen, alle anderen Vorkommen werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</svrl:text>
+            <svrl:text>Innerhalb eines mods:location darf mods:physicalLocation nicht wiederholt werden. Ist mehr als ein mods:physicalLocation in mods:location vorhanden, wird das erste Vorkommen bei der Transformation der Daten berücksichtigt, alle anderen Vorkommen werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M71"/>
+      <xsl:apply-templates select="*" mode="M75"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M71"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M71">
-      <xsl:apply-templates select="*" mode="M71"/>
+   <xsl:template match="text()" priority="-1" mode="M75"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M75">
+      <xsl:apply-templates select="*" mode="M75"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:xmlData/mods:mods/mods:location/mods:url"
+                 priority="1000"
+                 mode="M76">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:xmlData/mods:mods/mods:location/mods:url"/>
+      <!--ASSERT error-->
+      <xsl:choose>
+         <xsl:when test="./@access = ('preview', 'object in context', 'raw object')"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="./@access = ('preview', 'object in context', 'raw object')">
+               <xsl:attribute name="id">location_06</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Das Element mods:url wird zurzeit bei der Bearbeitung der Datensätze entfernt. Perspektivisch unterstützt die DDB mods:url nur mit einem gültigen Wert im Attribut access ("preview", "object in context" und "raw object"). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</svrl:text>
+               <svrl:property id="dmd_id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M76"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M76"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M76">
+      <xsl:apply-templates select="*" mode="M76"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:xmlData/mods:mods/mods:location[mods:physicalLocation]"
+                 priority="1000"
+                 mode="M77">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:xmlData/mods:mods/mods:location[mods:physicalLocation]"/>
+      <xsl:variable name="current_physicalLocation" select="mods:physicalLocation[1]"/>
+      <!--REPORT error-->
+      <xsl:if test="./preceding-sibling::mods:location[mods:physicalLocation/text() != $current_physicalLocation]">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="./preceding-sibling::mods:location[mods:physicalLocation/text() != $current_physicalLocation]">
+            <xsl:attribute name="id">location_07</xsl:attribute>
+            <xsl:attribute name="role">error</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Ein Datensatz darf im allen Unterelementen mods:physicalLocation von mods:location nur einen Wert enthalten. Enthält der Datensatz mehr als einen unterschiedlichen Wert in allen mods:physicalLocation, werden die weiteren Vorkommen (XML-Reihenfolge) von mods:physicalLocation bzw. die entsprechenden mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M77"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M77"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M77">
+      <xsl:apply-templates select="*" mode="M77"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mods:accessCondition[@type='use and reproduction']/@*[local-name()= 'href']"
+                 priority="1000"
+                 mode="M78">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mods:accessCondition[@type='use and reproduction']/@*[local-name()= 'href']"/>
+      <!--ASSERT error-->
+      <xsl:choose>
+         <xsl:when test="namespace-uri() = 'http://www.w3.org/1999/xlink'"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="namespace-uri() = 'http://www.w3.org/1999/xlink'">
+               <xsl:attribute name="id">accessCondition_02</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Das Attribut href des Elements mods:accessCondition muss zum Namensraum "http://www.w3.org/1999/xlink" gehören. Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs href in den Namensraum "http://www.w3.org/1999/xlink" gesetzt und entsprechend ausgewertet.</svrl:text>
+               <svrl:property id="dmd_id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M78"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M78"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M78">
+      <xsl:apply-templates select="*" mode="M78"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M72">
+                 mode="M79">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT fatal-->
@@ -3421,17 +3643,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M72"/>
+      <xsl:apply-templates select="*" mode="M79"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M72"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M72">
-      <xsl:apply-templates select="*" mode="M72"/>
+   <xsl:template match="text()" priority="-1" mode="M79"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M79">
+      <xsl:apply-templates select="*" mode="M79"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier"
                  priority="1000"
-                 mode="M73">
+                 mode="M80">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier"/>
       <!--ASSERT fatal-->
@@ -3453,15 +3675,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M73"/>
+      <xsl:apply-templates select="*" mode="M80"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M73"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M73">
-      <xsl:apply-templates select="*" mode="M73"/>
+   <xsl:template match="text()" priority="-1" mode="M80"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M80">
+      <xsl:apply-templates select="*" mode="M80"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods" priority="1000" mode="M74">
+   <xsl:template match="mets:xmlData/mods:mods" priority="1000" mode="M81">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods"/>
       <!--REPORT error-->
@@ -3483,25 +3705,25 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M74"/>
+      <xsl:apply-templates select="*" mode="M81"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M74"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M74">
-      <xsl:apply-templates select="*" mode="M74"/>
+   <xsl:template match="text()" priority="-1" mode="M81"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M81">
+      <xsl:apply-templates select="*" mode="M81"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier"
                  priority="1000"
-                 mode="M75">
+                 mode="M82">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier"/>
       <!--ASSERT fatal-->
       <xsl:choose>
-         <xsl:when test="matches(text()[1], '^[a-zA-Z_0-9:\-]+$')"/>
+         <xsl:when test="matches(text()[1], '^[^ /]+$')"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="matches(text()[1], '^[a-zA-Z_0-9:\-]+$')">
+                                test="matches(text()[1], '^[^ /]+$')">
                <xsl:attribute name="id">recordInfo_04</xsl:attribute>
                <xsl:attribute name="role">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -3515,15 +3737,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M75"/>
+      <xsl:apply-templates select="*" mode="M82"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M75"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M75">
-      <xsl:apply-templates select="*" mode="M75"/>
+   <xsl:template match="text()" priority="-1" mode="M82"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M82">
+      <xsl:apply-templates select="*" mode="M82"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods" priority="1000" mode="M76">
+   <xsl:template match="mets:xmlData/mods:mods" priority="1000" mode="M83">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods"/>
       <!--REPORT error-->
@@ -3541,15 +3763,15 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M76"/>
+      <xsl:apply-templates select="*" mode="M83"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M76"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M76">
-      <xsl:apply-templates select="*" mode="M76"/>
+   <xsl:template match="text()" priority="-1" mode="M83"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M83">
+      <xsl:apply-templates select="*" mode="M83"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M77">
+   <xsl:template match="mets:mets" priority="1001" mode="M84">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -3566,12 +3788,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M77"/>
+      <xsl:apply-templates select="*" mode="M84"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']"
                  priority="1000"
-                 mode="M77">
+                 mode="M84">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']"/>
       <!--ASSERT fatal-->
@@ -3588,17 +3810,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M77"/>
+      <xsl:apply-templates select="*" mode="M84"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M77"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M77">
-      <xsl:apply-templates select="*" mode="M77"/>
+   <xsl:template match="text()" priority="-1" mode="M84"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M84">
+      <xsl:apply-templates select="*" mode="M84"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"
                  priority="1000"
-                 mode="M78">
+                 mode="M85">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"/>
       <!--ASSERT fatal-->
@@ -3619,17 +3841,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M78"/>
+      <xsl:apply-templates select="*" mode="M85"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M78"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M78">
-      <xsl:apply-templates select="*" mode="M78"/>
+   <xsl:template match="text()" priority="-1" mode="M85"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M85">
+      <xsl:apply-templates select="*" mode="M85"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div[@DMDID] | key('structMap_LOGICAL_dmdids', $work_dmdid)[@DMDID]"
                  priority="1001"
-                 mode="M79">
+                 mode="M86">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div[@DMDID] | key('structMap_LOGICAL_dmdids', $work_dmdid)[@DMDID]"/>
       <!--ASSERT fatal-->
@@ -3650,12 +3872,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M79"/>
+      <xsl:apply-templates select="*" mode="M86"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div | key('structMap_LOGICAL_dmdids', $work_dmdid)"
                  priority="1000"
-                 mode="M79">
+                 mode="M86">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div | key('structMap_LOGICAL_dmdids', $work_dmdid)"/>
       <!--ASSERT warn-->
@@ -3676,17 +3898,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M79"/>
+      <xsl:apply-templates select="*" mode="M86"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M79"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M79">
-      <xsl:apply-templates select="*" mode="M79"/>
+   <xsl:template match="text()" priority="-1" mode="M86"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M86">
+      <xsl:apply-templates select="*" mode="M86"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]"
                  priority="1002"
-                 mode="M80">
+                 mode="M87">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]"/>
       <!--ASSERT fatal-->
@@ -3706,12 +3928,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M80"/>
+      <xsl:apply-templates select="*" mode="M87"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]"
                  priority="1001"
-                 mode="M80">
+                 mode="M87">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]"/>
       <!--ASSERT error-->
@@ -3735,12 +3957,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M80"/>
+      <xsl:apply-templates select="*" mode="M87"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"
                  priority="1000"
-                 mode="M80">
+                 mode="M87">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div"/>
       <!--REPORT fatal-->
@@ -3758,17 +3980,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M80"/>
+      <xsl:apply-templates select="*" mode="M87"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M80"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M80">
-      <xsl:apply-templates select="*" mode="M80"/>
+   <xsl:template match="text()" priority="-1" mode="M87"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M87">
+      <xsl:apply-templates select="*" mode="M87"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"
                  priority="1000"
-                 mode="M81">
+                 mode="M88">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"/>
       <!--ASSERT warn-->
@@ -3792,17 +4014,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M81"/>
+      <xsl:apply-templates select="*" mode="M88"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M81"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M81">
-      <xsl:apply-templates select="*" mode="M81"/>
+   <xsl:template match="text()" priority="-1" mode="M88"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M88">
+      <xsl:apply-templates select="*" mode="M88"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"
                  priority="1000"
-                 mode="M82">
+                 mode="M89">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]"/>
       <!--ASSERT fatal-->
@@ -3823,17 +4045,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M82"/>
+      <xsl:apply-templates select="*" mode="M89"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M82"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M82">
-      <xsl:apply-templates select="*" mode="M82"/>
+   <xsl:template match="text()" priority="-1" mode="M89"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M89">
+      <xsl:apply-templates select="*" mode="M89"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"
                  priority="1000"
-                 mode="M83">
+                 mode="M90">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"/>
       <!--ASSERT error-->
@@ -3854,17 +4076,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M83"/>
+      <xsl:apply-templates select="*" mode="M90"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M83"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M83">
-      <xsl:apply-templates select="*" mode="M83"/>
+   <xsl:template match="text()" priority="-1" mode="M90"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M90">
+      <xsl:apply-templates select="*" mode="M90"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[mets:mptr]"
                  priority="1000"
-                 mode="M84">
+                 mode="M91">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[mets:mptr]"/>
       <!--REPORT fatal-->
@@ -3882,17 +4104,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M84"/>
+      <xsl:apply-templates select="*" mode="M91"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M84"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M84">
-      <xsl:apply-templates select="*" mode="M84"/>
+   <xsl:template match="text()" priority="-1" mode="M91"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M91">
+      <xsl:apply-templates select="*" mode="M91"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='periodical']"
                  priority="1000"
-                 mode="M85">
+                 mode="M92">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='periodical']"/>
       <!--REPORT fatal-->
@@ -3910,17 +4132,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M85"/>
+      <xsl:apply-templates select="*" mode="M92"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M85"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M85">
-      <xsl:apply-templates select="*" mode="M85"/>
+   <xsl:template match="text()" priority="-1" mode="M92"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M92">
+      <xsl:apply-templates select="*" mode="M92"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='multivolume_work']"
                  priority="1000"
-                 mode="M86">
+                 mode="M93">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='multivolume_work']"/>
       <!--REPORT fatal-->
@@ -3938,17 +4160,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M86"/>
+      <xsl:apply-templates select="*" mode="M93"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M86"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M86">
-      <xsl:apply-templates select="*" mode="M86"/>
+   <xsl:template match="text()" priority="-1" mode="M93"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M93">
+      <xsl:apply-templates select="*" mode="M93"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:mptr"
                  priority="1000"
-                 mode="M87">
+                 mode="M94">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:mptr"/>
       <!--ASSERT fatal-->
@@ -3969,17 +4191,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M87"/>
+      <xsl:apply-templates select="*" mode="M94"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M87"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M87">
-      <xsl:apply-templates select="*" mode="M87"/>
+   <xsl:template match="text()" priority="-1" mode="M94"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M94">
+      <xsl:apply-templates select="*" mode="M94"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"
                  priority="1000"
-                 mode="M88">
+                 mode="M95">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"/>
       <!--REPORT fatal-->
@@ -3997,15 +4219,51 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M88"/>
+      <xsl:apply-templates select="*" mode="M95"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M88"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M88">
-      <xsl:apply-templates select="*" mode="M88"/>
+   <xsl:template match="text()" priority="-1" mode="M95"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M95">
+      <xsl:apply-templates select="*" mode="M95"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1002" mode="M89">
+   <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)]//mets:div[@DMDID]"
+                 priority="1000"
+                 mode="M96">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)]//mets:div[@DMDID]"/>
+      <xsl:variable name="logid" select="@ID"/>
+      <xsl:variable name="physical_div_id"
+                    select="./ancestor::mets:mets/mets:structLink/mets:smLink[@xlink:from = $logid][1]/@xlink:to"/>
+      <xsl:variable name="fileids"
+                    select="key('structMap_PHYSICAL_ids', $physical_div_id)/descendant-or-self::mets:div[mets:fptr][parent::mets:div][1]/mets:fptr/@FILEID"/>
+      <!--ASSERT error-->
+      <xsl:choose>
+         <xsl:when test="key('fileGrp_DEFAULT_file_ids', $fileids) or $is_anchor"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="key('fileGrp_DEFAULT_file_ids', $fileids) or $is_anchor">
+               <xsl:attribute name="id">structMapLogical_22</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Jedes Strukturelement (mets:div in mets:structMap[@TYPE='LOGICAL']) muss für die Anzeige in der DDB mindestens ein mets:file Element im Element mets:fileGrp[@USE='DEFAULT'] zugewiesen sein. Ist dies nicht der Fall, wird das Strukturelement bei der Transformation des Datensatzes entfernt.</svrl:text>
+               <svrl:property id="id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M96"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M96"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M96">
+      <xsl:apply-templates select="*" mode="M96"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:mets" priority="1002" mode="M97">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4022,12 +4280,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M89"/>
+      <xsl:apply-templates select="*" mode="M97"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL'][not(mets:div[@TYPE='physSequence'])]"
                  priority="1001"
-                 mode="M89">
+                 mode="M97">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][not(mets:div[@TYPE='physSequence'])]"/>
       <!--ASSERT fatal-->
@@ -4045,12 +4303,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M89"/>
+      <xsl:apply-templates select="*" mode="M97"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                  priority="1000"
-                 mode="M89">
+                 mode="M97">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']"/>
       <!--ASSERT fatal-->
@@ -4068,17 +4326,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M89"/>
+      <xsl:apply-templates select="*" mode="M97"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M89"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M89">
-      <xsl:apply-templates select="*" mode="M89"/>
+   <xsl:template match="text()" priority="-1" mode="M97"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M97">
+      <xsl:apply-templates select="*" mode="M97"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div"
                  priority="1000"
-                 mode="M90">
+                 mode="M98">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div"/>
       <!--ASSERT fatal-->
@@ -4099,17 +4357,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M90"/>
+      <xsl:apply-templates select="*" mode="M98"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M90"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M90">
-      <xsl:apply-templates select="*" mode="M90"/>
+   <xsl:template match="text()" priority="-1" mode="M98"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M98">
+      <xsl:apply-templates select="*" mode="M98"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page'][not(@ORDER)]"
                  priority="1001"
-                 mode="M91">
+                 mode="M99">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page'][not(@ORDER)]"/>
       <!--ASSERT warn-->
@@ -4129,12 +4387,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M91"/>
+      <xsl:apply-templates select="*" mode="M99"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"
                  priority="1000"
-                 mode="M91">
+                 mode="M99">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"/>
       <!--ASSERT warn-->
@@ -4154,17 +4412,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M91"/>
+      <xsl:apply-templates select="*" mode="M99"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M91"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M91">
-      <xsl:apply-templates select="*" mode="M91"/>
+   <xsl:template match="text()" priority="-1" mode="M99"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M99">
+      <xsl:apply-templates select="*" mode="M99"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"
                  priority="1000"
-                 mode="M92">
+                 mode="M100">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']"/>
       <!--ASSERT fatal-->
@@ -4185,17 +4443,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M92"/>
+      <xsl:apply-templates select="*" mode="M100"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M92"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M92">
-      <xsl:apply-templates select="*" mode="M92"/>
+   <xsl:template match="text()" priority="-1" mode="M100"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M100">
+      <xsl:apply-templates select="*" mode="M100"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='PHYSICAL'][//mets:div[@TYPE='page'][starts-with(@CONTENTIDS, 'urn:')]]//mets:div[@TYPE='page']"
                  priority="1000"
-                 mode="M93">
+                 mode="M101">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][//mets:div[@TYPE='page'][starts-with(@CONTENTIDS, 'urn:')]]//mets:div[@TYPE='page']"/>
       <!--ASSERT fatal-->
@@ -4216,15 +4474,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M93"/>
+      <xsl:apply-templates select="*" mode="M101"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M93"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M93">
-      <xsl:apply-templates select="*" mode="M93"/>
+   <xsl:template match="text()" priority="-1" mode="M101"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M101">
+      <xsl:apply-templates select="*" mode="M101"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1003" mode="M94">
+   <xsl:template match="mets:mets" priority="1003" mode="M102">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4241,12 +4499,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M94"/>
+      <xsl:apply-templates select="*" mode="M102"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structLink[not(mets:smLink)]"
                  priority="1002"
-                 mode="M94">
+                 mode="M102">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structLink[not(mets:smLink)]"/>
       <!--ASSERT fatal-->
@@ -4263,12 +4521,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M94"/>
+      <xsl:apply-templates select="*" mode="M102"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structLink/mets:smLink[not(string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0)]"
                  priority="1001"
-                 mode="M94">
+                 mode="M102">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structLink/mets:smLink[not(string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0)]"/>
       <!--ASSERT fatal-->
@@ -4286,12 +4544,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M94"/>
+      <xsl:apply-templates select="*" mode="M102"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structLink/mets:smLink"
                  priority="1000"
-                 mode="M94">
+                 mode="M102">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structLink/mets:smLink"/>
       <!--ASSERT fatal-->
@@ -4309,15 +4567,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M94"/>
+      <xsl:apply-templates select="*" mode="M102"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M94"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M94">
-      <xsl:apply-templates select="*" mode="M94"/>
+   <xsl:template match="text()" priority="-1" mode="M102"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M102">
+      <xsl:apply-templates select="*" mode="M102"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1002" mode="M95">
+   <xsl:template match="mets:mets" priority="1002" mode="M103">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4334,12 +4592,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M95"/>
+      <xsl:apply-templates select="*" mode="M103"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='DEFAULT'])]"
                  priority="1001"
-                 mode="M95">
+                 mode="M103">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='DEFAULT'])]"/>
       <!--ASSERT fatal-->
@@ -4357,12 +4615,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M95"/>
+      <xsl:apply-templates select="*" mode="M103"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']"
                  priority="1000"
-                 mode="M95">
+                 mode="M103">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']"/>
       <!--REPORT fatal-->
@@ -4377,17 +4635,17 @@
             <svrl:text>In der mets:fileSec sind innerhalb der mets:fileGrp die einzelnen Bilder gelistet. Die mets:fileGrp use="DEFAULT" muss mindestens ein mets:file enthalten und dieses muss in dem Unterelement mets:FLocat das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt mets:file mit dem Attribut xlink:href im Unterelement mets:FLocat, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.3</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M95"/>
+      <xsl:apply-templates select="*" mode="M103"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M95"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M95">
-      <xsl:apply-templates select="*" mode="M95"/>
+   <xsl:template match="text()" priority="-1" mode="M103"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M103">
+      <xsl:apply-templates select="*" mode="M103"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:fileSec/mets:fileGrp/mets:file"
                  priority="1000"
-                 mode="M96">
+                 mode="M104">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:fileSec/mets:fileGrp/mets:file"/>
       <!--ASSERT fatal-->
@@ -4408,15 +4666,38 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M96"/>
+      <xsl:apply-templates select="*" mode="M104"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M96"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M96">
-      <xsl:apply-templates select="*" mode="M96"/>
+   <xsl:template match="text()" priority="-1" mode="M104"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M104">
+      <xsl:apply-templates select="*" mode="M104"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M97">
+   <xsl:template match="mets:mets/mets:fileSec" priority="1000" mode="M105">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets/mets:fileSec"/>
+      <!--REPORT warn-->
+      <xsl:if test="//mets:file[string-length(@MIMETYPE) = 0]">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="//mets:file[string-length(@MIMETYPE) = 0]">
+            <xsl:attribute name="id">fileSec_08</xsl:attribute>
+            <xsl:attribute name="role">warn</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Jedes mets:file Element im Element mets:fileSec muss das Attribut MIMETYPE besitzen. Der Datensatz enthält mindestens ein mets:file ohne das Attribut MIMETYPE. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.2</svrl:text>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M105"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M105"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M105">
+      <xsl:apply-templates select="*" mode="M105"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:mets" priority="1001" mode="M106">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4436,12 +4717,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M97"/>
+      <xsl:apply-templates select="*" mode="M106"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[not(@ID=$work_dmdid)]"
                  priority="1000"
-                 mode="M97">
+                 mode="M106">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[not(@ID=$work_dmdid)]"/>
       <!--ASSERT error-->
@@ -4462,15 +4743,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M97"/>
+      <xsl:apply-templates select="*" mode="M106"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M97"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M97">
-      <xsl:apply-templates select="*" mode="M97"/>
+   <xsl:template match="text()" priority="-1" mode="M106"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M106">
+      <xsl:apply-templates select="*" mode="M106"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:dmdSec" priority="1000" mode="M98">
+   <xsl:template match="mets:dmdSec" priority="1000" mode="M107">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:dmdSec"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4487,15 +4768,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M98"/>
+      <xsl:apply-templates select="*" mode="M107"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M98"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M98">
-      <xsl:apply-templates select="*" mode="M98"/>
+   <xsl:template match="text()" priority="-1" mode="M107"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M107">
+      <xsl:apply-templates select="*" mode="M107"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:dmdSec" priority="1000" mode="M99">
+   <xsl:template match="mets:dmdSec" priority="1000" mode="M108">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:dmdSec"/>
       <!--ASSERT error-->
       <xsl:choose>
@@ -4515,15 +4796,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M99"/>
+      <xsl:apply-templates select="*" mode="M108"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M99"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M99">
-      <xsl:apply-templates select="*" mode="M99"/>
+   <xsl:template match="text()" priority="-1" mode="M108"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M108">
+      <xsl:apply-templates select="*" mode="M108"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M100">
+   <xsl:template match="mets:mets" priority="1001" mode="M109">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -4539,10 +4820,10 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M100"/>
+      <xsl:apply-templates select="*" mode="M109"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="mets:amdSec" priority="1000" mode="M100">
+   <xsl:template match="mets:amdSec" priority="1000" mode="M109">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:amdSec"/>
       <!--ASSERT warn-->
       <xsl:choose>
@@ -4562,17 +4843,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M100"/>
+      <xsl:apply-templates select="*" mode="M109"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M100"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M100">
-      <xsl:apply-templates select="*" mode="M100"/>
+   <xsl:template match="text()" priority="-1" mode="M109"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M109">
+      <xsl:apply-templates select="*" mode="M109"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]"
                  priority="1001"
-                 mode="M101">
+                 mode="M110">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]"/>
       <!--ASSERT error-->
@@ -4590,20 +4871,20 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M101"/>
+      <xsl:apply-templates select="*" mode="M110"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]"
                  priority="1000"
-                 mode="M101">
+                 mode="M110">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]"/>
       <!--ASSERT error-->
       <xsl:choose>
-         <xsl:when test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)"/>
+         <xsl:when test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)">
+                                test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)">
                <xsl:attribute name="id">amdSec_05</xsl:attribute>
                <xsl:attribute name="role">error</xsl:attribute>
                <xsl:attribute name="location">
@@ -4613,17 +4894,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M101"/>
+      <xsl:apply-templates select="*" mode="M110"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M101"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M101">
-      <xsl:apply-templates select="*" mode="M101"/>
+   <xsl:template match="text()" priority="-1" mode="M110"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M110">
+      <xsl:apply-templates select="*" mode="M110"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:amdSec[@ID=$work_amdid]/mets:digiprovMD | mets:amdSec[not(@ID=$work_amdid)][1]/mets:digiprovMD"
                  priority="1000"
-                 mode="M102">
+                 mode="M111">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:amdSec[@ID=$work_amdid]/mets:digiprovMD | mets:amdSec[not(@ID=$work_amdid)][1]/mets:digiprovMD"/>
       <!--ASSERT error-->
@@ -4644,17 +4925,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M102"/>
+      <xsl:apply-templates select="*" mode="M111"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M102"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M102">
-      <xsl:apply-templates select="*" mode="M102"/>
+   <xsl:template match="text()" priority="-1" mode="M111"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M111">
+      <xsl:apply-templates select="*" mode="M111"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"
                  priority="1000"
-                 mode="M103">
+                 mode="M112">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"/>
       <!--REPORT fatal-->
@@ -4671,17 +4952,17 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M103"/>
+      <xsl:apply-templates select="*" mode="M112"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M103"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M103">
-      <xsl:apply-templates select="*" mode="M103"/>
+   <xsl:template match="text()" priority="-1" mode="M112"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M112">
+      <xsl:apply-templates select="*" mode="M112"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets[mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][contains(@ADMID, ' ')]]"
                  priority="1002"
-                 mode="M104">
+                 mode="M113">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][contains(@ADMID, ' ')]]"/>
       <!--REPORT fatal-->
@@ -4696,12 +4977,12 @@
             <svrl:text>Sind mit dem primären Strukturelement (das primäre mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" mehrere mets:amdSec verlinkt, ist keine eindeutige Zuordnung der adminstrativen Metadaten zum METS-Datensatz möglich. Er kann daher nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1 und 2.6.1</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M104"/>
+      <xsl:apply-templates select="*" mode="M113"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets[not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]]"
                  priority="1001"
-                 mode="M104">
+                 mode="M113">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]]"/>
       <!--REPORT fatal-->
@@ -4716,10 +4997,10 @@
             <svrl:text>Der Datensatz enthält mehrere mets:amdSec, die nicht von einem mets:div in der mets:structMap[@TYPE='LOGICAL'] über das Attribut "ADMID" referenziert werden. Darüber hinaus fehlt die Verlinkung des primären Strukturelements (primäres mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" mit einer mets:amdSec. Daher ist keine eindeutige Zuordnung der adminstrativen Metadaten zum METS-Datensatz möglich und er kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1 und 2.6.1</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M104"/>
+      <xsl:apply-templates select="*" mode="M113"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1000" mode="M104">
+   <xsl:template match="mets:mets" priority="1000" mode="M113">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT error-->
       <xsl:choose>
@@ -4736,17 +5017,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M104"/>
+      <xsl:apply-templates select="*" mode="M113"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M104"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M104">
-      <xsl:apply-templates select="*" mode="M104"/>
+   <xsl:template match="text()" priority="-1" mode="M113"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M113">
+      <xsl:apply-templates select="*" mode="M113"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(contains(@DMDID, $work_dmdid))][@ADMID]"
                  priority="1000"
-                 mode="M105">
+                 mode="M114">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(contains(@DMDID, $work_dmdid))][@ADMID]"/>
       <!--REPORT info-->
@@ -4761,17 +5042,17 @@
             <svrl:text>Die administrativen Metadaten in der mets:amdSec werden für den METS-Datensatz ausschließlich aus der mets:amdSec abgeleitet, die mit dem primären Strukturelement (primäres mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" verlinkt ist. Besitzt der Datensatz darüber hinaus weitere mets:amdSec, die mit anderen Strukturelementen verlinkt sind, werden deren administrative Metadaten von der DDB zurzeit nicht berücksichtigt.</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M105"/>
+      <xsl:apply-templates select="*" mode="M114"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M105"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M105">
-      <xsl:apply-templates select="*" mode="M105"/>
+   <xsl:template match="text()" priority="-1" mode="M114"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M114">
+      <xsl:apply-templates select="*" mode="M114"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"
                  priority="1000"
-                 mode="M106">
+                 mode="M115">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights"/>
       <!--REPORT error-->
@@ -4785,19 +5066,19 @@
             <svrl:text>Das Element dv:rights darf das Element dv:license nur einmal enthalten. Enthält dv:rights mehr als ein dv:license, wird bei der Bereinigung des Datensatzes das erste Vorkommen von dv:license mit gültiger Lizenz-URI übernommen, alle anderen dv:license werden entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.2.11</svrl:text>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M106"/>
+      <xsl:apply-templates select="*" mode="M115"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M106"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M106">
-      <xsl:apply-templates select="*" mode="M106"/>
+   <xsl:template match="text()" priority="-1" mode="M115"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M115">
+      <xsl:apply-templates select="*" mode="M115"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href[contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
+   <xsl:template match="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M107">
+                 mode="M116">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href, $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@xlink:href) &gt; 0][1]/@xlink:href[contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
+                       context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--REPORT warn-->
       <xsl:if test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910">
          <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
@@ -4814,36 +5095,109 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M107"/>
+      <xsl:apply-templates select="*" mode="M116"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M107"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M107">
-      <xsl:apply-templates select="*" mode="M107"/>
+   <xsl:template match="text()" priority="-1" mode="M116"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M116">
+      <xsl:apply-templates select="*" mode="M116"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1000" mode="M108">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
+   <xsl:template match="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]"
+                 priority="1002"
+                 mode="M117">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]"/>
       <!--REPORT fatal-->
-      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@xlink:href, 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@xlink:href, '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to, key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
          <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@xlink:href, 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@xlink:href, '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to, key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
             <xsl:attribute name="id">amdSec_14</xsl:attribute>
             <xsl:attribute name="role">fatal</xsl:attribute>
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Ein Datensatz muss eindeutige Rechteangaben zu den Digitalisaten enthalten. Enthält ein Datensatz unterschiedliche URIs aus dem Lizenzkorb der DDB wird er nicht in die DDB eingespielt.</svrl:text>
+            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M108"/>
+      <xsl:apply-templates select="*" mode="M117"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M108"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M108">
-      <xsl:apply-templates select="*" mode="M108"/>
+   <!--RULE -->
+   <xsl:template match="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]"
+                 priority="1001"
+                 mode="M117">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]"/>
+      <!--REPORT fatal-->
+      <xsl:if test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1">
+            <xsl:attribute name="id">amdSec_16</xsl:attribute>
+            <xsl:attribute name="role">fatal</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element mods:accessCondition[@type='use and reproduction'] widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M117"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:mets" priority="1000" mode="M117">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
+      <!--REPORT error-->
+      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+            <xsl:attribute name="id">amdSec_17</xsl:attribute>
+            <xsl:attribute name="role">error</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält in den Elementen mods:accessCondition[@type='use and reproduction'] und dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB. Bei der Transformation der Daten übernimmt die DDB in diesem Fall die Rechteangabe aus mods:accessCondition[@type='use and reproduction']. Bitte beachten Sie darüber hinaus, dass die DDB die codierten CC-Lizenz-Werte aus dem METS-AP für dv:license als Version 4.0 und den Wert "reserved" als "Urheberrechtsschutz nicht bewertet" (Europeana Rightstatement "CNE") interpretiert.</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M117"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M117"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M117">
+      <xsl:apply-templates select="*" mode="M117"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:mets" priority="1000" mode="M118">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
+      <!--ASSERT warn-->
+      <xsl:choose>
+         <xsl:when test="mets:amdSec/mets:digiprovMD/mets:mdWrap/mets:xmlData/dv:links/dv:presentation[string-length(text()) &gt; 0]"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="mets:amdSec/mets:digiprovMD/mets:mdWrap/mets:xmlData/dv:links/dv:presentation[string-length(text()) &gt; 0]">
+               <xsl:attribute name="id">amdSec_15</xsl:attribute>
+               <xsl:attribute name="role">warn</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Im Datensatz fehlt das Element dv:presentation mit dem URL zur Anzeige des Digitalisats bei Ihrer Institution. Daher fehlt in der DDB der Button "Objekt anzeigen" mit dem entsprechend Link zu Ihrer lokalen Präsentation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M118"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M118"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M118">
+      <xsl:apply-templates select="*" mode="M118"/>
    </xsl:template>
 </xsl:stylesheet>
