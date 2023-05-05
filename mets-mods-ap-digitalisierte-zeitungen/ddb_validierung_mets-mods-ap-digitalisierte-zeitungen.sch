@@ -2,7 +2,7 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2022-11-10T08:51:24"
+            schemaVersion="v2023-05-05T15:51:41"
             queryBinding="xslt2">
    <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS-Anwendungsprofil für Zeitungen</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>
@@ -77,10 +77,6 @@
          <license_uri>https://rightsstatements.org/vocab/NoC-NC/1.0/</license_uri>
          <license_uri>http://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
          <license_uri>https://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
-         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
-         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
-         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
-         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
       </license_uris>
    </sch:let>
    <sch:let name="iso639-1_codes">
@@ -830,6 +826,9 @@
    <xsl:key name="structMap_PHYSICAL_ids"
             match="mets:structMap[@TYPE='PHYSICAL']//mets:div"
             use="@ID"/>
+   <xsl:key name="structMap_PHYSICAL_fptr_FILEID"
+            match="mets:structMap[@TYPE='PHYSICAL']//mets:fptr"
+            use="@FILEID"/>
    <xsl:key name="structMap_LOGICAL_dmdids"
             match="mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"
             use="tokenize(@DMDID, ' ')"/>
@@ -847,7 +846,9 @@
             use="text()"/>
    <sch:pattern>
       <sch:rule context="mods:*">
-            <!-- Der Datensatz enthält leere MODS-Elemente -->
+            <!-- 
+               Der Datensatz enthält leere MODS-Elemente
+             -->
          <sch:assert id="all_01"
                      role="warn"
                      test="string-length(normalize-space(text()[1])) &gt; 0 or element()"
@@ -856,7 +857,9 @@
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:*[mods:*]">
-            <!-- Text in Elementen, die Unterelemente enthalten -->
+            <!-- 
+               Text in Elementen, die Unterelemente enthalten
+             -->
          <sch:report id="all_02"
                      role="error"
                      test="matches(string-join(text(), ''), '\w')"
@@ -865,7 +868,9 @@
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:mods/mods:*">
-            <!-- Nicht erlaubte Elemente in der obersten MODS-Ebene -->
+            <!-- 
+               Nicht erlaubte Elemente in der obersten MODS-Ebene
+             -->
          <sch:assert id="all_03"
                      role="fatal"
                      test="./local-name() = ( 'titleInfo', 'name', 'typeOfResource', 'genre', 'originInfo', 'language', 'physicalDescription', 'abstract', 'tableOfContents', 'targetAudience', 'note', 'subject', 'classification', 'relatedItem', 'identifier', 'location', 'accessCondition', 'part', 'extension', 'recordInfo' )"
@@ -874,7 +879,9 @@
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:*/@valueURI">
-            <!-- Der Wert im Attribut valueURI ist kein URL -->
+            <!-- 
+               Der Wert im Attribut valueURI ist kein URL
+             -->
          <sch:assert id="all_04"
                      role="error"
                      test="matches(., '^https?://[^ ]+$')"
@@ -883,16 +890,20 @@
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:*//mods:mods">
-            <!-- mods:mods enthält weitere mods:mods Elemente -->
+            <!-- 
+               mods:mods enthält weitere mods:mods Elemente
+             -->
          <sch:report id="all_05"
                      role="error"
                      test=".[not(./ancestor::mods:extension)]"
-                     properties="dmd_id">Das mods:mods Wurzelelement der mets:dmdSec enthält weitere mods:mods Elemente, die dort nicht zulässig sind. Sie werden bei der Transformation der Daten entfernt.</sch:report>
+                     properties="dmd_id">Das <sch:span class="monotype">mods:mods</sch:span> Wurzelelement der <sch:span class="monotype">mets:dmdSec</sch:span> enthält weitere <sch:span class="monotype">mods:mods</sch:span> Elemente, die dort nicht zulässig sind. Sie werden bei der Transformation der Daten entfernt.</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:*[starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')]">
-            <!-- Ungültiger GND-URI im Attribut valueURI -->
+            <!-- 
+               Ungültiger GND-URI im Attribut valueURI
+             -->
          <sch:assert id="all_06"
                      role="error"
                      test="matches(substring-after(@valueURI, '/gnd/'), '^[0-9]*-[0-9xX]{1}$|^[0-9xX]*$')"
@@ -901,63 +912,78 @@
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods">
-            <!-- mods:typeOfResource fehlt -->
+            <!-- 
+               mods:typeOfResource fehlt
+             -->
          <sch:assert id="typeOfResource_01"
                      role="error"
                      test="mods:typeOfResource"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:typeOfResource">Jede mets:dmdSec muss mindestens ein mods:typeOfResource enthalten. Ist dies nicht der Fall, wird bei der Bereinigung der Daten als Default-Wert mods:typeOfResource mit dem Wert text eingefügt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:typeOfResource">Jede <sch:span class="monotype">mets:dmdSec</sch:span> muss mindestens ein <sch:span class="monotype">mods:typeOfResource</sch:span> enthalten. Ist dies nicht der Fall, wird bei der Bereinigung der Daten als Default-Wert <sch:span class="monotype">mods:typeOfResource</sch:span> mit dem Wert text eingefügt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:typeOfResource]">
-            <!-- Falscher Wert in mods:typeOfResource -->
+            <!-- 
+               Falscher Wert in mods:typeOfResource
+             -->
          <sch:assert id="typeOfResource_02"
                      role="error"
                      test="mods:typeOfResource[text()='text']"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:typeOfResource">Die mets:dmdSec der Ausgabe muss in mods:typeOfResource den Wert "text" enthalten. Ist dies nicht der Fall, dann wird bei der Bereinigung der Daten der vorhandene Wert durch den Wert text ersetzt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:typeOfResource">Die <sch:span class="monotype">mets:dmdSec</sch:span> der Ausgabe muss in <sch:span class="monotype">mods:typeOfResource</sch:span> den Wert <sch:span class="monotype">text</sch:span> enthalten. Ist dies nicht der Fall, dann wird bei der Bereinigung der Daten der vorhandene Wert durch den Wert text ersetzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[not(mods:originInfo[@eventType='publication'])]">
-            <!-- Das Attribut eventType="publication" fehlt in mods:originInfo -->
+            <!-- 
+               Das Attribut eventType mit dem Wert publication fehlt in mods:originInfo
+             -->
          <sch:assert id="originInfo_07"
                      role="fatal"
                      test="mods:originInfo[@eventType='publication']"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Es muss mindestens ein mods:originInfo mit dem eventType="publication" vorhanden sein. Ist dies nicht der Fall,kann die Ausgabe nicht in das Zeitungsportal übernommen werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Erscheinungsangaben</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Es muss mindestens ein <sch:span class="monotype">mods:originInfo[@eventType='publication']</sch:span> vorhanden sein. Ist dies nicht der Fall,kann die Ausgabe nicht in das Zeitungsportal übernommen werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Erscheinungsangaben).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication'][not(mods:dateIssued)]">
-            <!-- mods:dateIssued mit dem Erscheinungsdatum der Ausgabe fehlt -->
+            <!-- 
+               mods:dateIssued mit dem Erscheinungsdatum der Ausgabe fehlt
+             -->
          <sch:assert id="originInfo_08"
                      role="fatal"
                      test="mods:dateIssued"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Die mets:dmdSec der Ausgabe muss in mods:dateIssued das Erscheinungdatum enthalten. Ist dies nicht der Fall, kann die Ausgabe nicht in das Zeitungsportal übernommen werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Die <sch:span class="monotype">mets:dmdSec</sch:span> der Ausgabe muss in <sch:span class="monotype">mods:dateIssued</sch:span> das Erscheinungdatum enthalten. Ist dies nicht der Fall, kann die Ausgabe nicht in das Zeitungsportal übernommen werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication'][mods:dateIssued[2]]">
-            <!-- Die Erscheinungsangabe in mods:dateIssued ist nicht wiederholbar -->
+            <!-- 
+               Die Erscheinungsangabe in mods:dateIssued ist nicht wiederholbar
+             -->
          <sch:report id="originInfo_09"
                      role="error"
                      test="mods:dateIssued[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">mods:dateIssued darf innerhalb von mods:originInfo nicht wiederholt werden. Ist dies der Fall, wird bei der Transformation der Daten die erste Datumsangabe übernommen, alle anderen werden entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">
+            <sch:span class="monotype">mods:dateIssued</sch:span> darf innerhalb von <sch:span class="monotype">mods:originInfo</sch:span> nicht wiederholt werden. Ist dies der Fall, wird bei der Transformation der Daten die erste Datumsangabe übernommen, alle anderen werden entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:let name="current_year"
                value="number(substring-before(string(current-date()), '-'))"/>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(matches(text()[1], '^\d\d\d\d-\d\d-\d\d$'))]">
-            <!-- Der Wert in mods:dateIssued ist kein Tagesdatum -->
+            <!-- 
+               Der Wert in mods:dateIssued ist kein Tagesdatum
+             -->
          <sch:assert id="originInfo_10"
                      role="fatal"
                      test="matches(text()[1], '^\d\d\d\d-\d\d-\d\d$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Der Wert in mods:dateIssued muss einem Tagesdatum nach dem ISO 8601 Standard entsprechen. Ist dies nicht der Fall, kann die Ausgabe nicht dem richtigen Datum im Kalender des Zeitungsportals zugeordnet werden und kann daher nicht in das Zeitungsportal übernommen werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Der Wert in <sch:span class="monotype">mods:dateIssued</sch:span> muss einem Tagesdatum nach dem ISO 8601 Standard entsprechen. Ist dies nicht der Fall, kann die Ausgabe nicht dem richtigen Datum im Kalender des Zeitungsportals zugeordnet werden und kann daher nicht in das Zeitungsportal übernommen werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(text()[1] castable as xs:date)]">
-            <!-- Das Erscheinungsdatum enthält einen ungültigen Wert -->
+            <!-- 
+               Das Erscheinungsdatum enthält einen ungültigen Wert
+             -->
          <sch:assert id="originInfo_14"
                      role="fatal"
                      test="text()[1] castable as xs:date"
@@ -965,15 +991,19 @@
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Das angegebene Erscheinungsdatum der Ausgabe enthält einen ungültigen ISO 8601 Wert. Die Ausgabe kann daher nicht ins Zeitungsportal übernommen werden.</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(matches(text()[1], '^((1[5-9]\d\d)|(2[012]\d\d))-((0\d)|(1[012]))-(([012])\d|3([01]))$'))]">
-            <!-- Der Wert in mods:dateIssued liegt außerhalb des erwarteten Zeitraums -->
+            <!-- 
+               Der Wert in mods:dateIssued liegt außerhalb des erwarteten Zeitraums
+             -->
          <sch:assert id="originInfo_11"
                      role="fatal"
                      test="matches(text()[1], '^((1[5-9]\d\d)|(2[012]\d\d))-((0\d)|(1[012]))-(([012])\d|3([01]))$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Der Wert in mods:dateIssued liegt außerhalb des erwarteten Zeitraums (ab 1500) oder besitzt ungültige Monats- bzw. Tagesangaben. Die Ausgabe kann daher nicht ins Zeitungsportal übernommen werden, da dies dort zu Fehldarstellung führt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Der Wert in <sch:span class="monotype">mods:dateIssued</sch:span> liegt außerhalb des erwarteten Zeitraums (ab 1500) oder besitzt ungültige Monats- bzw. Tagesangaben. Die Ausgabe kann daher nicht ins Zeitungsportal übernommen werden, da dies dort zu Fehldarstellung führt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[ number(substring-before(text(), '-')) &gt; $current_year ]">
-            <!-- Das Erscheinungsdatum der Ausgabe in mods:dateIssued liegt in der Zukunft -->
+            <!-- 
+               Das Erscheinungsdatum der Ausgabe in mods:dateIssued liegt in der Zukunft
+             -->
          <sch:report id="originInfo_13"
                      role="fatal"
                      test="number(substring-before(text(), '-')) &gt; $current_year"
@@ -982,634 +1012,820 @@
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued">
          <sch:let name="year" value="number(substring-before(text(), '-'))"/>
-         <!-- Das Erscheinungsdatum der Ausgabe in mods:dateIssued liegt auffällig kurz zurück -->
+         <!-- 
+               Das Erscheinungsdatum der Ausgabe in mods:dateIssued liegt auffällig kurz zurück
+             -->
          <sch:report id="originInfo_12"
                      role="warn"
                      test="$year &gt;= 1960"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Das angegebene Erscheinungsdatum der Ausgabe ist 1960 oder später. Auf Grund des geringen Alters der Ausgabe und geltender urheberrechtlicher Beschränkungen bitten wir Sie, zu prüfen ob diese Ausgaben bereits frei zugänglich sind. Ist dies der Fall besteht von Ihrer Seite kein Handlungsbedarf. Sollten die betroffenen Ausgaben aber noch nicht an das Deutsche Zeitungsportal geliefert werden, informieren Sie bitte die Fachstelle Bibliothek.</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:originInfo">Das angegebene Erscheinungsdatum der Ausgabe ist 1960 oder später. Auf Grund des geringen Alters der Ausgabe und geltender urheberrechtlicher Beschränkungen bitten wir Sie, zu prüfen ob diese Ausgaben bereits frei zugänglich sind.
+Ist dies der Fall besteht von Ihrer Seite kein Handlungsbedarf. Sollten die betroffenen Ausgaben aber noch nicht an das Deutsche Zeitungsportal geliefert werden, informieren Sie bitte die Fachstelle Bibliothek.</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:language/mods:languageTerm">
-            <!-- Verwendung eines falschen Sprachcodes -->
+            <!-- 
+               Verwendung eines falschen Sprachcodes
+             -->
          <sch:assert id="language_02"
                      role="error"
                      test="key('iso639-1_codes', text()[1], $iso639-1_codes) or key('iso639-2_codes', text()[1], $iso639-2_codes)"
                      properties="dmd_id text"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:language">mods:language/mods:languageTerm muss einen Code aus ISO 639-2 enthalten. Sollen mehrere Sprachen angegeben werden, muss mods:language/mods:languageTerm wiederholt werden. Die Angaben von mehreren Sprachen in einem mod:languageTerm Element ist nicht erlaubt. Handelt es sich bei dem Eintrag in mods:language/mods:languageTerm um einen anderen Wert als die oben genannten Codes bzw. sind mehrere Codes enthalten, wird mods:language bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:language">
+            <sch:span class="monotype">mods:language/mods:languageTerm</sch:span> muss einen Code aus dem ISO 639-2b Standard (https://id.loc.gov/vocabulary/iso639-2) enthalten. Sollen mehrere Sprachen angegeben werden, muss <sch:span class="monotype">mods:language/mods:languageTerm</sch:span> wiederholt werden. Die Angaben von mehreren Sprachen in einem mod:languageTerm Element ist nicht erlaubt.
+Handelt es sich bei dem Eintrag in <sch:span class="monotype">mods:language/mods:languageTerm</sch:span> um einen anderen Wert als die oben genannten Codes bzw. sind mehrere Codes enthalten, wird <sch:span class="monotype">mods:language</sch:span> bei der Bereinigung der Daten entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Die Angabe der Sprache fehlt -->
+            <!-- 
+               Die Angabe der Sprache fehlt
+             -->
          <sch:assert id="language_03"
                      role="error"
                      test="mods:language/mods:languageTerm or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID=$work_dmdid][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:language">Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:language">Die Sprache muss in <sch:span class="monotype">mods:language/mods:languageTerm</sch:span> angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards (https://id.loc.gov/vocabulary/iso639-2) zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:physicalDescription/mods:extent">
-            <!-- Falsche Angaben in mods:extent -->
+            <!-- 
+               Falsche Angaben in mods:extent
+             -->
          <sch:report id="physicalDescription_01"
                      role="error"
                      test="contains(lower-case(text()[1]), 'online') or contains(lower-case(text()[1]), 'electronic')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:physicalDescription">mods:extent sollte die Umfangsangabe des digitalisierten Originals enthalten. Wenn in mods:extent Begriffe wie "Online" oder "Electronic" enthalten sind, wird davon ausgegangen, dass es sich um Angaben zum Digitalisat handelt. In diesem Fall wird mods:extent bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PhysischeBeschreibung</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:physicalDescription">
+            <sch:span class="monotype">mods:extent</sch:span> sollte die Umfangsangabe des digitalisierten Originals enthalten. Wenn in <sch:span class="monotype">mods:extent</sch:span> Begriffe wie "Online" oder "Electronic" enthalten sind, wird davon ausgegangen, dass es sich um Angaben zum Digitalisat handelt. In diesem Fall wird <sch:span class="monotype">mods:extent</sch:span> bei der Bereinigung der Daten entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PhysischeBeschreibung).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Die Verknüpfung mit der Gesamtaufnahme ist nicht möglich -->
+            <!-- 
+               Die Verknüpfung mit der Gesamtaufnahme ist nicht möglich
+             -->
          <sch:assert id="relatedItem_06"
                      role="error"
                      test="mods:relatedItem[@type = 'host']/mods:recordInfo/mods:recordIdentifier[@source]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss die mets:dmdSec, die eine Ausgabe beschreibt, ein mods:relatedItem type="host" enthalten, das den mods:recordInfo/mods:recordIdentifier der Gesamtaufnahme enthält. Zudem muss mods:recordIdentifier das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlt mods:relatedItem type="host" oder mods:recordIdentifier oder das Attribut source, so lassen sich die Daten der Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss die <sch:span class="monotype">mets:dmdSec</sch:span>, die eine Ausgabe beschreibt, ein <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> enthalten, das den <sch:span class="monotype">mods:recordInfo/mods:recordIdentifier</sch:span> der Gesamtaufnahme enthält.
+Zudem muss <sch:span class="monotype">mods:recordIdentifier</sch:span> das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element <sch:span class="monotype">mods:recordIdentifier</sch:span> verwendet wird.
+Fehlt <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> oder <sch:span class="monotype">mods:recordIdentifier</sch:span> oder das Attribut source, so lassen sich die Daten der Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets[not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'])]">
-            <!-- Die Verknüpfung mit der Gesamtaufnahme in der ZDB ist nicht möglich -->
+            <!-- 
+               Die Verknüpfung mit der Gesamtaufnahme in der ZDB ist nicht möglich
+             -->
          <sch:assert id="relatedItem_07"
                      role="fatal"
                      test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'] or mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='newspaper']/mets:mptr[@xlink:href]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier in mods:relatedItem type="host" mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in mods:relatedItem type="host", wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen. Enthält auch die Gesamtaufnahme keinen mods:identifier type="zdb", so kann die Ausgabe nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier in <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen. Enthält auch die Gesamtaufnahme keinen <sch:span class="monotype">mods:identifier[@type='zdb']</sch:span>, so kann die Ausgabe nicht in die DDB eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host'][mods:identifier[@type='zdb']]">
-            <!-- Wiederholung von mods:identifier[@type='zdb'] -->
+            <!-- 
+               Wiederholung von mods:identifier[@type='zdb']
+             -->
          <sch:report id="relatedItem_10"
                      role="error"
                      test="mods:identifier[@type='zdb'][2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Innerhalb von mods:relatedItem[@type='host'] darf mods:identifier[@type='zdb'] nicht wiederholt werden. Ist mehr als ein mods:identifier[@type='zdb'] in mods:relatedItem[@type='host'] vorhanden, wird das erste Vorkommen bei der Transformation der Daten übernommen und alle weiteren Vorkommen entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Innerhalb von <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> darf <sch:span class="monotype">mods:identifier[@type='zdb']</sch:span> nicht wiederholt werden. Ist mehr als ein <sch:span class="monotype">mods:identifier[@type='zdb']</sch:span> in <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> vorhanden, wird das erste Vorkommen bei der Transformation der Daten übernommen und alle weiteren Vorkommen entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</sch:report>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- ZDB-Identifier der digitalen Ausgabe fehlt -->
+            <!-- 
+               ZDB-Identifier der digitalen Ausgabe fehlt
+             -->
          <sch:assert id="relatedItem_11"
                      role="error"
                      test="mods:relatedItem[@type='host']/mods:identifier[@type='zdb']"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der digtalen Ausgabe im Element mods:identifier[@type='zdb'] in mods:relatedItem[@type='host'] mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in mods:relatedItem[@type='host'], wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der digtalen Ausgabe im Element <sch:span class="monotype">mods:identifier[@type='zdb']</sch:span> in <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Die Verknüpfung zur ZDB-Aufnahme der Druckausgabe ist nicht möglich -->
-         <sch:assert id="relatedItem_08"
-                     role="error"
-                     test="mods:relatedItem[@type='host']/mods:relatedItem[@type='original']/mods:identifier[@type='zdb']"
-                     properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der Druckausgabe mit Bestandsinformationen zu der Zeitung in der ZDB verknüpft. Fehlt der ZDB-Identifier der Druckausgabe, wird er bei der Transformation der Daten aus der ZDB-Aufnahme der Online-Ausgabe übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- mods:relatedItem[@type='host'] enthält keinen Titel -->
+            <!-- 
+               mods:relatedItem[@type='host'] enthält keinen Titel
+             -->
          <sch:assert id="relatedItem_09"
                      role="error"
                      test="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]/mods:title[string-length(text()) &gt; 0]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Das Element mods:relatedItem[@type='host'] mit den Informationen zur Zeitung muss einen Titel in mods:titleInfo/mods:title enthalten. Fehlt der Titel der Zeitung, wird er bei der Transformation der Daten aus der ZDB-Aufnahme der Online-Ausgabe übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-TitelderZeitung</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Das Element <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> mit den Informationen zur Zeitung muss einen Titel in <sch:span class="monotype">mods:titleInfo/mods:title</sch:span> enthalten. Fehlt der Titel der Zeitung, wird er bei der Transformation der Daten aus der ZDB-Aufnahme der Online-Ausgabe übernommen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-TitelderZeitung).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Ein persistenter Identifier fehlt -->
+            <!-- 
+               Ein persistenter Identifier fehlt
+             -->
          <sch:assert id="identifier_02"
                      role="warn"
                      test="mods:identifier[@type = ('purl', 'urn', 'doi', 'handle')]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:identifier">Ausgaben von Zeitungen müssen mindestens einen persistenten Identifier enthalten, der in mods:identifier nachgewiesen wird. Erlaubt sind Identifier vom Typ "urn", "purl", "doi" oder "handle". Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PersistenterURIderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:identifier">Ausgaben von Zeitungen müssen mindestens einen persistenten Identifier enthalten, der in <sch:span class="monotype">mods:identifier</sch:span> nachgewiesen wird. Erlaubt sind Identifier vom Typ:
+ * <sch:span class="monotype">urn</sch:span>
+ * <sch:span class="monotype">purl</sch:span>
+ * <sch:span class="monotype">doi</sch:span>
+ * <sch:span class="monotype">handle</sch:span>Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PersistenterURIderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'][not(matches(text()[1], '^\d\d?\d?\d?\d?\d?\d?\d?\d?\d?-?[0-9X]$'))] | mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:relatedItem[@type='original']/mods:identifier[@type='zdb'][not(matches(text()[1], '^\d\d?\d?\d?\d?\d?\d?\d?\d?\d?-?[0-9X]$'))]">
-            <!-- Die ZDB-ID ist nicht valide -->
+            <!-- 
+               Die ZDB-ID ist nicht valide
+             -->
          <sch:assert id="identifier_03"
                      role="fatal"
                      test="matches(text()[1], '^\d\d?\d?\d?\d?\d?\d?\d?\d?\d?-?[0-9X]$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Die ZDB-ID der Zeitung darf nur aus maximal 10 Zahlen, optional gefolgt von einem Bindestrich und einer weiteren Zahl bzw. einem "X" bestehen. Entspricht die ZDB-ID nicht diesen Vorgaben, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Die ZDB-ID der Zeitung darf nur aus maximal 10 Zahlen, optional gefolgt von einem Bindestrich und einer weiteren Zahl bzw. einem <sch:span class="monotype">X</sch:span> bestehen. Entspricht die ZDB-ID nicht diesen Vorgaben, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'] | mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:relatedItem[@type='original']/mods:identifier[@type='zdb']">
-            <!-- Bindestrich in der ZDB-ID fehlt -->
+            <!-- 
+               Bindestrich in der ZDB-ID fehlt
+             -->
          <sch:assert id="identifier_04"
                      role="info"
                      test="matches(text()[1], '^\d\d?\d?\d?\d?\d?\d?\d?\d?\d?-[0-9X]$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Die ZDB-ID der Zeitung enthält an der letzten Stelle eine Prüfziffer, die durch einen Bindestrich eingeleitet werden kann. Da der Bindestrich für das Einspielen in das Deutsche Zeitungsportal erforderlich ist, wird er bei der Transformation der Daten ergänzt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:relatedItem">Die ZDB-ID der Zeitung enthält an der letzten Stelle eine Prüfziffer, die durch einen Bindestrich eingeleitet werden kann. Da der Bindestrich für das Einspielen in das Deutsche Zeitungsportal erforderlich ist, wird er bei der Transformation der Daten ergänzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type = 'use and reproduction']]">
-            <!-- Verwendung von accessCondition entspricht nicht dem Anwendungsprofil -->
+            <!-- 
+               Verwendung von mods:accessCondition entspricht nicht dem Anwendungsprofil
+             -->
          <sch:assert id="accessCondition_01"
                      role="warn"
                      test="mods:accessCondition[@type = 'use and reproduction' and key('license_uris', ./@*[local-name()='href'][1], $license_uris)]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:accessCondition">Wenn für die Angabe der Lizenz das Element mods:accessCondition verwendet wird, so sollte dies den Empfehlungen für Rechteinformationen in Metadaten der DINI AG KIM entsprechend erfolgen (s. https://wiki.dnb.de/pages/viewpage.action?pageId=148607377). Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Rechteinformationen</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:accessCondition">Wenn für die Angabe der Lizenz das Element <sch:span class="monotype">mods:accessCondition</sch:span> verwendet wird, so sollte dies den Empfehlungen für Rechteinformationen in Metadaten der DINI AG KIM (https://wiki.dnb.de/pages/viewpage.action?pageId=148607377) entsprechend erfolgen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Rechteinformationen).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:accessCondition[@type='use and reproduction']/@*[local-name()= 'href']">
-            <!-- Falscher Namensraum für das Attribut href von mods:accessCondition -->
+            <!-- 
+               Falscher Namensraum für das Attribut href von mods:accessCondition
+             -->
          <sch:assert id="accessCondition_02"
                      role="error"
                      test="namespace-uri() = 'http://www.w3.org/1999/xlink'"
                      properties="dmd_id"
-                     see="https://wiki.dnb.de/pages/viewpage.action?pageId=148607412#MODS(Empfehlung2.0)-Rechtehinweis/Lizenz">Das Attribut href des Elements mods:accessCondition muss zum Namensraum "http://www.w3.org/1999/xlink" gehören. Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs href in den Namensraum "http://www.w3.org/1999/xlink" gesetzt und entsprechend ausgewertet.</sch:assert>
+                     see="https://wiki.dnb.de/pages/viewpage.action?pageId=148607412#MODS(Empfehlung2.0)-Rechtehinweis/Lizenz">Das Attribut href des Elements <sch:span class="monotype">mods:accessCondition</sch:span> muss zum Namensraum <sch:span class="monotype">http://www.w3.org/1999/xlink</sch:span> gehören. Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs <sch:span class="monotype">href</sch:span> in den Namensraum <sch:span class="monotype">http://www.w3.org/1999/xlink</sch:span> gesetzt und entsprechend ausgewertet.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:part[2]]">
-            <!-- mods:part ist nicht wiederholbar -->
+            <!-- 
+               mods:part ist nicht wiederholbar
+             -->
          <sch:report id="part_06"
                      role="fatal"
                      test="mods:part[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Das Element mods:part ist in Ausgaben von Zeitungen nicht wiederholbar. Gibt es in einem Datensatz mehr als ein mods:part ist die Sortierung der Ausgabe nicht mehr eindeutig und er kann daher nicht in das Zeitungsportal eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Das Element <sch:span class="monotype">mods:part</sch:span> ist in Ausgaben von Zeitungen nicht wiederholbar. Gibt es in einem Datensatz mehr als ein <sch:span class="monotype">mods:part</sch:span> ist die Sortierung der Ausgabe nicht mehr eindeutig und er kann daher nicht in das Zeitungsportal eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</sch:report>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[not(mods:part/mods:detail/mods:number)]">
-            <!-- mods:part fehlt -->
+            <!-- 
+               mods:part fehlt
+             -->
          <sch:assert id="part_07"
                      role="error"
                      test="mods:part/mods:detail/mods:number"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Ausgaben von Zeitungen müssen Informationen zur Zählung enthalten, die im Zeitungsportal für die Anzeige der Ausgabe verwendet werden. Diese Information muss in mods:part/mods:detail/mods:number zur Verfügung gestellt werden. Fehlt mods:part, so wird der Inhalt des Elements mods:number bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. mods:dateIssued) generiert. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Ausgaben von Zeitungen müssen Informationen zur Zählung enthalten, die im Zeitungsportal für die Anzeige der Ausgabe verwendet werden. Diese Information muss in <sch:span class="monotype">mods:part/mods:detail/mods:number</sch:span> zur Verfügung gestellt werden.
+Fehlt <sch:span class="monotype">mods:part</sch:span>, so wird der Inhalt des Elements <sch:span class="monotype">mods:number</sch:span> bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. <sch:span class="monotype">mods:dateIssued</sch:span>) generiert.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[not(mods:part[@order])]/mods:part">
-            <!-- Attribut order fehlt in mods:part -->
+            <!-- 
+               Attribut order fehlt in mods:part
+             -->
          <sch:assert id="part_08"
                      role="error"
                      test="./@order"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Damit die Ausgaben in der richtigen Reihenfolge angezeigt werden muss mods:part das Attribut order enthalten. Der Wert in diesem Attribut muss dem Erscheinungsdatum in Form eines Integer (also yyyymmdd ggf. mit angehängter zweistelliger Zählung) entsprechen. Fehlt das Attribut order in mods:part, so wird der Inhalt des Attributs bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. mods:dateIssued) generiert. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Damit die Ausgaben in der richtigen Reihenfolge angezeigt werden muss <sch:span class="monotype">mods:part</sch:span> das Attribut order enthalten. Der Wert in diesem Attribut muss dem Erscheinungsdatum in Form eines Integer (also <sch:span class="monotype">YYYYMMDD</sch:span> ggf. mit angehängter zweistelliger Zählung) entsprechen.
+Fehlt das Attribut order in <sch:span class="monotype">mods:part</sch:span>, so wird der Inhalt des Attributs bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. <sch:span class="monotype">mods:dateIssued</sch:span>) generiert.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:part[not(matches(@order, '^\d+$'))]">
-            <!-- Falscher Wert im Attribut order in mods:part -->
+            <!-- 
+               Falscher Wert im Attribut order in mods:part
+             -->
          <sch:assert id="part_09"
                      role="error"
                      test="matches(./@order, '^\d+$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss mods:part das Attribut order enthalten, dessen Wert ein integer ist. Handelt es sich um einen Wert, der nicht maschinenlesbar ist, so verhindert dies nicht das Einspielen der Daten in das Zeitungsportal, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss <sch:span class="monotype">mods:part</sch:span> das Attribut <sch:span class="monotype">order</sch:span> enthalten, dessen Wert ein Integer ist. Handelt es sich um einen Wert, der nicht maschinenlesbar ist, so verhindert dies nicht das Einspielen der Daten in das Zeitungsportal, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:part[not(matches(@order, '^[12]\d\d\d[01]\d[0123]\d(\d\d)?$'))]">
-            <!-- Abweichende Struktur der Ausgabenzählung im Attribut order in mods:part -->
+            <!-- 
+               Abweichende Struktur der Ausgabenzählung im Attribut order in mods:part
+             -->
          <sch:assert id="part_10"
                      role="warn"
                      test="matches(./@order, '^[12]\d\d\d[01]\d[0123]\d(\d\d)?$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Der vorliegende Wert als Integer erfüllt die Anforderungen weicht aber in der Struktur von der Empfehlung im Anwendungsprofil (YYYYMMTT ggf. mit angehängter zweistelliger Zählung) ab. Wir empfehlen die empfohlene Struktur zu übernehmen um Sortierfehler im Zeitungsportal zu vermeiden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Der vorliegende Wert als Integer erfüllt die Anforderungen weicht aber in der Struktur von der Empfehlung im Anwendungsprofil (<sch:span class="monotype">YYYYMMTT</sch:span> ggf. mit angehängter zweistelliger Zählung) ab. Wir empfehlen die empfohlene Struktur zu übernehmen um Sortierfehler im Zeitungsportal zu vermeiden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[not(mods:part[2])]/mods:part">
-            <!-- Fehlende Informationen in mods:detail -->
+            <!-- 
+               Fehlende Informationen in mods:detail
+             -->
          <sch:assert id="part_11"
                      role="error"
                      test="mods:detail[@type = 'issue'][mods:number[string-length(text()[1]) &gt; 0]]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">In mods:part von Ausgaben von Zeitungen muss das Unterelement mods:detail ein Attribut type mit dem Wert issue enthalten. Darüber hinaus muss das Element mods:detail ein Unterelement mods:number enthalten. Fehlen diese Angaben wird bei der Transformation der Daten in dem vorhandenen mods:part ein mods:detail mit dem type="issue" erzeugt und der Wert für das Unterelement mods:number aus dem Erscheinungsdatum übernommen (s. mods:dateIssued). Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:part">In <sch:span class="monotype">mods:part</sch:span> von Ausgaben von Zeitungen muss das Unterelement <sch:span class="monotype">mods:detail</sch:span> ein Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">issue</sch:span> enthalten. Darüber hinaus muss das Element <sch:span class="monotype">mods:detail</sch:span> ein Unterelement <sch:span class="monotype">mods:number</sch:span> enthalten.
+Fehlen diese Angaben wird bei der Transformation der Daten in dem vorhandenen <sch:span class="monotype">mods:part</sch:span> ein <sch:span class="monotype">mods:detail</sch:span> mit dem Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">issue</sch:span> erzeugt und der Wert für das Unterelement <sch:span class="monotype">mods:number</sch:span> aus dem Erscheinungsdatum übernommen (s. <sch:span class="monotype">mods:dateIssued</sch:span>).Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Der Identifier des Datensatzes fehlt -->
+            <!-- 
+               Der Identifier des Datensatzes fehlt
+             -->
          <sch:assert id="recordInfo_01"
                      role="fatal"
                      test="mods:recordInfo/mods:recordIdentifier"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">Die mets:dmdSec, die das gesamte Werk beschreibt, muss ein mods:recordInfo mit dem Unterelement mods:recordIdentifier enthalten. Dieser mods:recordIdentifier muss durch den Wert im Attribut source eindeutig identifizierbar sein. Wenn mods:recordIdentifier und/oder das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">Die <sch:span class="monotype">mets:dmdSec</sch:span>, die das gesamte Werk beschreibt, muss ein <sch:span class="monotype">mods:recordInfo</sch:span> mit dem Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> enthalten. Dieser <sch:span class="monotype">mods:recordIdentifier</sch:span> muss durch den Wert im Attribut <sch:span class="monotype">source</sch:span> eindeutig identifizierbar sein. Wenn <sch:span class="monotype">mods:recordIdentifier</sch:span> und / oder das Attribut <sch:span class="monotype">source</sch:span> fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier">
-            <!-- Identifier des Datensatzes ist nicht eindeutig -->
+            <!-- 
+               Identifier des Datensatzes ist nicht eindeutig
+             -->
          <sch:assert id="recordInfo_02"
                      role="fatal"
                      test="string-length(normalize-space(@source)) &gt; 0"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">mods:recordIdentifier muss das Attribut source enthalten. Der Wert dieses Attribut muss die Herkunft des Identifiers des Datensatzes eindeutig identifizieren. Wenn das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">
+            <sch:span class="monotype">mods:recordIdentifier</sch:span> muss das Attribut <sch:span class="monotype">source</sch:span> enthalten. Der Wert dieses Attribut muss die Herkunft des Identifiers des Datensatzes eindeutig identifizieren. Wenn das Attribut <sch:span class="monotype">source</sch:span> fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:recordInfo">
-            <!-- Der Identifier des Datensatzes wird wiederholt -->
+            <!-- 
+               Der Identifier des Datensatzes wird wiederholt
+             -->
          <sch:report id="recordInfo_03"
                      role="fatal"
                      test="mods:recordIdentifier[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">Jeder METS-Datensatz muss durch ein mods:recordIdentifier Element eindeutig identifiziert werden. Ist mehr als ein mods:recordIdentifier vorhanden, wird nach Rücksprache mit dem DP anhand der im Attribut source genannten Quelle des Identifiers entschieden, welches mods:recordIdentifier bei der Bereinigung des Datensatzes erhalten bleibt. Alle anderen mods:recordIdentifier werden bei der Bereinigung des Datensatzes entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">Jeder METS-Datensatz muss durch ein <sch:span class="monotype">mods:recordIdentifier</sch:span> Element eindeutig identifiziert werden. Ist mehr als ein <sch:span class="monotype">mods:recordIdentifier</sch:span> vorhanden, wird nach Rücksprache mit Ihnen anhand der im Attribut <sch:span class="monotype">source</sch:span> genannten Quelle des Identifiers entschieden, welches <sch:span class="monotype">mods:recordIdentifier</sch:span> bei der Bereinigung des Datensatzes erhalten bleibt. Alle anderen <sch:span class="monotype">mods:recordIdentifier</sch:span> werden bei der Bereinigung des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier">
-            <!-- Der Identifier des Datensatzes ist nicht valide -->
+            <!-- 
+               Der Identifier des Datensatzes ist nicht valide
+             -->
          <sch:assert id="recordInfo_04"
                      role="fatal"
                      test="matches(text()[1], '^[^ /]+$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und/oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und/oder Sonderzeichen enthalten, nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmods:recordInfo">Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und / oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und / oder Sonderzeichen enthalten, nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:structMap TYPE="LOGICAL" fehlt -->
+            <!-- 
+               mets:structMap[@TYPE='LOGICAL'] fehlt
+             -->
          <sch:assert id="structMapLogical_01"
                      role="fatal"
                      test="mets:structMap[@TYPE='LOGICAL']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">mets:structMap TYPE="LOGICAL" ist notwendig, um die logische Struktur eines Dokuments anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">
+            <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> ist notwendig, um die logische Struktur eines Dokuments anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']">
-            <!-- mets:structMap TYPE="LOGICAL" enthält keine mets:div -->
+            <!-- 
+               mets:structMap[@TYPE='LOGICAL'] enthält keine mets:div
+             -->
          <sch:assert id="structMapLogical_02"
                      role="fatal"
                      test="mets:div"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der structMap TYPE="LOGICAL" durch ineinander verschachtelte mets:div repräsentiert werden. Die mets:structMap TYPE="LOGICAL" muss mindestens für die oberste dieser Ebenen eine mets:div enthalten, in der die oberste Ebene des Dokuments beschrieben wird. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> durch ineinander verschachtelte <sch:span class="monotype">mets:div</sch:span> repräsentiert werden. Die <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss mindestens für die oberste dieser Ebenen eine <sch:span class="monotype">mets:div</sch:span> enthalten, in der die oberste Ebene des Dokuments beschrieben wird. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div">
-            <!-- Eindeutiger Identifier fehlt in mets:div in mets:structMap TYPE="LOGICAL" -->
+            <!-- 
+               Eindeutiger Identifier fehlt in mets:div in mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:assert id="structMapLogical_03"
                      role="fatal"
                      test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der mets:structMap TYPE="LOGICAL" durch ineinander verschachtelte mets:div repräsentiert werden. Jede dieser mets:div muss in dem Attribut ID einen eindeutigen Identifier enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> durch ineinander verschachtelte <sch:span class="monotype">mets:div</sch:span> repräsentiert werden. Jede dieser <sch:span class="monotype">mets:div</sch:span> muss in dem Attribut <sch:span class="monotype">ID</sch:span> einen eindeutigen Identifier enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID=$work_dmdid]//mets:div | mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID=$work_dmdid]">
-            <!-- Notwendiger Identifier der logischen Strukturebene fehlt im mets:structLink -->
+            <!-- 
+               Notwendiger Identifier der logischen Strukturebene fehlt im mets:structLink
+             -->
          <sch:assert id="structMapLogical_04"
                      role="fatal"
                      test="key('structLink_from_ids', @ID)"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer mets:div in der structMap TYPE="LOGICAL" im mets:structLink den jeweiligen Identifiern der Seiten zugeordnet werden. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer <sch:span class="monotype">mets:div</sch:span> in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> im <sch:span class="monotype">mets:structLink</sch:span> den jeweiligen Identifiern der Seiten zugeordnet werden. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]">
-            <!-- Das Attribut TYPE in der mets:div innerhalb von mets:structMap TYPE="LOGICAL" fehlt -->
+            <!-- 
+               Das Attribut TYPE in der mets:div innerhalb von mets:structMap[@TYPE='LOGICAL'] fehlt
+             -->
          <sch:assert id="structMapLogical_05"
                      role="fatal"
                      test="@TYPE"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der mets:div in dem Attribut TYPE. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen. Fehlt das Attribut TYPE in einem der mets:div, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der <sch:span class="monotype">mets:div</sch:span> in dem Attribut <sch:span class="monotype">TYPE</sch:span>. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen. Fehlt das Attribut <sch:span class="monotype">TYPE</sch:span> in einem der <sch:span class="monotype">mets:div</sch:span>, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
+      </sch:rule>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]">
+            <!-- 
+               Falsche Strukturtypen in der mets:div innerhalb von mets:structMap[@TYPE='LOGICAL']
+             -->
+         <sch:assert id="structMapLogical_06"
+                     role="error"
+                     test="@TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' )"
+                     properties="id TYPE"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der <sch:span class="monotype">mets:div</sch:span> in dem Attribut <sch:span class="monotype">TYPE</sch:span>. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen (https://dfg-viewer.de/strukturdatenset/) (s. dort die Spalte XML).
+Werden in dem Attribut <sch:span class="monotype">TYPE</sch:span> andere Begriffe als die in der Liste vorgesehenen verwendet, wird er bei der Bereinigung der Daten durch den Strukturtyp <sch:span class="monotype">section</sch:span> ersetzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]">
-            <!-- mets:structMap type="LOGICAL" verlinkt auf nicht vorhandene mets:dmdSec -->
+            <!-- 
+               mets:structMap[@TYPE='LOGICAL'] verlinkt auf nicht vorhandene mets:dmdSec
+             -->
          <sch:assert id="structMapLogical_09"
                      role="error"
                      test="key('dmdsec_ids', @DMDID)"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Ist das Attribut DMDID des Elements mets:div in der mets:structMap type="LOGICAL" vorhanden, muss es eine dazugehörige mets:dmdSec mit dem gleichen Wert im Attribut ID geben. Ist dies nicht der Fall, wird die Verknüpfung in der mets:structMap type="LOGICAL" entfernt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Ist das Attribut <sch:span class="monotype">DMDID</sch:span> des Elements <sch:span class="monotype">mets:div</sch:span> in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> vorhanden, muss es eine dazugehörige <sch:span class="monotype">mets:dmdSec</sch:span> mit dem gleichen Wert im Attribut <sch:span class="monotype">ID</sch:span> geben. Ist dies nicht der Fall, wird die Verknüpfung in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- Falsche Strukturtypen in der mets:div innerhalb von mets:structMap TYPE="LOGICAL" -->
+            <!-- 
+               Falsche Strukturtypen in der mets:div innerhalb von mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:assert id="structMapLogical_12"
                      role="warn"
                      test="mets:structMap[@TYPE='LOGICAL'] /mets:div[@TYPE='newspaper'][not(./preceding-sibling::mets:div or ./following-sibling::mets:div)] /mets:div[@TYPE='year'][not(./preceding-sibling::mets:div or ./following-sibling::mets:div)] /mets:div[@TYPE='month'][not(./preceding-sibling::mets:div or ./following-sibling::mets:div)] /mets:div[@TYPE='day'][not(./preceding-sibling::mets:div or ./following-sibling::mets:div)] /mets:div[@TYPE=('issue', 'additional')][not(./preceding-sibling::mets:div or ./following-sibling::mets:div)]"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Für die Darstellung der logischen Struktur in Zeitungsausgaben ist die Verwendung der Strukturtypen vorgegeben. In der obersten mets:div wird auf die Gesamtaufnahme verwiesen, der Wert im Attribut TYPE muss "newspaper" lauten. In der darunterliegenden mets:div wird auf den Jahrgang verwiesen, der Wert im Attribut TYPE muss "year" lauten. In der darunterliegenden mets:div wird auf die einzelnen Monate verwiesen, in denen Ausgaben erschienen sind, der Wert im Attribut TYPE muss "month" lauten. In der darunterliegenden mets:div wird auf das tägliche Erscheinen verwiesen, der Wert im Attribut TYPE muss "day" lauten. In der darunterliegenden mets:div wird auf die Ausgabe verwiesen, der Wert im Attribut TYPE muss "issue" lauten. Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Transformation der Daten ggf. die entsprechenden Strukturtypen übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Für die Darstellung der logischen Struktur in Zeitungsausgaben ist die Verwendung der Strukturtypen vorgegeben. In der obersten <sch:span class="monotype">mets:div</sch:span> wird auf die Gesamtaufnahme verwiesen, der Wert im Attribut <sch:span class="monotype">TYPE</sch:span> muss <sch:span class="monotype">newspaper</sch:span> lauten.
+In der darunterliegenden <sch:span class="monotype">mets:div</sch:span> wird auf den Jahrgang verwiesen, der Wert im Attribut <sch:span class="monotype">TYPE</sch:span> muss <sch:span class="monotype">year</sch:span> lauten.
+In der darunterliegenden <sch:span class="monotype">mets:div</sch:span> wird auf die einzelnen Monate verwiesen, in denen Ausgaben erschienen sind, der Wert im Attribut <sch:span class="monotype">TYPE</sch:span> muss <sch:span class="monotype">month</sch:span> lauten.
+In der darunterliegenden <sch:span class="monotype">mets:div</sch:span> wird auf das tägliche Erscheinen verwiesen, der Wert im Attribut <sch:span class="monotype">TYPE</sch:span> muss <sch:span class="monotype">day</sch:span> lauten.
+In der darunterliegenden <sch:span class="monotype">mets:div</sch:span> wird auf die Ausgabe verwiesen, der Wert im Attribut <sch:span class="monotype">TYPE</sch:span> muss <sch:span class="monotype">issue</sch:span> lauten.
+Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Transformation der Daten ggf. die entsprechenden Strukturtypen übernommen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@TYPE='year']">
-            <!-- mets:mptr zum Jahrgang fehlt -->
+            <!-- 
+               mets:mptr zum Jahrgang fehlt
+             -->
          <sch:assert id="structMapLogical_13"
                      role="info"
                      test="mets:mptr[@xlink:href]"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die Ausgabe enthält keinen mets:mptr, der auf den METS-Datensatz der Ausgabe verlinkt. Dieser Fehler verhindet nicht das Einspielen der Daten in die DDB, entspricht aber nicht den Vorgaben im METS/MODS-Anwendungsprofil für Zeitungen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die Ausgabe enthält keinen <sch:span class="monotype">mets:mptr</sch:span>, der auf den METS-Datensatz der Ausgabe verlinkt. Dieser Fehler verhindet nicht das Einspielen der Daten in die DDB, entspricht aber nicht den Vorgaben im METS/MODS-Anwendungsprofil für Zeitungen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@TYPE=('issue', 'additional')]">
-            <!-- Ausgabe enthält mets:mptr zur Ausgabe -->
+            <!-- 
+               Ausgabe enthält mets:mptr zur Ausgabe
+             -->
          <sch:report id="structMapLogical_14"
                      role="error"
                      test="mets:mptr"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Im METS-Datensatz zu der Ausgabe einer Zeitung darf kein mets:mptr enhalten sein, der auf eben diesen METS-Datensatz verweist. Ist dies der Fall, wird der mets:mptr bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Im METS-Datensatz zu der Ausgabe einer Zeitung darf kein <sch:span class="monotype">mets:mptr</sch:span> enhalten sein, der auf eben diesen METS-Datensatz verweist. Ist dies der Fall, wird der <sch:span class="monotype">mets:mptr</sch:span> bei der Transformation der Daten entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@TYPE=('issue', 'additional')]">
-            <!-- DMDID für die Ausgabe bzw. Beilage fehlt -->
+            <!-- 
+               Das Attribut DMDID des mets:div der Ausgabe bzw. Beilage fehlt
+             -->
          <sch:assert id="structMapLogical_15"
                      role="fatal"
                      test="string-length(./@DMDID) &gt; 0"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Jede Ausgabe bzw. Beilage muss eine mets:dmdSec enthalten, die die bibliographische Beschreibung der Ausgabe bzw. Beilage enthält. Diese mets:dmdSec muss durch einen Identifier eindeutig beschrieben werden, der in der structMap TYPE="LOGICAL" in der mets:div mit dem Strukturtyp "issue" bzw. "additional" in dem Attribut DMDID steht. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Jede Ausgabe bzw. Beilage muss eine <sch:span class="monotype">mets:dmdSec</sch:span> enthalten, die die bibliographische Beschreibung der Ausgabe bzw. Beilage enthält. Diese <sch:span class="monotype">mets:dmdSec</sch:span> muss durch einen Identifier eindeutig beschrieben werden, der in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> in der <sch:span class="monotype">mets:div</sch:span> mit dem Strukturtyp <sch:span class="monotype">issue</sch:span> bzw. <sch:span class="monotype">additional</sch:span> in dem Attribut <sch:span class="monotype">DMDID</sch:span> steht.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:mptr">
-            <!-- Ungültiger Verweis auf externe METS-Datei -->
+            <!-- 
+               Ungültiger Verweis auf externe METS-Datei
+             -->
          <sch:assert id="structMapLogical_17"
                      role="fatal"
                      test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~:])*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Die mets:mptr Elemente in der mets:structMap TYPE="LOGICAL" müssen im Attribut xlink:href eine valide URL einer externen METS-Datei enthalten. Ist dies nicht der Fall können wichtige Informationen daraus nicht geladen werden und der Datensatz wird nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.2</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Die <sch:span class="monotype">mets:mptr</sch:span> Elemente in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> müssen im Attribut <sch:span class="monotype">xlink:href</sch:span> eine valide URL einer externen METS-Datei enthalten. Ist dies nicht der Fall können wichtige Informationen daraus nicht geladen werden und der Datensatz wird nicht in die DDB eingespielt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']">
-            <!-- Der Datensatz enthält mehrere primäre Strukturelemente -->
+            <!-- 
+               Der Datensatz enthält mehrere primäre Strukturelemente
+             -->
          <sch:report id="structMapLogical_18"
                      role="fatal"
                      test="count(//mets:div[@TYPE = ('issue', 'additional')]) &gt; 1"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet in der mets:structMap[@TYPE='LOGICAL'] darf nur ein mets:div[@TYPE='issue'] oder ein mets:div[@TYPE='additional'] vorhanden sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> darf nur ein <sch:span class="monotype">mets:div[@TYPE='issue']</sch:span> oder ein <sch:span class="monotype">mets:div[@TYPE='additional']</sch:span> vorhanden sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:structMap TYPE="PHYSICAL" fehlt -->
+            <!-- 
+               mets:structMap[@TYPE='PHYSICAL'] fehlt
+             -->
          <sch:assert id="structMapPhysical_01"
                      role="fatal"
                      test="mets:structMap[@TYPE='PHYSICAL']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">mets:structMap TYPE="PHYSICAL" ist notwendig, um die Seiten des Dokuments in der richtigen Reihenfolge anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">
+            <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> ist notwendig, um die Seiten des Dokuments in der richtigen Reihenfolge anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][not(mets:div[@TYPE='physSequence'])]">
-            <!-- Innerhalb von mets:structMap TYPE="PHYSICAL" fehlt die Beschreibung der obersten Ebene -->
+            <!-- 
+               Innerhalb von mets:structMap[@TYPE='PHYSICAL'] fehlt die Beschreibung der obersten Ebene
+             -->
          <sch:assert id="structMapPhysical_02"
                      role="fatal"
                      test="mets:div[@TYPE='physSequence']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">mets:structMap TYPE="PHYSICAL" muss auf der obersten Ebene immer eine mets:div enthalten, die in dem Attribut TYPE den Wert physSequence enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">
+            <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> muss auf der obersten Ebene immer eine <sch:span class="monotype">mets:div</sch:span> enthalten, die in dem Attribut <sch:span class="monotype">TYPE</sch:span> den Wert <sch:span class="monotype">physSequence</sch:span> enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']">
-            <!-- Innerhalb von mets:structMap TYPE="PHYSICAL" fehlt die Liste der Seiten -->
+            <!-- 
+               Innerhalb von mets:structMap[@TYPE='PHYSICAL'] fehlt die Liste der Seiten
+             -->
          <sch:assert id="structMapPhysical_03"
                      role="fatal"
                      test="mets:div[@TYPE='physSequence']/mets:div[@TYPE='page']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">mets:structMap TYPE="PHYSICAL" muss mindestens eine mets:div enthalten, die in dem Attribut TYPE den Wert page enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">
+            <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> muss mindestens eine <sch:span class="monotype">mets:div</sch:span> enthalten, die in dem Attribut <sch:span class="monotype">TYPE</sch:span> den Wert <sch:span class="monotype">page</sch:span> enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div">
-            <!-- Eindeutiger Identifier fehlt in mets:div in mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               Eindeutiger Identifier fehlt in mets:div in mets:structMap[@TYPE='PHYSICAL']
+             -->
          <sch:assert id="structMapPhysical_04"
                      role="fatal"
                      test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" muss in dem Attribut ID einen eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Jede <sch:span class="monotype">mets:div</sch:span> innerhalb von <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> muss in dem Attribut <sch:span class="monotype">ID</sch:span> einen eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page'][not(@ORDER)]">
-            <!-- Attribut order fehlt in mets:div in mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               Attribut order fehlt in mets:div in mets:structMap[@TYPE='PHYSICAL']
+             -->
          <sch:assert id="structMapPhysical_05"
                      role="warn"
                      test="@ORDER"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" die das Attribut TYPE mit dem Wert "page" enthält, muss auch ein Attribut order enthalten. Das Fehlen des Attributs order verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Jede <sch:span class="monotype">mets:div</sch:span> innerhalb von <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> die das Attribut <sch:span class="monotype">TYPE</sch:span> mit dem Wert <sch:span class="monotype">page</sch:span> enthält, muss auch ein Attribut order enthalten. Das Fehlen des Attributs order verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']">
-            <!-- Falscher Attributwert in mets:div in mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               Falscher Attributwert in mets:div in mets:structMap[@TYPE='PHYSICAL']
+             -->
          <sch:assert id="structMapPhysical_06"
                      role="warn"
                      test="matches(@ORDER, '^\d+$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">In der structMap TYPE="PHYSICAL" muss der Wert in dem Attribut order innerhalb der mets:div mit TYPE="page" immer ein integer sein. Ist dies nicht der Fall, verhindert es nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen, da es Probleme bei der Anzeige der Seiten im Viewer nach sich ziehen kann. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">In der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> muss der Wert in dem Attribut <sch:span class="monotype">order</sch:span> innerhalb der <sch:span class="monotype">mets:div[@TYPE='page']</sch:span> immer ein Integer sein.
+Ist dies nicht der Fall, verhindert es nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen, da es Probleme bei der Anzeige der Seiten im Viewer nach sich ziehen kann.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']">
-            <!-- Verknüpfung zur mets:fileSec fehlt -->
+            <!-- 
+               Verknüpfung zur mets:fileSec fehlt
+             -->
          <sch:assert id="structMapPhysical_07"
                      role="fatal"
                      test="mets:fptr[string-length(@FILEID) &gt; 0]"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL", die das Attribut TYPE="page" enthält, muss das Unterelement mets:fptr enthalten, das in den Attributen FILEID den Identifier enthält, der auf die jeweiligen Bilder in der mets:fileSec verlinkt. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Jede <sch:span class="monotype">mets:div[@TYPE='page']</sch:span> innerhalb von <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> muss das Unterelement <sch:span class="monotype">mets:fptr</sch:span> enthalten, das im Attribut <sch:span class="monotype">FILEID</sch:span> den Identifier enthält, der auf die jeweiligen Bilder in der <sch:span class="monotype">mets:fileSec</sch:span> verlinkt. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][//mets:div[@TYPE='page'][starts-with(@CONTENTIDS, 'urn:')]]//mets:div[@TYPE='page']">
-            <!-- Seiten ohne URN -->
+            <!-- 
+               Seiten ohne URN
+             -->
          <sch:assert id="structMapPhysical_08"
                      role="fatal"
                      test="starts-with(@CONTENTIDS, 'urn:')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Wenn in einem Datensatz URNs auf Seitenebene vergeben werden, muss für jede Seite eine URN vorhanden sein. Das bedeutet, wenn in der mets:structMap TYPE="PHYSICAL" mindestens ein mets:div mit dem Attribut TYPE und dem Wert "page" zusätzlich ein Attribut CONTENTIDS mit einer URN enthält, müssen alle mets:div mit dem Attribut TYPE und dem Wert "page" ebenfalls ein Attribut CONTENTIDS mit einer URN enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22PHYSICAL%22">Wenn in einem Datensatz URNs auf Seitenebene vergeben werden, muss für jede Seite eine URN vorhanden sein. Das bedeutet, wenn in der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> mindestens ein <sch:span class="monotype">mets:div[@TYPE='page']</sch:span> zusätzlich ein Attribut <sch:span class="monotype">CONTENTIDS</sch:span> mit einer URN enthält, müssen alle <sch:span class="monotype">mets:div[@TYPE='page']</sch:span> ebenfalls ein Attribut <sch:span class="monotype">CONTENTIDS</sch:span> mit einer URN enthalten.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:structLink fehlt -->
+            <!-- 
+               mets:structLink fehlt
+             -->
          <sch:assert id="structLink_01"
                      role="fatal"
                      test="mets:structLink"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">mets:structLink ist notwendig, um die Ebenen der logischen Struktur mit den dazugehörigen Seiten zu verknüpfen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">
+            <sch:span class="monotype">mets:structLink</sch:span> ist notwendig, um die Ebenen der logischen Struktur mit den dazugehörigen Seiten zu verknüpfen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structLink[not(mets:smLink)]">
-            <!-- mets:smLink fehlt -->
+            <!-- 
+               mets:smLink fehlt
+             -->
          <sch:assert id="structLink_02"
                      role="fatal"
                      test="mets:smLink"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink. Ist kein mets:smLink vorhanden, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">Die Verknüpfung zwischen den logischen Ebenen der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> und den dazugehörigen Seiten in der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> erfolgt im <sch:span class="monotype">mets:structLink</sch:span> in den Unterelementen <sch:span class="monotype">mets:smLink</sch:span>. Ist kein <sch:span class="monotype">mets:smLink</sch:span> vorhanden, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structLink/mets:smLink[not(string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0)]">
-            <!-- Verknüpfung zwischen der logischen und physischen Struktur fehlt -->
+            <!-- 
+               Verknüpfung zwischen der logischen und physischen Struktur fehlt
+             -->
          <sch:assert id="structLink_03"
                      role="fatal"
                      test="string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink über die Attribute xlink:from und xlink:to. Fehlt eines dieser Attribute, wird der Datensatz nicht in die DDB eingespielt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">Die Verknüpfung zwischen den logischen Ebenen der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> und den dazugehörigen Seiten in der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> erfolgt im <sch:span class="monotype">mets:structLink</sch:span> in den Unterelementen <sch:span class="monotype">mets:smLink</sch:span> über die Attribute <sch:span class="monotype">xlink:from</sch:span> und <sch:span class="monotype">xlink:to</sch:span>. Fehlt eines dieser Attribute, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structLink/mets:smLink">
-            <!-- Identifier aus mets:structLink fehlt in der mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               Identifier aus mets:structLink fehlt in der mets:structMap[@TYPE='PHYSICAL']
+             -->
          <sch:assert id="structLink_04"
                      role="fatal"
                      test="key('structMap_PHYSICAL_ids', @xlink:to)"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink über die Attribute xlink:from und xlink:to. Dafür muss jeder Identifier, der in einem mets:smLink steht einem ID in der structMap TYPE="PHYSICAL" entsprechen. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">Die Verknüpfung zwischen den logischen Ebenen der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> und den dazugehörigen Seiten in der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> erfolgt im <sch:span class="monotype">mets:structLink</sch:span> in den Unterelementen <sch:span class="monotype">mets:smLink</sch:span> über die Attribute <sch:span class="monotype">xlink:from</sch:span> und <sch:span class="monotype">xlink:to</sch:span>. Dafür muss jeder Identifier, der in einem <sch:span class="monotype">mets:smLink</sch:span> steht einem <sch:span class="monotype">mets:div/@ID</sch:span> in der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> entsprechen. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:fileSec fehlt -->
+            <!-- 
+               mets:fileSec fehlt
+             -->
          <sch:assert id="fileSec_01"
                      role="fatal"
                      test="mets:fileSec"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Die mets:fileSec enthält die Links zu den digitalen Bildern. Fehlt die mets:fileSec, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Die <sch:span class="monotype">mets:fileSec</sch:span> enthält die Links zu den digitalen Bildern. Fehlt die <sch:span class="monotype">mets:fileSec</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='DEFAULT'])]">
-            <!-- mets:fileGrp USE=DEFAULT fehlt -->
+            <!-- 
+               mets:fileGrp[@USE='DEFAULT'] fehlt
+             -->
          <sch:assert id="fileSec_02"
                      role="fatal"
                      test="mets:fileGrp[@USE='DEFAULT']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Die mets:fileSec enthält die Links zu den digitalen Bildern in unterschiedlichen Auflösungen. Um welche Art von Auflösung es sich dabei handelt, wird über die mets:fileGrp angegeben. Jede Auflösung eines Bildes wird daher der entsprechenden fileGrp zugeordnet. Eine mets:fileSec muss mindestens die mets:fileGrp mit dem Attribut USE="DEFAULT" enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Die <sch:span class="monotype">mets:fileSec</sch:span> enthält die Links zu den digitalen Bildern in unterschiedlichen Auflösungen. Um welche Art von Auflösung es sich dabei handelt, wird über die <sch:span class="monotype">mets:fileGrp</sch:span> angegeben. Jede Auflösung eines Bildes wird daher der entsprechenden <sch:span class="monotype">mets:fileGrp</sch:span> zugeordnet. Eine <sch:span class="monotype">mets:fileSec</sch:span> muss mindestens die <sch:span class="monotype">mets:fileGrp[@USE='DEFAULT']</sch:span> enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']">
-            <!-- mets:file fehlt -->
+            <!-- 
+               mets:file fehlt
+             -->
          <sch:assert id="fileSec_03"
                      role="fatal"
                      test="mets:file[mets:FLocat[string-length(@xlink:href) &gt; 0]]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">In der mets:fileSec sind innerhalb der mets:fileGrp die einzelnen Bilder gelistet. Die mets:fileGrp use="DEFAULT" muss mindestens ein mets:file enthalten und dieses muss in dem Unterelement mets:FLocat das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt mets:file mit dem Attribut xlink:href im Unterelement mets:FLocat, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">In der <sch:span class="monotype">mets:fileSec</sch:span> sind innerhalb der <sch:span class="monotype">mets:fileGrp</sch:span> die einzelnen Bilder gelistet. Die <sch:span class="monotype">mets:fileGrp[@USE='DEFAULT']</sch:span> muss mindestens ein <sch:span class="monotype">mets:file</sch:span> enthalten und dieses muss in dem Unterelement <sch:span class="monotype">mets:FLocat</sch:span> das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt <sch:span class="monotype">mets:file</sch:span> mit dem Attribut <sch:span class="monotype">xlink:href</sch:span> im Unterelement <sch:span class="monotype">mets:FLocat</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']/mets:file">
-            <!-- Eindeutiger Identifier fehlt in mets:file -->
+            <!-- 
+               Eindeutiger Identifier fehlt in mets:file
+             -->
          <sch:assert id="fileSec_04"
                      role="fatal"
                      test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Jedes mets:file in der mets:fileSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Jedes <sch:span class="monotype">mets:file</sch:span> in der <sch:span class="monotype">mets:fileSec</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='FULLTEXT'])]">
-            <!-- mets:fileGrp USE="FULLTEXT" fehlt -->
+            <!-- 
+               mets:fileGrp[@USE='FULLTEXT'] fehlt
+             -->
          <sch:assert id="fileSec_05"
                      role="warn"
                      test="mets:fileGrp[@USE='FULLTEXT']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">In der mets:fileSec wird innerhalb der mets:fileGrp mit dem Attribut USE="FULLTEXT" auf die Volltexte der einzelnen Seiten verlinkt. Die Bereitstellung von Volltexten ist für alle Zeitungsausgaben im Deutsche Zeitungsportal gewünscht, aber nicht verpflichtend. Die Volltextsuche ist der zentrale Einstieg zu den Inhalten des Zeitungsportals. Die Inhalte von Zeitungen ohne Volltext sind für NutzerInnen schwerer zugänglich. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">In der <sch:span class="monotype">mets:fileSec</sch:span> wird innerhalb der <sch:span class="monotype">mets:fileGrp[@USE='FULLTEXT']</sch:span> auf die Volltexte der einzelnen Seiten verlinkt. Die Bereitstellung von Volltexten ist für alle Zeitungsausgaben im Deutsche Zeitungsportal gewünscht, aber nicht verpflichtend. Die Volltextsuche ist der zentrale Einstieg zu den Inhalten des Zeitungsportals. Die Inhalte von Zeitungen ohne Volltext sind für NutzerInnen schwerer zugänglich.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE='FULLTEXT']">
-            <!-- mets:file fehlt -->
+            <!-- 
+               mets:file fehlt
+             -->
          <sch:assert id="fileSec_06"
                      role="fatal"
                      test="mets:file[mets:FLocat[string-length(@xlink:href) &gt; 0]]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Die mets:fileGrp USE="FULLTEXT" muss mindestens ein mets:file enthalten. Fehlt mets:file mit dem Attribut xlink:href im Unterelement mets:FLocat, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Die <sch:span class="monotype">mets:fileGrp[@USE='FULLTEXT']</sch:span> muss mindestens ein <sch:span class="monotype">mets:file</sch:span> enthalten. Fehlt <sch:span class="monotype">mets:file</sch:span> mit dem Attribut xlink:href im Unterelement <sch:span class="monotype">mets:FLocat</sch:span>, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE='FULLTEXT']">
-            <!-- Fehlender MIMETYPE in mets:file in der mets:fileGrp[@USE='FULLTEXT'] -->
+            <!-- 
+               Fehlendes Attribut MIMETYPE in mets:file in der mets:fileGrp[@USE='FULLTEXT']
+             -->
          <sch:report id="fileSec_07"
                      role="error"
                      test="mets:file[not(@MIMETYPE = 'text/xml')]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">In der mets:fileGrp[@USE='FULLTEXT'] fehlt mindestens einem enthaltenden mets:file das Attribut MIMETYPE mit dem Wert "text/xml". Die mets:file in mets:fileGrp[@USE='FULLTEXT'] müssen in ihrem Unterelement mets:FLocat im Attribut xlink:href auf eine ALTO-Datei verweisen. Fehlt das zur entsprechenden Auszeichung benötigte Attribut MIMETYPE in mets:file oder besitzt es einen anderen Wert als "text/xml", geht das Zeitungsportal trotzdem davon aus, dass im Unterelement mets:FLocat im Attribut xlink:href eine ALTO-Datei referenziert wird. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">In der <sch:span class="monotype">mets:fileGrp[@USE='FULLTEXT']</sch:span> fehlt mindestens einem enthaltenden <sch:span class="monotype">mets:file</sch:span> das Attribut MIMETYPE mit dem Wert <sch:span class="monotype">text/xml</sch:span>. Die <sch:span class="monotype">mets:file</sch:span> in <sch:span class="monotype">mets:fileGrp[@USE='FULLTEXT']</sch:span> müssen in ihrem Unterelement <sch:span class="monotype">mets:FLocat</sch:span> im Attribut <sch:span class="monotype">xlink:href</sch:span> auf eine ALTO-Datei verweisen.
+Fehlt das zur entsprechenden Auszeichung benötigte Attribut <sch:span class="monotype">MIMETYPE</sch:span> in <sch:span class="monotype">mets:file</sch:span> oder besitzt es einen anderen Wert als <sch:span class="monotype">text/xml</sch:span>, geht das Zeitungsportal trotzdem davon aus, dass im Unterelement <sch:span class="monotype">mets:FLocat</sch:span> im Attribut <sch:span class="monotype">xlink:href</sch:span> eine ALTO-Datei referenziert wird.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:fileSec">
-            <!-- mets:file ohne Attribut MIMETYPE -->
+            <!-- 
+               mets:file ohne Attribut MIMETYPE
+             -->
          <sch:report id="fileSec_08"
                      role="warn"
                      test="//mets:file[string-length(@MIMETYPE) = 0]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Jedes mets:file Element im Element mets:fileSec muss das Attribut MIMETYPE besitzen. Der Datensatz enthält mindestens ein mets:file ohne das Attribut MIMETYPE. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Jedes <sch:span class="monotype">mets:file</sch:span> Element im Element <sch:span class="monotype">mets:fileSec</sch:span> muss das Attribut <sch:span class="monotype">MIMETYPE</sch:span> besitzen. Der Datensatz enthält mindestens ein <sch:span class="monotype">mets:file</sch:span> ohne das Attribut <sch:span class="monotype">MIMETYPE</sch:span>. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE=('DEFAULT', 'THUMBS', 'FULLTEXT')]/mets:file">
+            <!-- 
+               Nicht referenziertes mets:file
+             -->
+         <sch:assert id="fileSec_09"
+                     role="fatal"
+                     test="key('structMap_PHYSICAL_fptr_FILEID', @ID)"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:fileSec">Jedes <sch:span class="monotype">mets:file</sch:span> Element in einem <sch:span class="monotype">mets:fileGrp</sch:span> Element mit einem der Werte <sch:span class="monotype">DEFAULT</sch:span>, <sch:span class="monotype">THUMBS</sch:span> oder <sch:span class="monotype">FULLTEXT</sch:span> im Attribut <sch:span class="monotype">USE</sch:span> muss von einem <sch:span class="monotype">mets:fptr</sch:span> Element innerhalb des Elements <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> über dessen Attribut <sch:span class="monotype">FILEID</sch:span> referenziert sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- Die mets:dmdSec der Ausgabe fehlt -->
+            <!-- 
+               Die mets:dmdSec der Ausgabe bzw. Beilage fehlt
+             -->
          <sch:assert id="dmdSec_01"
                      role="fatal"
                      test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die mets:dmdSec der Ausgabe enthält ihre bibliographische Beschreibung. Sie muss mit dem mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" verlinkt sein. Ein Datensatz darf nur ein mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" enthalten. Sind diese Vorraussetzungen nicht erfüllt, wird der Datensatz nicht in das Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Die <sch:span class="monotype">mets:dmdSec</sch:span> der Ausgabe bzw. Beilage enthält ihre bibliographische Beschreibung. Sie muss mit dem <sch:span class="monotype">mets:div[@TYPE='issue']</sch:span> bzw. <sch:span class="monotype">mets:div[@TYPE='additional']</sch:span> in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> verlinkt sein.
+Ein Datensatz darf nur ein <sch:span class="monotype">mets:div[@TYPE='issue']</sch:span> oder ein <sch:span class="monotype">mets:div[@TYPE='additional']</sch:span> in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> enthalten. Sind diese Vorraussetzungen nicht erfüllt, wird der Datensatz nicht in das Zeitungsportal eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:dmdSec[not(@ID=$work_dmdid)]">
-            <!-- Unterelemente fehlen in mets:dmdSec -->
+            <!-- 
+               Unterelemente fehlen in mets:dmdSec
+             -->
          <sch:assert id="dmdSec_02"
                      role="error"
                      test="mets:mdWrap/mets:xmlData/mods:mods"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede mets:dmdSec muss das Unterelement mets:mdWrap mit dem Unterelement mets:xmlData enthalten. Und mets:xmlData muss das Unterelement mods:mods enthalten. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede <sch:span class="monotype">mets:dmdSec</sch:span> muss das Unterelement <sch:span class="monotype">mets:mdWrap</sch:span> mit dem Unterelement <sch:span class="monotype">mets:xmlData</sch:span> enthalten. Und <sch:span class="monotype">mets:xmlData</sch:span> muss das Unterelement <sch:span class="monotype">mods:mods</sch:span> enthalten. Ist dies nicht der Fall, wird die <sch:span class="monotype">mets:dmdSec</sch:span> bei der Bereinigung der Daten entfernt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec">
-            <!-- Kein eindeutiger Identifier für mets:dmdSec -->
+            <!-- 
+               Kein eindeutiger Identifier für mets:dmdSec
+             -->
          <sch:assert id="dmdSec_03"
                      role="fatal"
                      test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede mets:dmdSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede <sch:span class="monotype">mets:dmdSec</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec">
-            <!-- Identifier der mets:dmdSec fehlt in der structMap TYPE="LOGICAL" -->
+            <!-- 
+               Identifier der mets:dmdSec fehlt in der mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:assert id="dmdSec_04"
                      role="error"
                      test="key('structMap_LOGICAL_dmdids', @ID)"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede mets:dmdSec muss über ihren Identifier mit der dazugehörigen logischen Ebene verknüpft werden. Der Identifier der mets:dmdSec muss darum in der mets:div, die die logische Ebene beschreibt in dem Attribut DMDID vorkommen. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede <sch:span class="monotype">mets:dmdSec</sch:span> muss über ihren Identifier mit der dazugehörigen logischen Ebene verknüpft werden. Der Identifier der <sch:span class="monotype">mets:dmdSec</sch:span> muss darum in der <sch:span class="monotype">mets:div</sch:span>, die die logische Ebene beschreibt in dem Attribut <sch:span class="monotype">DMDID</sch:span> vorkommen. Ist dies nicht der Fall, wird die <sch:span class="monotype">mets:dmdSec</sch:span> bei der Bereinigung der Daten entfernt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:amdSec fehlt -->
+            <!-- 
+               mets:amdSec fehlt
+             -->
          <sch:assert id="amdSec_01"
                      role="fatal"
                      test="mets:amdSec"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Die mets:amdSec enthält die administrativen Metadaten zum Digitalisat. Innerhalb eines METS-Datensatzes muss eine mets:amdSec für das primäre logische Strukturelement geben. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Die <sch:span class="monotype">mets:amdSec</sch:span> enthält die administrativen Metadaten zum Digitalisat. Innerhalb eines METS-Datensatzes muss eine <sch:span class="monotype">mets:amdSec</sch:span> für das primäre logische Strukturelement geben. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:amdSec">
-            <!-- Kein eindeutiger Identifier für mets:amdSec -->
+            <!-- 
+               Kein eindeutiger Identifier für mets:amdSec
+             -->
          <sch:assert id="amdSec_02"
                      role="warn"
                      test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Jede mets:amdSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Das Fehlen der ID verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Jede <sch:span class="monotype">mets:amdSec</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Das Fehlen der <sch:span class="monotype">ID</sch:span> verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]">
-            <!-- Rechteangabe fehlt -->
+            <!-- 
+               Rechteangabe fehlt
+             -->
          <sch:assert id="amdSec_04"
                      role="error"
                      test="mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Jeder Datensatz muss Informationen über die Rechte an den Digitalisaten enthalten, damit er in die DDB eingespielt werden kann. Der Link zu einer Lizenz bzw. einem Rightsstatement steht in der mets:rightsMD in dem Element dv:license, das ein Unterelement von dv:rights, das wiederum ein Unterelement von mets:xmlData, das wiederum ein Unterelement von mets:mdWrap ist. Ist die Verwendung von dv:license nicht möglich, muss die Lizenz bzw. das Rightsstatement in mods:accessCondition type="use and reproduction" stehen. Ist keines von beiden der Fall, wird nach Rücksprache mit dem Datengeber für alle Datensätze bei der Bereinigung der Daten eine Standard-Lizenz gesetzt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Jeder Datensatz muss Informationen über die Rechte an den Digitalisaten enthalten, damit er in die DDB eingespielt werden kann. Der Link zu einer Lizenz bzw. einem Rightsstatement steht in der <sch:span class="monotype">mets:rightsMD</sch:span> in dem Element <sch:span class="monotype">dv:license</sch:span>, das ein Unterelement von <sch:span class="monotype">dv:rights</sch:span>, das wiederum ein Unterelement von <sch:span class="monotype">mets:xmlData</sch:span>, das wiederum ein Unterelement von <sch:span class="monotype">mets:mdWrap</sch:span> ist.
+Ist die Verwendung von <sch:span class="monotype">dv:license</sch:span> nicht möglich, muss die Lizenz bzw. das Rightsstatement in <sch:span class="monotype">mods:accessCondition[@type='use and reproduction']</sch:span> stehen.
+Ist keines von beiden der Fall, wird nach Rücksprache mit dem Datengeber für alle Datensätze bei der Bereinigung der Daten eine Standard-Lizenz gesetzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]">
-            <!-- Rechteangabe weicht von den Vorgaben ab -->
+            <!-- 
+               Rechteangabe weicht von den Vorgaben ab
+             -->
          <sch:assert id="amdSec_05"
                      role="error"
                      test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Die vom Deutschen Zeitungsportal akzeptierten Rechteangaben entsprechen der von Europeana veröffentlichten Liste der rights statements (s. \url{https://pro.europeana.eu/page/available-rights-statements}). Entsprechen die Rechteangaben in den Daten nicht den in dieser Liste erlaubten URIs, werden sie nach Rücksprache mit den Datengebern bei der Bereinigung der Daten in eine der dort genannten Lizenzen bzw. Rechteangaben konvertiert.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">Die von der DDB akzeptierten Rechteangaben entsprechen der von Europeana veröffentlichten Liste der Rights Statements (https://pro.europeana.eu/page/available-rights-statements). Entsprechen die Rechteangaben in den Daten nicht den in dieser Liste erlaubten URIs, werden sie nach Rücksprache mit den Datengebern bei der Bereinigung der Daten in eine der dort genannten Lizenzen bzw. Rechteangaben konvertiert.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:amdSec/mets:digiprovMD">
-            <!-- Link zum Objekt beim Datengeber fehlt -->
+            <!-- 
+               Link zum Objekt beim Datengeber fehlt
+             -->
          <sch:assert id="amdSec_06"
                      role="error"
                      test="mets:mdWrap/mets:xmlData/dv:links/dv:reference[matches(text()[1], '^http[s]?://.+')] or mets:mdWrap/mets:xmlData/dv:links/dv:presentation[matches(text()[1], '^http[s]?://.+')]"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">In der mets:amdSec des primären logischen Strukturelements enthält das Unterelement mets:digiprovMD einen Link zu dem Digitalisat beim Datenpartner. Dieser Link muss in Form eines http- oder https-URI in dv:presentation oder dv:reference vorhanden sein. Beide Elemente sind Unterelemente von dv:links, das ein Unterelement von mets:xmlData ist, welches ein Unterelement von mets:mdWrap ist welches ein Unterelement von mets:digiprovMD ist. Ist weder dv:presentation noch dv:reference vorhanden bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird mets:digiprovMD bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.4</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:amdSec">In der <sch:span class="monotype">mets:amdSec</sch:span> des primären logischen Strukturelements enthält das Unterelement <sch:span class="monotype">mets:digiprovMD</sch:span> einen Link zu dem Digitalisat beim Datenpartner. Dieser Link muss in Form eines http- oder https-URI in <sch:span class="monotype">dv:presentation</sch:span> oder <sch:span class="monotype">dv:reference</sch:span> vorhanden sein.
+Beide Elemente sind Unterelemente von <sch:span class="monotype">dv:links</sch:span>, das ein Unterelement von <sch:span class="monotype">mets:xmlData</sch:span> ist, welches ein Unterelement von <sch:span class="monotype">mets:mdWrap</sch:span> ist welches ein Unterelement von <sch:span class="monotype">mets:digiprovMD</sch:span> ist.
+Ist weder <sch:span class="monotype">dv:presentation</sch:span> noch <sch:span class="monotype">dv:reference</sch:span> vorhanden bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird <sch:span class="monotype">mets:digiprovMD</sch:span> bei der Transformation der Daten entfernt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Hinweis auf möglicherweise ungültige Rechteangabe -->
+            <!-- 
+               Hinweis auf möglicherweise ungültige Rechteangabe
+             -->
          <sch:report id="amdSec_13"
-                     role="warn"
+                     role="caution"
                      test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910"
-                     properties="dmd_id">Die Lizenzen aus dem Lizenzkorb der DDB können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen. Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im „Lizenzkorb“ enthaltene Rechtehinweis "Public Domain Mark" in Frage. Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.</sch:report>
+                     properties="dmd_id">Die Lizenzen aus dem Lizenzkorb der DDB können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen.
+Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im "Lizenzkorb" enthaltene Rechtehinweis "Public Domain Mark" in Frage.
+Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]">
-            <!-- Widersprüchliche Rechteangaben in dv:license -->
+            <!-- 
+               Widersprüchliche Rechteangaben in dv:license
+             -->
          <sch:report id="amdSec_14"
                      role="fatal"
                      test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
-                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
+                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element <sch:span class="monotype">dv:license</sch:span> widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
       </sch:rule>
       <sch:rule context="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]">
-            <!-- Widersprüchliche Rechteangaben in mods:accessCondition[@type='use and reproduction'] -->
+            <!-- 
+               Widersprüchliche Rechteangaben in mods:accessCondition[@type='use and reproduction']
+             -->
          <sch:report id="amdSec_16"
                      role="fatal"
                      test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1"
-                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element mods:accessCondition[@type='use and reproduction'] widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
+                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element <sch:span class="monotype">mods:accessCondition[@type='use and reproduction']</sch:span> widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
       </sch:rule>
       <sch:rule context="mets:mets">
-            <!-- Widersprüchliche Rechteangaben in dv:license -->
+            <!-- 
+               Widersprüchliche Rechteangaben in dv:license
+             -->
          <sch:report id="amdSec_17"
                      role="error"
                      test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
-                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält in den Elementen mods:accessCondition[@type='use and reproduction'] und dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB. Bei der Transformation der Daten übernimmt die DDB in diesem Fall die Rechteangabe aus mods:accessCondition[@type='use and reproduction']. Bitte beachten Sie darüber hinaus, dass die DDB die codierten CC-Lizenz-Werte aus dem METS-AP für dv:license als Version 4.0 und den Wert "reserved" als "Urheberrechtsschutz nicht bewertet" (Europeana Rightstatement "CNE") interpretiert.</sch:report>
+                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält in den Elementen <sch:span class="monotype">mods:accessCondition[@type='use and reproduction']</sch:span> und <sch:span class="monotype">dv:license</sch:span> widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB.
+Bei der Transformation der Daten übernimmt die DDB in diesem Fall die Rechteangabe aus <sch:span class="monotype">mods:accessCondition[@type='use and reproduction']</sch:span>. Bitte beachten Sie darüber hinaus, dass die DDB die codierten CC-Lizenz-Werte aus dem METS-AP für <sch:span class="monotype">dv:license</sch:span> als Version 4.0 und den Wert <sch:span class="monotype">reserved</sch:span> als "Urheberrechtsschutz nicht bewertet" (http://rightsstatements.org/vocab/CNE/1.0/) (Europeana Rightstatement "CNE") interpretiert.</sch:report>
       </sch:rule>
    </sch:pattern>
 </sch:schema>

@@ -2,7 +2,7 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2022-11-10T08:51:13"
+            schemaVersion="v2023-05-05T15:50:49"
             queryBinding="xslt2">
    <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS Anwendungsprofil für digitalisierte Medien</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>
@@ -77,10 +77,6 @@
          <license_uri>https://rightsstatements.org/vocab/NoC-NC/1.0/</license_uri>
          <license_uri>http://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
          <license_uri>https://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
-         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
-         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
-         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
-         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
       </license_uris>
    </sch:let>
    <sch:let name="iso639-1_codes">
@@ -1098,7 +1094,7 @@
    <sch:let name="is_anchor"
             value="if ( //mets:mets/mets:structLink or //mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT'] ) then false() else true()"/>
    <sch:let name="work_amdid"
-            value="//mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID = $work_dmdid]/@ADMID"/>
+            value="//mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[tokenize(@DMDID, ' ') = $work_dmdid]/@ADMID"/>
    <xsl:key name="mets_ids" match="mets:*[@ID]" use="@ID"/>
    <xsl:key name="dmdsec_ids" match="mets:dmdSec" use="@ID"/>
    <xsl:key name="amdsec_ids" match="mets:amdSec" use="@ID"/>
@@ -1108,6 +1104,9 @@
    <xsl:key name="structMap_PHYSICAL_ids"
             match="mets:structMap[@TYPE='PHYSICAL']//mets:div"
             use="@ID"/>
+   <xsl:key name="structMap_PHYSICAL_fptr_FILEID"
+            match="mets:structMap[@TYPE='PHYSICAL']//mets:fptr"
+            use="@FILEID"/>
    <xsl:key name="structMap_LOGICAL_dmdids"
             match="mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"
             use="tokenize(@DMDID, ' ')"/>
@@ -1137,1086 +1136,1594 @@
             use="text()"/>
    <sch:pattern>
       <sch:rule context="mods:*">
-            <!-- Der Datensatz enthält leere MODS-Elemente -->
+            <!-- 
+               Leeres MODS-Element
+             -->
          <sch:assert id="all_01"
                      role="warn"
                      test="string-length(normalize-space(text()[1])) &gt; 0 or element()"
-                     properties="dmd_id">Jedes MODS-Element muss entweder Text als Inhalt haben oder ein Kindelement das Text enthält. Leere MODS-Elemente verhindern nicht das Einspielen der Daten in die DDB. Wir bitten Sie jedoch, diesen Fehler in den folgenden Datensätzen bis zur nächsten Datenlieferung zu beheben.</sch:assert>
+                     properties="dmd_id">Jedes MODS-Element muss entweder mindestens ein Unterelement oder Text enthalten. Leere MODS-Elemente verhindern nicht das Einspielen Ihrer Daten in die DDB, können aber auf Probleme beim Erzeugen des Datensatzes und damit verbundene Informationsverluste hinweisen.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:*[mods:*]">
-            <!-- Text in Elementen, die Unterelemente enthalten -->
+            <!-- 
+               MODS-Element enthält Unterelement und Text
+             -->
          <sch:report id="all_02"
                      role="error"
                      test="matches(string-join(text(), ''), '\w')"
-                     properties="dmd_id">In MODS-Elementen, die Unterelemente enthalten, darf es keinen Text geben. Enthält ein solches Element Text, wird der Text bei der Bereinigung der Daten entfernt.</sch:report>
+                     properties="dmd_id">MODS-Elemente, die Unterelemente enthalten, dürfen keinen Text enthalten. Enthält ein MODS-Element mit mindestens einem Unterelement ebenfalls Text, wird der Text bei der Transformation des Datensatzes entfernt.</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:*">
-            <!-- Nicht erlaubte Elemente in der obersten MODS-Ebene -->
+            <!-- 
+               Ungültige Elemente in der obersten MODS-Ebene
+             -->
          <sch:assert id="all_03"
                      role="fatal"
                      test="./local-name() = ( 'titleInfo', 'name', 'typeOfResource', 'genre', 'originInfo', 'language', 'physicalDescription', 'abstract', 'tableOfContents', 'targetAudience', 'note', 'subject', 'classification', 'relatedItem', 'identifier', 'location', 'accessCondition', 'part', 'extension', 'recordInfo' )"
-                     properties="dmd_id local_name">In der obersten MODS-Ebene werden MODS-Elemente verwendet, die dort nicht zulässig sind. Da diese zu Problemen in der Verarbeitung der Datensätze führen kann, werden sie nicht in die DDB eingespielt.</sch:assert>
+                     properties="dmd_id local_name">Der Datensatz verwendet Elemente in der obersten MODS-Ebene, die dort nicht zulässig sind. Da diese zu Problemen in der Verarbeitung des Datensatzes führen können, wird der Datensatz nicht in die DDB eingespielt.Eine Liste der zulässigen MODS-Elemente auf der obersten Ebene finden sie in den MODS User Guidelines (https://www.loc.gov/standards/mods/userguide/generalapp.html#top_level).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:*/@valueURI">
-            <!-- Der Wert im Attribut valueURI ist kein URL -->
+            <!-- 
+               Der Wert im Attribut valueURI ist kein URL
+             -->
          <sch:assert id="all_04"
                      role="error"
                      test="matches(., '^https?://[^ ]+$')"
-                     properties="dmd_id">Das Attribut valueURI muss immer einen URL enthalten. Enthält es keinen URL, wird valueURI bei der Transformation der Daten entfernt.</sch:assert>
+                     properties="dmd_id">Das Attribut <sch:span class="monotype">valueURI</sch:span> muss immer einen URL enthalten. Enthält es keinen URL, wird <sch:span class="monotype">valueURI</sch:span> bei der Transformation des Datensatzes entfernt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:*//mods:mods">
-            <!-- mods:mods enthält weitere mods:mods Elemente -->
+            <!-- 
+               mods:mods enthält mods:mods
+             -->
          <sch:report id="all_05"
                      role="error"
                      test=".[not(./ancestor::mods:extension)]"
-                     properties="dmd_id">Das mods:mods Wurzelelement der mets:dmdSec enthält weitere mods:mods Elemente, die dort nicht zulässig sind. Sie werden bei der Transformation der Daten entfernt.</sch:report>
+                     properties="dmd_id">Der Datensatz enthält innerhalb des MODS-Wurzelelements <sch:span class="monotype">mods:mods</sch:span> im Element <sch:span class="monotype">mets:dmdSec</sch:span> weitere <sch:span class="monotype">mods:mods</sch:span>-Elemente. Diese können zu Problemen in der Verarbeitung des Datensatzes führen und werden daher bei der Transformation des Datensatzes entfernt. </sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:*[starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')]">
-            <!-- Ungültiger GND-URI im Attribut valueURI -->
+            <!-- 
+               Ungültiger GND-URI im Attribut valueURI
+             -->
          <sch:assert id="all_06"
                      role="error"
                      test="matches(substring-after(@valueURI, '/gnd/'), '^[0-9]*-[0-9xX]{1}$|^[0-9xX]*$')"
-                     properties="dmd_id">Der Datensatz enthält valueURI Attribute mit einer ungültigen GND-URI. Diese valueURI-Attribute werden bei der Transformation der Daten entfernt.</sch:assert>
+                     properties="dmd_id">Der Datensatz enthält <sch:span class="monotype">valueURI</sch:span> Attribute mit einem ungültigen GND-URI. Diese werden bei der Transformation des Datensatzes entfernt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Der Titel des Werks fehlt -->
+            <!-- 
+               mods:titleInfo fehlt in im primären mets:dmdSec
+             -->
          <sch:assert id="titleInfo_01"
                      role="fatal"
                      test="mods:titleInfo[not(@type)][1]/mods:title[1][string-length(normalize-space(text())) &gt; 0] or mods:titleInfo[@type='uniform'][1]/mods:title[1][string-length(normalize-space(text())) &gt; 0] or mods:relatedItem[@type='host']"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Die primäre mets:dmdSec von Monographien, Handschriften u.Ä. muss ein mods:titleInfo ohne Attribut type oder mit dem Attribut type mit dem Wert "uniform" besitzen. Darüber hinaus muss das mods:titleInfo das Unterelement mods:title enthalten. Bände von mehrteiligen Monografien und Zeitschriften können alternativ ein mods:relatedItem type="host" enthalten, das auf den Datensatz des übergeordneten Werks verweist. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Das primäre <sch:span class="monotype">mets:dmdSec</sch:span>-Element von Einteiligen Dokumenten muss ein <sch:span class="monotype">mods:titleInfo</sch:span>-Element ohne Attribut <sch:span class="monotype">type</sch:span> oder mit <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">uniform</sch:span> besitzen. Darüber hinaus muss das <sch:span class="monotype">mods:titleInfo</sch:span> das Unterelement <sch:span class="monotype">mods:title</sch:span> enthalten.
+Teile von Mehrteiligen Dokumenten können alternativ ein <sch:span class="monotype">mods:relatedItem</sch:span>-Element mit dem Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">host</sch:span> enthalten, das auf den Ankersatz des Mehrteiligen Dokuments verweist.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID!=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Teile eines Werkes haben keinen Titel -->
+            <!-- 
+               mods:titleInfo fehlt in einem nicht-primären mets:dmdSec
+             -->
          <sch:assert id="titleInfo_02"
                      role="error"
-                     test="mods:titleInfo[not(@type)][1]/mods:title[1][string-length(normalize-space(text())) &gt; 0]"
+                     test="mods:titleInfo[not(@type)][1]/mods:title[1][string-length(normalize-space(text())) &gt; 0] or $is_anchor"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Die bibliographische Beschreibung von Teilen eines Werks wird nur dann in die DDB eingespielt, wenn mods:titleInfo/mods:title mit einem aussagekräftigen Titel vorhanden ist. Ist dies nicht der Fall, wird die mets:dmdSec, die die Beschreibung des Teils enthält, aus dem METS-Datensatz entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Jedes nicht-primäre <sch:span class="monotype">mets:dmdSec</sch:span>-Element muss mindestens ein <sch:span class="monotype">mods:titleInfo</sch:span>-Element mit einem mindestens drei Zeichen langem Text im Unterelement <sch:span class="monotype">mods:title</sch:span> enthalten.
+Ist dies nicht der Fall, wird <sch:span class="monotype">mets:dmdSec</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und METS/MODS für Unselbständige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/BgKuB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Kein eindeutiger Haupttitel vorhanden -->
+            <!-- 
+               mets:dmdSec ohne eindeutiges mods:titleInfo
+             -->
          <sch:report id="titleInfo_03"
                      role="error"
                      test="mods:titleInfo[not(@type)][2] or (not(mods:titleInfo[not(@type)]) and mods:titleInfo[@type='uniform'][2])"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Für die Anzeige der Daten in der DDB wird ein eindeutiger Haupttitel benötigt. Dieser wird sowohl für die Anzeige in der Trefferliste als auch für die Überschrift in der Anzeige des Objekts benötigt. Dieser Haupttitel muss in dem mods:titleInfo stehen, das kein Attribut type bzw. ein Attribut type mit dem Wert "uniform" besitzt. Damit der Haupttitel eindeutig identifiziert werden kann, ist das nur einmal erlaubt. Ist mehr als ein mods:titleInfo ohne Attribut bzw. mit dem Attribut type mit dem Wert "uniform" vorhanden, wird bei der Transformation der erste entsprechende Titel als Haupttitel übernommen. Alle anderen mods:titleInfo ohne Attribut type werden bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1.1</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Das Element <sch:span class="monotype">mets:dmdSec</sch:span> muss genau ein <sch:span class="monotype">mods:titleInfo</sch:span>-Element enthalten. Dieses muss entweder genau ein <sch:span class="monotype">mods:titleInfo</sch:span> ohne das Attribut <sch:span class="monotype">type</sch:span> enthalten oder kein <sch:span class="monotype">mods:titleInfo</sch:span> ohne <sch:span class="monotype">type</sch:span> und genau ein <sch:span class="monotype">mods:titleInfo</sch:span> mit <sch:span class="monotype">type</sch:span> und dem Wert <sch:span class="monotype">uniform</sch:span>.
+Ist dies nicht der Fall, kann die DDB keinen eindeutigen Objekttitel für die Anzeige des Datensatzes in der DDB ermitteln. Bei der Transformation des Datensatzes werden daher alle weiteren Vorkommen von <sch:span class="monotype">mods:titleInfo</sch:span> ohne <sch:span class="monotype">type</sch:span> bzw. <sch:span class="monotype">mods:titleInfo</sch:span> mit <sch:span class="monotype">type</sch:span> und dem Wert <sch:span class="monotype">uniform</sch:span> entfernt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:titleInfo[@type]">
-            <!-- Falsche Attributwerte in mods:titleInfo -->
+            <!-- 
+               Ungültiger Wert im Attribut type von mods:titleInfo
+             -->
          <sch:assert id="titleInfo_04"
                      role="error"
                      test="./@type = ('abbreviated', 'translated', 'alternative', 'uniform')"
                      properties="dmd_id type"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">In mods:titleInfo dürfen in dem Attribut type nur die im MODS-Anwendungsprofil genannten Werte verwendet werden. Diese Werte sind: "abbreviated", "translated", "alternative", "uniform". Werden andere Werte verwendet, wird mods:titleInfo bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Das Attribut <sch:span class="monotype">type</sch:span> im Element <sch:span class="monotype">mods:titleInfo</sch:span> darf nur die folgenden Werte enthalten:
+ * <sch:span class="monotype">abbreviated</sch:span>
+ * <sch:span class="monotype">translated</sch:span>
+ * <sch:span class="monotype">alternative</sch:span>
+ * <sch:span class="monotype">uniform</sch:span>
+Ist dies nicht der Fall, wird <sch:span class="monotype">mods:titleInfo</sch:span> bei der Bereinigung des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:titleInfo">
-            <!-- Kein eindeutiger Titel vorhanden -->
+            <!-- 
+               mods:title ist in mods:titleInfo mehrfach vorhanden
+             -->
          <sch:report id="titleInfo_06"
                      role="error"
                      test="mods:title[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Innerhalb des Elements mods:titleInfo ist mods:title nicht wiederholbar. Ist mehr als ein mods:title vorhanden, wird bei der Transformation das erste Vorkommen innerhalb von mods:titleInfo übernommen, alle anderen mods:title werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1.2.1</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Das Element <sch:span class="monotype">mods:titleInfo</sch:span> darf das Element <sch:span class="monotype">mods:title</sch:span> nur einmal enthalten. Enthält <sch:span class="monotype">mods:titleInfo</sch:span> mehr als ein <sch:span class="monotype">mods:title</sch:span>, wird bei der Transformation des Datensatzes das erste Vorkommen von <sch:span class="monotype">mods:title</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:title</sch:span> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:titleInfo">
-            <!-- Wiederholung von Bestandteilen, die nicht in der alphabetischen Sortierung berücksichtigt werden sollen, in mods:titleInfo -->
+            <!-- 
+               mods:nonSort ist in mods:titleInfo mehrfach vorhanden
+             -->
          <sch:report id="titleInfo_07"
                      role="error"
                      test="mods:nonSort[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Innerhalb des Elements mods:titleInfo ist mods:nonSort nicht wiederholbar. Ist mehr als ein mods:nonSort vorhanden, wird bei der Transformation das erste Vorkommen innerhalb von mods:titleInfo übernommen, alle anderen mods:nonSort werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1.2.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Das Element <sch:span class="monotype">mods:titleInfo</sch:span> darf das Element <sch:span class="monotype">mods:nonSort</sch:span> nur einmal enthalten. Enthält <sch:span class="monotype">mods:titleInfo</sch:span> mehr als ein <sch:span class="monotype">mods:nonSort</sch:span>, wird bei der Transformation des Datensatzes das erste Vorkommen von <sch:span class="monotype">mods:nonSort</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:nonSort</sch:span> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:titleInfo[not(@type='abbreviated')]/mods:title">
-            <!-- Kein aussagekräftiger Titel -->
+            <!-- 
+               mods:titleInfo enthält keinen aussagekräftigen Objekttitel
+             -->
          <sch:assert id="titleInfo_08"
-                     role="warn"
+                     role="caution"
                      test="string-length(text()[1]) &gt; 2"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Der Text in mods:title ist als Titel nicht aussagekräftig. In der DDB erzeugt jede mets:dmdSec ein Objekt und der Wert in mods:title wird prominent und ggf. unabhängig vom Gesamtobjekt in der Trefferliste angezeigt. Daher erschweren nicht aussagekräftige Titel die Nutzung Ihrer Objekte in der DDB. Handelt es sich bei dem Text in mods:title um eine Abkürzung verwenden Sie bitte mods:titleInfo[@type='abbreviated']. Enthält mods:title eine Bandzählung muss diese in mods:part angegeben werden. Nicht aussagekräftige Titel verhindern nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich tatsächlich um einen Titel handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Der Text im Element <sch:span class="monotype">mods:title</sch:span> im Element <sch:span class="monotype">mods:titleInfo</sch:span> besteht aus weniger als drei Zeichen und ist daher wenig aussagekräftig.
+Bitte beachten Sie dazu, dass in der DDB jedes <sch:span class="monotype">mets:dmdSec</sch:span>-Element ein Objekt erzeugt. Der Wert in <sch:span class="monotype">mods:title</sch:span> wird prominent und ggf. unabhängig vom Gesamtobjekt in der Trefferliste angezeigt. Daher erschweren nicht aussagekräftige Objekttitel die Nutzung Ihrer Objekte in der DDB.
+Handelt es sich bei dem Text in <sch:span class="monotype">mods:title</sch:span> um eine Abkürzung, verwenden Sie bitte das Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">abbreviated</sch:span> im Elternelement <sch:span class="monotype">mods:titleInfo</sch:span>. Enthält <sch:span class="monotype">mods:title</sch:span> eine Bandzählung geben Sie diese im Element <sch:span class="monotype">mods:part</sch:span> an.
+Nicht aussagekräftige Titel verhindern nicht das Einspielen Ihrer Daten in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich tatsächlich um einen Titel handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:name">
-            <!-- Keine Namensangabe in mods:name vorhanden -->
+            <!-- 
+               mods:name ist unvollständig
+             -->
          <sch:assert id="name_01"
                      role="error"
                      test="mods:namePart[string-length(text()[1]) &gt; 0] or mods:displayForm[string-length(text()[1]) &gt; 0]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">mods:name muss entweder mods:namePart oder mods:displayForm enthalten. Ist keines der beiden Elemente vorhanden, wird mods:name bei der Transformation aus den Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Element <sch:span class="monotype">mods:name</sch:span> muss das Element <sch:span class="monotype">mods:displayForm</sch:span> enthalten.
+Enthält <sch:span class="monotype">mods:name</sch:span> mindestens ein <sch:span class="monotype">mods:namePart</sch:span>-Element, wird bei der Bereinigung des Datensatzes aus den entsprechenden <sch:span class="monotype">mods:namePart</sch:span> ein <sch:span class="monotype">mods:displayForm</sch:span> generiert.
+Enthält <sch:span class="monotype">mods:name</sch:span> weder <sch:span class="monotype">mods:displayForm</sch:span> noch ein <sch:span class="monotype">mods:namePart</sch:span> wird <sch:span class="monotype">mods:name</sch:span> bei der Bereinigung des Datensatzes entfernt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:name">
-            <!-- Wiederholung der Anzeigeform des Namens -->
+            <!-- 
+               mods:displayForm ist in mods:name mehrfach vorhanden
+             -->
          <sch:report id="name_02"
                      role="error"
                      test="mods:displayForm[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">mods:displayForm enthält den Namen einer Person oder Organisation in der Form, in der er in der DDB angezeigt werden soll. Da nur eine Anzeigeform berücksichtigt werden kann, darf dieses Element innerhalb von mods:name nicht wiederholt werden. Enthält mods:name mehr als ein mods:displayForm, wird das erste Vorkommen übernommen, alle anderen werden bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Element <sch:span class="monotype">mods:name</sch:span> darf das Element <sch:span class="monotype">mods:displayForm</sch:span> nur einmal enthalten. Enthält <sch:span class="monotype">mods:name</sch:span> mehr als ein <sch:span class="monotype">mods:displayForm</sch:span>, wird bei der Transformation des Datensatzes das erste Vorkommen von <sch:span class="monotype">mods:displayForm</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:displayForm</sch:span> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:name">
-            <!-- mods:name enthält wahrscheinlich Angaben zu mehreren Personen -->
+            <!-- 
+               Hinweis auf falsche Verwendung von mods:name
+             -->
          <sch:report id="name_03"
-                     role="info"
+                     role="caution"
                      test="mods:displayForm[contains(text()[1], ';')] or mods:namePart[contains(text()[1], ';')]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Für jede Person oder Organisation, die an einem Werk beteiligt war, muss jeweils ein eigenes mods:name angelegt werden. Der Name der Person oder Organisation steht dabei entweder in mods:namePart oder in mods:displayForm. Wenn in einem dieser Elemente Trennungszeichen wie ein Semikolon vorkommen, gehen wir davon aus, dass hier mehr als ein Personenname enthalten ist. In diesem Fall wird mods:name bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Element <sch:span class="monotype">mods:name</sch:span> enthält im Unterelement <sch:span class="monotype">mods:namePart</sch:span> bzw. im Unterelement <sch:span class="monotype">mods:displayForm</sch:span> ein <sch:span class="monotype">;</sch:span> (Semikolon). Dies ist ein Hinweis, dass die Elemente eine Aufzählung enthalten und damit mehrere Personen bzw. Organisationen beschreiben.
+Jede Person bzw. Organisation muss in einem eigenen <sch:span class="monotype">mods:name</sch:span> mit entsprechenden Unterelementen beschrieben sein. Ist dies nicht der Fall, kann dies zu Fehldarstellungen in der DDB führen.
+Ein Semikolon in den o. g. Elementen verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um eine Aufzählung handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:name[not(@type)]">
-            <!-- Das Attribut type in mods:name ist nicht vorhanden -->
+            <!-- 
+               Das Attribut type fehlt in mods:name
+             -->
          <sch:assert id="name_04"
                      role="warn"
                      test="@type"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">MODS unterscheidet zwischen Namen von Personen, Körperschaften u.a. Diese Unterscheidung erfolgt durch das Attribut type im Element mods:name. Die laut Anwendungsprofil zulässigen Werte des Attributs type sind: "personal" für Personen, "corporate" für Organisationen, "conference" für Konferenzen, "family" für Familien. Das Fehlen des Attributs type verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Element <sch:span class="monotype">mods:name</sch:span> muss das Attribut <sch:span class="monotype">type</sch:span> enthalten. Es dient zur Unterscheidung der Art des Namens und erlaubt die folgenden Werte:
+ * <sch:span class="monotype">personal</sch:span> (Person)
+ * <sch:span class="monotype">corporate</sch:span> (Organisation)
+ * <sch:span class="monotype">family</sch:span> (Familie)
+ * <sch:span class="monotype">conference</sch:span> (Konferenz)
+Das Fehlen von <sch:span class="monotype">type</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:name">
-            <!-- Falsche Attributwerte in mods:name -->
+            <!-- 
+               Ungültiger Wert im Attribut type von mods:name
+             -->
          <sch:assert id="name_05"
                      role="warn"
                      test="@type = ('personal', 'corporate', 'family', 'conference')"
                      properties="dmd_id type"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">MODS unterscheidet zwischen Namen von Personen, Körperschaften u.a. Diese Unterscheidung erfolgt durch das Attribut type im Element mods:name. Die laut Anwendungsprofil zulässigen Werte des Attributs type sind: "personal" für Personen, "corporate" für Organisationen, "conference" für Konferenzen, "family" für Familien. Die Verwendung falscher Attributwerte verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.1</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:xmlData/mods:mods/mods:name[@type = ('corporate', 'family', 'conference')]">
-            <!-- Wiederholung von mods:namePart in mods:namePart bei Körperschaften -->
-         <sch:report id="name_06"
-                     role="error"
-                     test="mods:namePart[2]"
-                     properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Wenn das Attribut type in mods:name den Wert "corporate", "conference" oder "family" hat, darf mods:namePart innerhalb von mdos:name nicht wiederholt werden. Für jede Körperschaft, Konferenz oder Familie muss ein eigenes mods:name vorhanden sein. Enthält mods:name in diesen Fällen mehr als ein mods:namePart, wird bei der Bereinigung der Daten nur das erste mods:namePart übernommen, die anderen mods:namePart werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Attribut <sch:span class="monotype">type</sch:span> im Element <sch:span class="monotype">mods:name</sch:span> darf nur die folgenden Werte enthalten:
+ * <sch:span class="monotype">personal</sch:span> (Person)
+ * <sch:span class="monotype">corporate</sch:span> (Organisation)
+ * <sch:span class="monotype">family</sch:span> (Familie)
+ * <sch:span class="monotype">conference</sch:span> (Konferenz)
+Die Verwendung falscher Attributwerte verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:name[@type='personal']/mods:namePart[not(@type)]">
-            <!-- Das Attribut type fehlt in mods:namePart für Personennamen -->
+            <!-- 
+               Das Attribut type fehlt in mods:namePart
+             -->
          <sch:assert id="name_07"
                      role="warn"
                      test="@type"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Bei Personennamen (mods:name type="personal") sollte mods:namePart wiederholt werden, um die verschiedenen Bestandteile eines persönlichen Namens zu unterscheiden. Es ist daher verpflichtend, in diesen Fällen das Attribut type in mods:namePart zu verwenden. Folgende Werte sind in diesem Attribut type erlaubt: "family" für den Nachnamen, "given" für den Vornamen, "termsOfAddress" für Titel und andere Namenszusätze, "date" für Lebensdaten der Person. Sollen die Bestandteile eines Namens in der DDB in einer bestimmten Reihenfolge angezeigt werden, verwenden Sie bitte mods:displayForm. Die Daten werden in diesen Fällen auch ohne Attribut type in die DDB eingespielt, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Element <sch:span class="monotype">mods:namePart</sch:span> im Element <sch:span class="monotype">mods:name[@type='personal']</sch:span> muss das Attribut <sch:span class="monotype">type</sch:span> enthalten. Es dient zur Unterscheidung von Bestandteilen eines persönlichen Namens und erlaubt die folgenden Werte:
+ * <sch:span class="monotype">family</sch:span> (Nachname)
+ * <sch:span class="monotype">given</sch:span> (Vorname)
+ * <sch:span class="monotype">termsOfAddress</sch:span> (Titel und andere Namenszusätze)
+ * <sch:span class="monotype">date</sch:span> (Lebensdaten der Person)
+Sollen die Bestandteile eines Namens in der DDB in einer bestimmten Reihenfolge angezeigt werden, verwenden Sie bitte das Element <sch:span class="monotype">mods:displayForm</sch:span>.
+Das Fehlen von <sch:span class="monotype">type</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und den genannten Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:name[@type='personal']/mods:namePart">
-            <!-- Falsche Attributwerte in mods:namePart für Personennamen -->
+            <!-- 
+               Ungültiger Wert im Attribut type von mods:namePart
+             -->
          <sch:assert id="name_08"
                      role="error"
                      test="@type = ('date', 'family', 'given', 'termsOfAddress')"
                      properties="dmd_id type"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Bei Personennamen (mods:name type="personal") sollte mods:namePart wiederholt werden, um die verschiedenen Bestandteile eines persönlichen Namens zu unterscheiden. Es ist daher verpflichtend, in diesen Fällen das Attribut type in mods:namePart zu verwenden. Folgende Werte sind in diesem Attribut type erlaubt: "family" für den Nachnamen, "given" für den Vornamen, "termsOfAddress" für Titel und andere Namenszusätze, "date" für Lebensdaten der Person. Wird in dem Attribut type in mods:namePart ein anderer Wert verwendet, dann wird mods:namePart bei der Transformation entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Attribut <sch:span class="monotype">type</sch:span> im Element <sch:span class="monotype">mods:namePart</sch:span> darf nur die folgenden Werte enthalten:
+ * <sch:span class="monotype">family</sch:span> (Nachname)
+ * <sch:span class="monotype">given</sch:span> (Vorname)
+ * <sch:span class="monotype">termsOfAddress</sch:span> (Titel und andere Namenszusätze)
+ * <sch:span class="monotype">date</sch:span> (Lebensdaten der Person)
+Enthält <sch:span class="monotype">type</sch:span> einen ungültigen Wert, wird <sch:span class="monotype">mods:namePart</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:name/mods:*[@valueURI]">
-            <!-- Falsche Verwendung von URIs -->
+            <!-- 
+               Unterelemente von mods:name enthalten das Attribut valueURI
+             -->
          <sch:report id="name_09"
                      role="error"
                      test="@valueURI"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">URIs zu Personen, Organisationen, Familien und Konferenzen müssen in dem Attribut valueURI in mods:name angegeben werden. Ist dies nicht der Fall, wird der URI bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.1</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Attribut <sch:span class="monotype">valueURI</sch:span> ist in Unterelementen des Elements <sch:span class="monotype">mods:name</sch:span> nicht zulässig. Bitte verwenden Sie <sch:span class="monotype">valueURI</sch:span> nur in <sch:span class="monotype">mods:name</sch:span>.
+Enthält ein Unterelement von <sch:span class="monotype">mods:name</sch:span>
+            <sch:span class="monotype">valueURI</sch:span> wird <sch:span class="monotype">valueURI</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:report>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:name[@valueURI]">
-            <!-- URI ist kein GND-URI -->
+            <!-- 
+               Das Attribut valueURI von mods:name enthält keinen GND-URI
+             -->
          <sch:assert id="name_10"
                      role="error"
                      test="starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Die URIs, die in dem Attribut valueURI in mods:name verwendet werden, werden in der DDB nur dann ausgewertet, wenn es sich um http-URIs der GND handelt. Handelt es sich nicht um einen GND-URI, wird der URI bei der Transformation der Daten entfernt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Die DDB wertet das Attribut <sch:span class="monotype">valueURI</sch:span> im Element <sch:span class="monotype">mods:name</sch:span> nur aus, wenn es im einen GND-URI enthält. Ist dies nicht der Fall, wird <sch:span class="monotype">valueURI</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:name[not(mods:role/mods:roleTerm)]">
-            <!-- Die Angabe der Rolle fehlt in mods:name -->
+            <!-- 
+               mods:roleTerm fehlt in mods:name
+             -->
          <sch:assert id="name_11"
                      role="warn"
                      test="mods:role/mods:roleTerm"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Jedes mods:name muss mindestens ein mods:role mit dem Unterelement mods:roleTerm enthalten, in dem die Rolle beschrieben wird, die eine Person oder Organisation bei der Entstehung des Werks hatte. Die Daten werden auch ohne mods:role in die DDB eingespielt, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.3</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Element <sch:span class="monotype">mods:name</sch:span> muss mindestens ein <sch:span class="monotype">mods:role</sch:span>-Element mit dem Unterelement <sch:span class="monotype">mods:roleTerm</sch:span> mit einem gültigen MARC Relator Code (http://id.loc.gov/vocabulary/relators) enthalten.
+Fehlt <sch:span class="monotype">mods:role</sch:span> mit dem Unterelement <sch:span class="monotype">mods:roleTerm</sch:span> wird bei der Transformation des Datensatzes ein <sch:span class="monotype">mods:role</sch:span> mit dem Unterelement <sch:span class="monotype">mods:roleTerm</sch:span> mit dem Wert <sch:span class="monotype">ctb</sch:span> (contributor) erzeugt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:name/mods:role[not(mods:roleTerm[@type='code'][@authority='marcrelator'])]">
-            <!-- Attribut type fehlt in mods:roleTerm -->
+            <!-- 
+               Die Attribute type und authority fehlen oder enthalten ungültige Werte in mods:roleTerm
+             -->
          <sch:assert id="name_12"
                      role="error"
                      test="mods:roleTerm[@type='code'][@authority='marcrelator']"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">In jedem mods:role muss mindestens ein mods:roleTerm mit dem Attribut type und dem Wert "code" , sowie das Attribut authority mit dem Wert "marcrelator" enthalten sein. Ist dies nicht der Fall, wird mods:role bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.4.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Das Element <sch:span class="monotype">mods:name</sch:span> muss mindestens ein <sch:span class="monotype">mods:role</sch:span>-Element mit einem gültigen Unterelement <sch:span class="monotype">mods:roleTerm</sch:span> enthalten. Ein gültiges <sch:span class="monotype">mods:roleTerm</sch:span> muss die Attribute <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">code</sch:span> und <sch:span class="monotype">authority</sch:span> mit dem Wert <sch:span class="monotype">marcrelator</sch:span> enthalten.
+Ist dies nicht der Fall, wird <sch:span class="monotype">mods:role</sch:span> bei der Transformation des Datensatzes entfernt und ein <sch:span class="monotype">mods:role</sch:span> mit dem Unterelement <sch:span class="monotype">mods:roleTerm</sch:span> mit dem Wert <sch:span class="monotype">ctb</sch:span> (contributor) erzeugt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:name/mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']">
-            <!-- Falscher Relator-Code im Attribut bei der Verwendung von mods:roleTerm -->
+            <!-- 
+               Ungültiger Wert in mods:roleTerm
+             -->
          <sch:assert id="name_13"
                      role="error"
                      test="key('marc_relator_codes', text()[1], $marc_relator_codes)"
-                     properties="dmd_id text"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/name">Für die Beschreibung der Rolle, die eine Person oder Organisation bei der Entstehung des Werks hatte, müssen die Codes der "MARC Code List for Relators" verwendet werden. Diese müssen in mods:roleTerm type="code" enthalten sein. Ist dies nicht der Fall, wird mods:role bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.2.2.4.1</sch:assert>
+                     properties="dmd_id text">Das Element <sch:span class="monotype">mods:role</sch:span> muss ein <sch:span class="monotype">mods:roleTerm</sch:span>-Element mit einem Wert aus dem MARC Relator Code Vokabular (http://id.loc.gov/vocabulary/relators) enthalten.
+Ist dies nicht der Fall, wird <sch:span class="monotype">mods:role</sch:span> bei der Transformation des Datensatzes entfernt und ein <sch:span class="monotype">mods:role</sch:span> mit dem Unterelement <sch:span class="monotype">mods:roleTerm</sch:span> mit dem Wert <sch:span class="monotype">ctb</sch:span> (contributor) erzeugt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:originInfo">
-            <!-- Wiederholung von Datumsangaben ohne Attribut point in mods:originInfo -->
+            <!-- 
+               mods:date*-Elemente sind ohne Attribut point in mods:originInfo mehrfach vorhanden
+             -->
          <sch:report id="originInfo_01"
                      role="error"
                      test="mods:dateIssued[not(@point)][position() &gt; 1] or mods:dateCreated[not(@point)][position() &gt; 1] or mods:dateCaptured[not(@point)][position() &gt; 1] or (mods:dateIssued[not(@point)] and mods:dateIssued[@point]) or (mods:dateCreated[not(@point)] and mods:dateCreated[@point]) or (mods:dateCaptured[not(@point)] and mods:dateCaptured[@point])"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">mods:dateIssued darf innerhalb von mods:originInfo nur wiederholt werden, wenn es sich um die Beschreibung einer Zeitspanne handelt. Dafür muss das Attribut point mit den Werten "start" und "end" vorhanden sein. Dasselbe gilt für mods:dateCreated und mods:dateCaptured. Fehlt das Attribut point, wird bei der Transformation der Daten die erste Datumsangabe übernommen, alle anderen werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.4 – 2.4.2.6</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Die Elemente <sch:span class="monotype">mods:dateIssued</sch:span>, <sch:span class="monotype">mods:dateCreated</sch:span> und <sch:span class="monotype">mods:dateCaptured</sch:span> im Element <sch:span class="monotype">mods:originInfo</sch:span> dürfen ohne das Attribut <sch:span class="monotype">point</sch:span> mit den Werten <sch:span class="monotype">start</sch:span> und <sch:span class="monotype">end</sch:span> nicht wiederholt werden.
+Fehlt <sch:span class="monotype">point</sch:span> in den o. g. Elementen wird bei der Transformation des Datensatzes das erste Vorkommen des jeweiligen Elements übernommen und alle anderen entfernt.
+Bitte nutzen Sie für Zeitangaben in textlicher Form das Element <sch:span class="monotype">mods:displayDate</sch:span>.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:xmlData/mods:mods/mods:originInfo/mods:dateIssued | mets:xmlData/mods:mods/mods:originInfo/mods:dateCreated | mets:xmlData/mods:mods/mods:originInfo/mods:dateCaptured">
-            <!-- Datumsangaben sind nicht standardkonform -->
+      <sch:rule context="mets:xmlData/mods:mods/mods:originInfo[ not(@eventType='digitization' or mods:edition[text()= '[Electronic ed.]']) and not(mods:dateIssued or mods:dateCreated) ]">
+            <!-- 
+               mods:originInfo muss mods:dateIssued oder mods:dateCreated enthalten
+             -->
+         <sch:assert id="originInfo_17"
+                     role="warn"
+                     test="mods:dateIssued or mods:dateCreated"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Das Element <sch:span class="monotype">mods:originInfo</sch:span>, das nicht die Angaben zur Digitalisierung des Dokuments enthält, muss das Element <sch:span class="monotype">mods:dateIssued</sch:span> oder das Element <sch:span class="monotype">mods:dateCreated</sch:span> mit einem ISO 8601-konformen Wert enthalten.
+Das Fehlen eines ISO 8601-konformen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, führt aber u. a. zu Problemen bei der Filterung von Suchergebnissen nach Datumsangabe zu Problemen. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:assert>
+      </sch:rule>
+      <sch:rule context="mets:xmlData/mods:mods/mods:originInfo/mods:dateIssued | mets:xmlData/mods:mods/mods:originInfo/mods:dateCreated">
+            <!-- 
+               Ungültiger Wert in mods:dateIssued bzw. mods:dateCreated
+             -->
          <sch:assert id="originInfo_02"
-                     role="info"
+                     role="warn"
                      test="matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Die Datumsangaben in mods:dateIssued, mods:dateCreated und mods:dateCaptured müssen ISO 8601 konform sein. Ist dies nicht der Fall, kann es vorkommen, dass bei der Transformation der Daten Datumsangaben verloren gehen.  Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.4 – 2.4.2.6</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Die Elemente <sch:span class="monotype">mods:dateIssued</sch:span> bzw. <sch:span class="monotype">mods:dateCreated</sch:span> müssen einen ISO 8601-konformen Wert enthalten. Bitte nutzen Sie für unsichere bzw. ungenaue Zeitangaben in textlicher Form das Element <sch:span class="monotype">mods:displayDate</sch:span>.
+Die Verwendung von nicht ISO 8601-konformen Werten in <sch:span class="monotype">mods:dateIssued</sch:span> bzw. <sch:span class="monotype">mods:dateCreated</sch:span> kann zu Informationsverlusten und Einschränkungen in der Suche in der DDB führen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:originInfo/mods:place/mods:placeTerm">
-            <!-- mods:place enthält wahrscheinlich Angaben zu verschiedenen Orten -->
+            <!-- 
+               Hinweis auf falsche Verwendung von mods:place
+             -->
          <sch:report id="originInfo_03"
-                     role="error"
+                     role="caution"
                      test="contains(text()[1], ';')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Für jede Ortsangabe in mods:originInfo muss jeweils ein eigenes mods:place/mods:placeTerm angelegt werden. Wenn in mods:placeTerm Trennungszeichen wie Semikolon vorkommen, wird bei der Bereinigung der Daten davon ausgegangen, dass hier mehr als ein Ortsname enthalten ist. In diesem Fall wird mods:place bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.1</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Das Element <sch:span class="monotype">mods:place</sch:span> enthält im Unterelement <sch:span class="monotype">mods:placeTerm</sch:span> ein <sch:span class="monotype">;</sch:span> (Semikolon). Dies ist ein Hinweis, dass das Element eine Aufzählung enthält und damit mehrere Orte beschreibt.
+Jeder Ort muss in einem eigenen <sch:span class="monotype">mods:place</sch:span> mit dem Unterelement <sch:span class="monotype">mods:placeTerm</sch:span> beschrieben sein. Ist dies nicht der Fall, kann dies zu Fehldarstellungen in der DDB führen.
+Ein Semikolon im <sch:span class="monotype">mods:placeTerm</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um eine Aufzählung handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:originInfo/mods:place/mods:placeTerm">
-            <!-- mods:place enthält wahrscheinlich Angaben zu Verlegern -->
+            <!-- 
+               Hinweis auf falsche Verwendung von mods:place
+             -->
          <sch:report id="originInfo_04"
-                     role="error"
+                     role="caution"
                      test="contains(text()[1], ':')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Angaben zu Verlegern dürfen nicht in mods:place/mods:placeTerm stehen, sondern müssen in mods:publisher abgelegt werden. Handelt es sich um mehrere Verleger, muss mods:publisher wiederholt werden. Wenn in mods:placeTerm Trennungszeichen wie ein Doppelpunkt vorkommen, wird bei der Bereinigung der Daten davon ausgegangen, dass hier neben dem Ortsnamen auch ein Verlagsangabe vorhanden ist. In diesem Fall wird mods:place bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.1 und 2.4.2.3</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Das Element <sch:span class="monotype">mods:place</sch:span> enthält im Unterelement <sch:span class="monotype">mods:placeTerm</sch:span> einen <sch:span class="monotype">:</sch:span> (Doppelpunkt). Dies ist ein Hinweis, dass das Element auch Angaben zu Verlegern enthält.
+<sch:span class="monotype">mods:place</sch:span> darf nur Angaben zu einem Ort enthalten. Verwenden Sie für Informationen zu einem Verleger das Element <sch:span class="monotype">mods:publisher</sch:span> und wiederholen Sie es ggf. für weitere Verleger.
+Angaben zu Verlegen in <sch:span class="monotype">mods:placeTerm</sch:span> können zu Fehldarstellungen in der DDB führen.
+Ein Doppelpunkt im <sch:span class="monotype">mods:placeTerm</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um Angaben zu Verlegern handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:originInfo[ not(../mods:originInfo[@eventType='digitization'] or ../mods:originInfo[mods:edition[text()[1] = '[Electronic ed.]']]) and (mods:dateIssued[number(substring(text()[1], 1, 4)) &gt; 1999] or mods:dateCreated[number(substring(text()[1], 1, 4)) &gt; 1999]) ]">
-            <!-- Die Datumsangabe für die digitale Ausgabe ist nicht eindeutig -->
+            <!-- 
+               Hinweis auf ungültige Datumsangabe in mods:originInfo
+             -->
          <sch:assert id="originInfo_05"
-                     role="warn"
+                     role="caution"
                      test="mods:edition[text()[1] = '[Electronic ed.]'] or ./@eventType='digitization'"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Wenn das Erscheinungsdatum in mods:dateIssued bzw. das Entstehungsdatum in mods:dateCreated später als 2000 liegt, ist es wahrscheinlich, dass es sich nicht um das Datum der originalen Ausgabe handelt, sondern um das Entstehungsdatum der digitalen Ausgabe. In diesem Fall muss das Datum in einem eigenen mods:originInfo enthalten sein, das den eventType="digitization" enthält sowie das Element mods:edition mit dem Wert (Electronic ed.]. Dieser Fehler verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, zu prüfen, ob es sich tatsächlich um das richtige Datum handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Der Wert im Unterelement <sch:span class="monotype">mods:dateIssued</sch:span> bzw. im Unterelement <sch:span class="monotype">mods:dateCreated</sch:span> von <sch:span class="monotype">mods:originInfo</sch:span> enthält das Jahr 2000 oder später. Dies deutet darauf hin, dass sich <sch:span class="monotype">mods:originInfo</sch:span> nicht auf die Veröffentlichung bzw. Entstehung sondern die Digitalisierung des Dokuments bezieht.
+Bitte verwenden Sie für die Angaben zur Digitalisierung ein eigenes  <sch:span class="monotype">mods:originInfo</sch:span> mit dem Attribut <sch:span class="monotype">eventType</sch:span> mit dem Wert <sch:span class="monotype">digitization</sch:span> sowie dem Unterelement <sch:span class="monotype">mods:edition</sch:span> mit dem Wert <sch:span class="monotype">[Electronic ed.]</sch:span>.
+Dieser Fehler verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, zu prüfen, ob es sich tatsächlich um die richtige Datumsangabe handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:originInfo/mods:place">
-            <!-- mods:placeTerm fehlt -->
+            <!-- 
+               mods:placeTerm fehlt in mods:place
+             -->
          <sch:assert id="originInfo_06"
                      role="error"
                      test="mods:placeTerm[@type='text']"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Ortsnamen stehen in dem Unterelement mods:placeTerm, das in mods:place enthalten ist. Dieses Unterelement muss zudem das Attribut type="text" enthalten. Ist dies nicht der Fall, wird mods:place bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Das Element <sch:span class="monotype">mods:place</sch:span> muss das Unterelement <sch:span class="monotype">mods:placeTerm</sch:span> mit dem Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">text</sch:span> enthalten. Ist dies nicht der Fall, wird <sch:span class="monotype">mods:place</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und dem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:originInfo/mods:*[local-name() = ('dateIssued', 'dateCreated', 'dateOther') and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point]">
          <sch:let name="point" value="./@point"/>
          <sch:let name="name" value="./local-name()"/>
-         <!-- Wiederholung von Datumsangaben mit identischem Wert im Attribut point in mods:originInfo -->
+         <!-- 
+               mods:date*-Elemente sind mit gleichem Wert im Attribut point in mods:originInfo mehrfach vorhanden
+             -->
          <sch:report id="originInfo_15"
                      role="error"
                      test="./preceding-sibling::*[local-name() = $name and namespace-uri() = 'http://www.loc.gov/mods/v3'][@point = $point]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Die Elemente mods:dateIssued, mods:dateCreated und mods:dateOther dürfen innerhalb eines Elements mods:originInfo nicht mit dem gleichen Wert im Attribut point wiederholt werden. Wird eines dieser Elemente mit dem gleichen Wert in point wiederholt, werden alle weiteren Vorkommen (XML-Reihenfolge) bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.4.2.4 – 2.4.2.6</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Die Unterelemente <sch:span class="monotype">mods:dateIssued</sch:span>, <sch:span class="monotype">mods:dateCreated</sch:span> und <sch:span class="monotype">mods:dateOther</sch:span> im Element <sch:span class="monotype">mods:originInfo</sch:span> dürfen nicht mit dem gleichen Wert im Attribut <sch:span class="monotype">point</sch:span> wiederholt werden.
+Wird eines der o. g. Elemente mit dem identischen Wert in <sch:span class="monotype">point</sch:span> wiederholt, werden alle weiteren Vorkommen (XML-Reihenfolge) bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mods:mods/mods:originInfo">
+            <!-- 
+               mods:displayDate ist in mods:originInfo mehrmals vorhanden
+             -->
+         <sch:report id="originInfo_16"
+                     role="error"
+                     test="mods:displayDate[2]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Das Element <sch:span class="monotype">mods:displayDate</sch:span> darf innerhalb des Elements <sch:span class="monotype">mods:originInfo</sch:span> nicht wiederholt werden. Enthält <sch:span class="monotype">mods:originInfo</sch:span> mehr als ein <sch:span class="monotype">mods:displayDate</sch:span>, wird das erste Vorkommen (XML-Reihenfolge) übernommen, alle anderen werden bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:xmlData/mods:mods">
+            <!-- 
+               mods:originInfo ist mit Attribut eventType mit dem Wert digitization bzw. mit mods:edition mit dem Wert [Electronic ed.] mehrfach vorhanden
+             -->
+         <sch:report id="originInfo_18"
+                     role="error"
+                     test="mods:originInfo[@eventType='digitization' or mods:edition[text()[1] = '[Electronic ed.]']][2]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Das Element <sch:span class="monotype">mods:originInfo</sch:span> innerhalb des Elements <sch:span class="monotype">mets:dmdSec</sch:span> darf mit dem Attribut <sch:span class="monotype">eventType</sch:span> mit dem Wert <sch:span class="monotype">digitization</sch:span> bzw. mit <sch:span class="monotype">mods:edition</sch:span> mit dem Wert <sch:span class="monotype">[Electronic ed.]</sch:span> nicht wiederholt werden.
+Enthält <sch:span class="monotype">mets:dmdSec</sch:span> mehr als ein <sch:span class="monotype">mods:originInfo</sch:span> mit dem Attribut <sch:span class="monotype">eventType</sch:span> mit dem Wert <sch:span class="monotype">digitization</sch:span> bzw. mit <sch:span class="monotype">mods:edition</sch:span> mit dem Wert <sch:span class="monotype">[Electronic ed.]</sch:span>, wird bei der Transformation des Datensatzes das erste entsperchende Vorkommen von <sch:span class="monotype">mods:originInfo</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:originInfo</sch:span> werden entfernt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Die Angabe der Sprache fehlt -->
+            <!-- 
+               mods:language fehlt
+             -->
          <sch:assert id="language_01"
                      role="warn"
                      test="mods:language/mods:languageTerm[text() != 'und'] or ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE = ('image', 'photograph', 'illustration', 'map', 'poster', 'plan')]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/language">Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache, ist der Sprachcode "und" (Nicht zu entscheiden) bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Bitte beachten: Im Kontext der DDB und Europeana fallen auch Noten unter den Dokumenttyp Text. Falls die Noten keinen Sprachtext enthalten, verwenden Sie bitte den Code "zxx" für "Kein linguistischer Inhalt" (s. \url{http://id.loc.gov/vocabulary/iso639-2/zxx}). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/language">Ein Datensatz zu einem Textdokument muss das Element <sch:span class="monotype">mods:language</sch:span> mit dem Unterelement <sch:span class="monotype">mods:languageTerm</sch:span> mit einem ISO 639-2b (https://id.loc.gov/vocabulary/iso639-2)-konformen Wert enthalten.
+Bitte beachten Sie, dass das Fehlen von <sch:span class="monotype">mods:language</sch:span>, die Verwendung eines nicht-ISO 639-2b (https://id.loc.gov/vocabulary/iso639-2)-konformen Wertes in <sch:span class="monotype">mods:languageTerm</sch:span> oder die Verwendung des Sprachcode und (https://id.loc.gov/vocabulary/iso639-2/und) (Nicht zu entscheiden (https://id.loc.gov/vocabulary/iso639-2/und)) die Weitergabe des Datensatzes an Europeana verhindert.
+Darüber hinaus gelten im Kontext der DDB und Europeana auch Noten als Textdokumente. Falls Ihre Noten keinen Sprachtext enthalten, verwenden Sie bitte den Code zxx (https://id.loc.gov/vocabulary/iso639-2/zxx) (Kein linguistischer Inhalt (https://id.loc.gov/vocabulary/iso639-2/zxx)).Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:language (https://wiki.deutsche-digitale-bibliothek.de/x/F8MeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:language/mods:languageTerm">
-            <!-- Verwendung eines falschen Sprachcodes -->
+            <!-- 
+               Ungültiger Wert in mods:languageTerm
+             -->
          <sch:assert id="language_02"
                      role="error"
                      test="key('iso639-1_codes', text()[1], $iso639-1_codes) or key('iso639-2_codes', text()[1], $iso639-2_codes)"
                      properties="dmd_id text"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/language">mods:language/mods:languageTerm muss einen Code aus ISO 639-2 enthalten. Sollen mehrere Sprachen angegeben werden, muss mods:language/mods:languageTerm wiederholt werden. Die Angaben von mehreren Sprachen in einem mod:languageTerm Element ist nicht erlaubt. Handelt es sich bei dem Eintrag in mods:language/mods:languageTerm um einen anderen Wert als die oben genannten Codes bzw. sind mehrere Codes enthalten, wird mods:language bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.5.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/language">Das Element <sch:span class="monotype">mods:languageTerm</sch:span> im Element <sch:span class="monotype">mods:language</sch:span> muss einen ISO 639-2b (https://id.loc.gov/vocabulary/iso639-2)-konformen Wert enthalten.
+Bitte beachten Sie, dass wiederholte Sprachangaben innerhalb von <sch:span class="monotype">mods:language</sch:span> bzw. im Wert von <sch:span class="monotype">mods:languageTerm</sch:span> nicht zulässig sind. Verwenden Sie für jede Sprachangabe jeweils ein <sch:span class="monotype">mods:language</sch:span> mit <sch:span class="monotype">mods:languageTerm</sch:span>.
+Enthält <sch:span class="monotype">mods:language</sch:span> kein <sch:span class="monotype">mods:languageTerm</sch:span> mit einem ISO 639-2b (https://id.loc.gov/vocabulary/iso639-2)-konformen Wert wird <sch:span class="monotype">mods:language</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:language (https://wiki.deutsche-digitale-bibliothek.de/x/F8MeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:physicalDescription/mods:extent">
-            <!-- Falsche Angaben in mods:extent -->
+            <!-- 
+               Die Angaben in mods:extent beziehen sich auf das Digitalisat
+             -->
          <sch:report id="physicalDescription_01"
                      role="error"
                      test="contains(lower-case(text()), 'online') or contains(lower-case(text()[1]), 'electronic')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/physicalDescription">mods:extent sollte die Umfangsangabe des digitalisierten Originals enthalten. Wenn in mods:extent Begriffe wie "Online" oder "Electronic" enthalten sind, wird davon ausgegangen, dass es sich um Angaben zum Digitalisat handelt. In diesem Fall wird mods:extent bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.6.2.1</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/physicalDescription">Das Element <sch:span class="monotype">mods:extent</sch:span> im Element <sch:span class="monotype">mods:physicalDescription</sch:span> enthält die Begriffe <sch:span class="monotype">online</sch:span> bzw. <sch:span class="monotype">electronic</sch:span> und beschreibt damit das Digitalisat.
+Da <sch:span class="monotype">mods:extent</sch:span> aber nur zur Beschreibung des originalen Dokuments dient, wird es bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:physicalDescription (https://wiki.deutsche-digitale-bibliothek.de/x/G8MeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:note[parent::mods:mods or parent::mods:physicalDescription][not(@type)]">
-            <!-- Attribut type fehlt in mods:note -->
+            <!-- 
+               Das Attribut type fehlt in mods:note
+             -->
          <sch:assert id="note_01"
                      role="error"
                      test="@type"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/note">mods:note muss ein Attribut type enthalten. Erlaubt sind in diesem Attribut nur Werte aus der Liste der MODS Note Type (\url{http://www.loc.gov/standards/mods/mods-notes.html}). Ist kein Attribut type mit einem der erlaubten Werte vorhanden, wird mods:note bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.8</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/note">Das Top-Level-Element <sch:span class="monotype">mods:note</sch:span> bzw. <sch:span class="monotype">mods:note</sch:span> im Element <sch:span class="monotype">mods:physicalDescription</sch:span> muss das Attribut <sch:span class="monotype">type</sch:span> mit einem Wert aus der Liste der MODS &lt;note&gt; Types (https://www.loc.gov/standards/mods/mods-notes.html) enthalten.
+Fehlt <sch:span class="monotype">type</sch:span> in <sch:span class="monotype">mods:note</sch:span> wird <sch:span class="monotype">mods:note</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:note (https://wiki.deutsche-digitale-bibliothek.de/x/IcMeB) und mods:physicalDescription (https://wiki.deutsche-digitale-bibliothek.de/x/G8MeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mods:note[parent::mods:mods or parent::mods:physicalDescription][@type]">
-            <!-- Falscher Attributwert in mods:note -->
+            <!-- 
+               Ungültiger Wert im Attribut type von mods:note
+             -->
          <sch:assert id="note_02"
                      role="error"
                      test="@type = ( 'accrual method', 'accrual policy', 'acquisition', 'action', 'additional physical form', 'admin', 'bibliographic history', 'bibliography', 'biographical/historical', 'citation/reference', 'conservation history', 'content', 'creation/production credits', 'date', 'exhibitions', 'funding', 'handwritten', 'language', 'numbering', 'date/sequential designation', 'original location', 'original version', 'ownership', 'performers', 'preferred citation', 'publications', 'reproduction', 'restriction', 'source characteristics', 'source dimensions', 'source identifier', 'source note', 'source type', 'statement of responsibility', 'subject completeness', 'system details', 'thesis', 'venue', 'version identification', 'condition', 'marks', 'medium', 'organization', 'physical description', 'physical details', 'presentation', 'script', 'support', 'technique' )"
                      properties="dmd_id type"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/note">In dem Attribut type in mods:note sind nur Werte aus der Liste der MODS Note Type (\url{http://www.loc.gov/standards/mods/mods-notes.html}) erlaubt. Enthält das Attribut type andere Werte, wird mods:note bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.8.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/note">Das Attribut <sch:span class="monotype">type</sch:span> im Element <sch:span class="monotype">mods:note</sch:span> darf nur einem Wert aus der Liste der MODS &lt;note&gt; Types (https://www.loc.gov/standards/mods/mods-notes.html) enthalten.
+Enthält <sch:span class="monotype">type</sch:span> einen ungültigen Wert, wird <sch:span class="monotype">mods:note</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:note (https://wiki.deutsche-digitale-bibliothek.de/x/IcMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:xmlData/mods:mods/mods:subject[mods:topic]/mods:topic | mets:xmlData/mods:mods/mods:subject[mods:genre]/mods:genre">
-            <!-- Kein unterstützter URI in mods:subject -->
+      <sch:rule context="mods:mods/mods:subject[@valueURI]/mods:topic | mods:mods/mods:subject[@valueURI]/mods:genre | mods:mods/mods:subject[@valueURI]/mods:geographic | mods:mods/mods:subject[@valueURI]/mods:name | mods:mods/mods:subject[@valueURI]/mods:titleInfo | mods:mods/mods:subject/mods:topic[@valueURI] | mods:mods/mods:subject/mods:genre[@valueURI] | mods:mods/mods:subject/mods:geographic[@valueURI] | mods:mods/mods:subject/mods:name[@valueURI] | mods:mods/mods:subject/mods:titleInfo[@valueURI]">
+            <!-- 
+               Das Attribut valueURI von mods:subject enthält keinen unterstützten URI
+             -->
          <sch:assert id="subject_01"
                      role="info"
-                     test="starts-with(../@valueURI, 'http://d-nb.info/gnd/') or starts-with(../@valueURI, 'https://d-nb.info/gnd/') or starts-with(../@valueURI, 'http://www.wikidata.org/') or starts-with(../@valueURI, 'https://www.wikidata.org/') or starts-with(../@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(../@valueURI, 'https://vocab.getty.edu/aat/') or starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/') or starts-with(@valueURI, 'http://www.wikidata.org/') or starts-with(@valueURI, 'https://www.wikidata.org/') or starts-with(@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(@valueURI, 'https://vocab.getty.edu/aat/')"
+                     test="starts-with(../@valueURI, 'http://d-nb.info/gnd/') or starts-with(../@valueURI, 'https://d-nb.info/gnd/') or starts-with(../@valueURI, 'http://www.wikidata.org/') or starts-with(../@valueURI, 'https://www.wikidata.org/') or starts-with(../@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(../@valueURI, 'https://vocab.getty.edu/aat/') or starts-with(../@valueURI, 'https://sws.geonames.org/') or starts-with(../@valueURI, 'http://sws.geonames.org/') or starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/') or starts-with(@valueURI, 'http://www.wikidata.org/') or starts-with(@valueURI, 'https://www.wikidata.org/') or starts-with(@valueURI, 'http://vocab.getty.edu/aat/') or starts-with(@valueURI, 'https://vocab.getty.edu/aat/') or starts-with(@valueURI, 'http://sws.geonames.org/') or starts-with(@valueURI, 'https://sws.geonames.org/')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/subject">Die DDB berücksichtigt das Element mods:subject nur, wenn es Schlagworte aus der GND, Wikidata oder dem AAT enthält. Diese müssen in dem Unterelement zu mods:subject stehen und dort mittels einer der genannten URIs in dem Attribut valueURI eindeutig identifiziert werden. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.9</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/subject">Die DDB berücksichtigt das Element <sch:span class="monotype">mods:subject</sch:span> nur, wenn es Schlagworte aus der GND (https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), Wikidata (https://www.wikidata.org), Geonames (https://sws.geonames.org) oder dem AAT (https://www.getty.edu/research/tools/vocabularies/aat/) enthält. Diese müssen in dem Unterelement zu <sch:span class="monotype">mods:subject</sch:span> stehen und dort mittels einer entsprechenden URIs der o. g. Normdaten in dem Attribut <sch:span class="monotype">valueURI</sch:span> eindeutig identifiziert werden.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mods:mods/mods:subject/mods:titleInfo">
+            <!-- 
+               mods:title fehlt in mods:titleInfo
+             -->
+         <sch:assert id="subject_02"
+                     role="info"
+                     test="mods:title"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/subject">Die DDB berücksichtigt das Element <sch:span class="monotype">mods:titleInfo</sch:span> im Element <sch:span class="monotype">mods:subject</sch:span> nur, wenn es das Element <sch:span class="monotype">mods:title</sch:span> enthält.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mods:mods/mods:subject/mods:name">
+            <!-- 
+               mods:displayForm fehlt in mods:name
+             -->
+         <sch:assert id="subject_03"
+                     role="info"
+                     test="mods:displayForm"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/subject">Die DDB berücksichtigt das Element <sch:span class="monotype">mods:name</sch:span> im Element <sch:span class="monotype">mods:subject</sch:span> nur, wenn es das Element <sch:span class="monotype">mods:displayForm</sch:span> enthält.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mods:mods/mods:subject/mods:cartographic">
+            <!-- 
+               Unterelemente fehlen in mods:cartographic
+             -->
+         <sch:assert id="subject_04"
+                     role="info"
+                     test="mods:scale or mods:coordinates or mods:projection"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/subject">Die DDB berücksichtigt das Element <sch:span class="monotype">mods:cartographic</sch:span> im Element <sch:span class="monotype">mods:subject</sch:span> nur, wenn es mindesten eines der folgenden Unterelemente enthält:
+ * <sch:span class="monotype">mods:scale</sch:span>
+ * <sch:span class="monotype">mods:coordinates</sch:span>
+ * <sch:span class="monotype">mods:projection</sch:span>Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods [ancestor::mets:mets/mets:structMap[@TYPE='LOGICAL']/mets:div/mets:mptr]">
-            <!-- Die Verknüpfung zur Gesamtaufnahme ist nicht möglich -->
+            <!-- 
+               mods:relatedItem[@type='host'] fehlt im primären mets:dmdSec
+             -->
          <sch:assert id="relatedItem_01"
                      role="fatal"
                      test="mods:relatedItem[@type = 'host']"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss eine mets:dmdSec, die einen solchen Band bzw. eine solche Ausgabe beschreibt, ein mods:relatedItem type="host" enthalten, das den mods:recordInfo/mods:recordIdentifier der Gesamtaufnahme enthält. Zudem muss mods:recordIdentifier das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlt mods:relatedItem type="host" odermods:recordIdentifier oder das Attribut source, so lassen sich die Daten der Bände bzw. Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Der METS-Datensatz wird daher nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Der Datensatz beschreibt den Teil eines Mehrteiligen Dokuments und muss den Ankersatz des Mehrteiligen Dokuments referenzieren.
+Die Referenzierung erfolgt im primären <sch:span class="monotype">mets:dmdSec</sch:span>-Element des Teiles des Mehrteiligen Dokuments im Element <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> über einen Identifier im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Elements <sch:span class="monotype">mods:recordInfo</sch:span>. Dieser Identifier muss dem Identifier im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Top-Level-Elements <sch:span class="monotype">mods:recordInfo</sch:span> im Ankersatz des Mehrteiligen Dokuments entsprechen.
+Der Identifier muss dazu im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Elements <sch:span class="monotype">mods:recordInfo</sch:span> angebeben sein. <sch:span class="monotype">mods:recordIdentifier</sch:span> muss darüber hinaus jeweils das Attribut <sch:span class="monotype">source</sch:span> mit identischem Wert besitzen.
+Ist dies nicht der Fall besteht keine Referenzierung zwischen den Datensätzen und der Datensatz nicht in die DDB eingespielt, Weitere Informationen zu diesen Elementen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB), mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB) und  METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:relatedItem[@type='host']">
-            <!-- Die Verknüpfung zur Gesamtaufnahme ist nicht möglich -->
+            <!-- 
+               mods:recordIdentifier fehlt im mods:relatedItem[@type='host'] der primären mets:dmdSec
+             -->
          <sch:assert id="relatedItem_02"
                      role="fatal"
                      test="mods:recordInfo/mods:recordIdentifier"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss mods:relatedItem type="host" den mods:recordInfo/mods:recordIdentifier der Gesamtaufnahme enthalten. Zudem muss mods:recordIdentifier das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlen mods:recordIdentifier oder das Attribut source, lassen sich die Daten der Bände bzw. Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Der METS-Datensatz wird daher nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Der Datensatz beschreibt den Teil eines Mehrteiligen Dokuments und muss den Ankersatz des Mehrteiligen Dokuments referenzieren.
+Die Referenzierung erfolgt im primären <sch:span class="monotype">mets:dmdSec</sch:span>-Element des Teiles des Mehrteiligen Dokuments im Element <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> über einen Identifier im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Elements <sch:span class="monotype">mods:recordInfo</sch:span>. Dieser Identifier muss dem Identifier im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Top-Level-Elements <sch:span class="monotype">mods:recordInfo</sch:span> im Ankersatz des Mehrteiligen Dokuments entsprechen.
+Der Identifier muss dazu im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Elements <sch:span class="monotype">mods:recordInfo</sch:span> angebeben sein. <sch:span class="monotype">mods:recordIdentifier</sch:span> muss darüber hinaus jeweils das Attribut <sch:span class="monotype">source</sch:span> mit identischem Wert besitzen.
+Ist dies nicht der Fall besteht keine Referenzierung zwischen den Datensätzen und der Datensatz nicht in die DDB eingespielt, Weitere Informationen zu diesen Elementen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB), mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB) und  METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier">
-            <!-- Die Verknüpfung zur Gesamtaufnahme ist nicht möglich -->
+            <!-- 
+               Das Attribut source fehlt in mods:recordIdentifier im mods:relatedItem[@type='host'] der primären mets:dmdSec
+             -->
          <sch:assert id="relatedItem_03"
                      role="fatal"
                      test="@source"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Dieser Identifier muss durch den Inhalt in dem Attribut source eindeutig identifiziert werden. Der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlt das Attribut source, lassen sich die Daten der Bände bzw. Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Der METS-Datensatz wird daher nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Der Datensatz beschreibt den Teil eines Mehrteiligen Dokuments und muss den Ankersatz des Mehrteiligen Dokuments referenzieren.
+Die Referenzierung erfolgt im primären <sch:span class="monotype">mets:dmdSec</sch:span>-Element des Teiles des Mehrteiligen Dokuments im Element <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> über einen Identifier im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Elements <sch:span class="monotype">mods:recordInfo</sch:span>. Dieser Identifier muss dem Identifier im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Top-Level-Elements <sch:span class="monotype">mods:recordInfo</sch:span> im Ankersatz des Mehrteiligen Dokuments entsprechen.
+Der Identifier muss dazu im Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> des Elements <sch:span class="monotype">mods:recordInfo</sch:span> angebeben sein. <sch:span class="monotype">mods:recordIdentifier</sch:span> muss darüber hinaus jeweils das Attribut <sch:span class="monotype">source</sch:span> mit identischem Wert besitzen.
+Ist dies nicht der Fall besteht keine Referenzierung zwischen den Datensätzen und der Datensatz nicht in die DDB eingespielt, Weitere Informationen zu diesen Elementen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB), mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB) und  METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:relatedItem">
-            <!-- Das Attribut type in mods:relatedItem ist nicht vorhanden oder enthält einen falschen Attributwert. -->
+            <!-- 
+               Das Attribut type fehlt in mods:relatedItem bzw. enthält einen ungültigen Wert
+             -->
          <sch:assert id="relatedItem_04"
                      role="error"
                      test="@type = ('enumerated', 'preceding', 'succeeding', 'original', 'host', 'constituent', 'series', 'otherVersion', 'otherFormat', 'isReferencedBy', 'references', 'reviewOf')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">mods:relatedItem wird in der DDB nur dann berücksichtigt, wenn ein Attribut type vorhanden ist und dieses den Wert "host" oder den Wert "series" enthält. Ist dies nicht der Fall, wird mods:relatedItem bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Das Element <sch:span class="monotype">mods:relatedItem</sch:span> muss das Attribut <sch:span class="monotype">type</sch:span> mit einem der folgenden Werte enthalten:
+ * <sch:span class="monotype">host</sch:span>
+ * <sch:span class="monotype">series</sch:span>
+Fehlt <sch:span class="monotype">type</sch:span> bzw. enthält es einen ungültigen Wert, wird <sch:span class="monotype">mods:relatedItem</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:relatedItem[@type = 'series']">
-            <!-- mods:relatedItem type="series" enthält keinen Titel -->
+            <!-- 
+               mods:titleInfo fehlt in mods:relatedItem[@type='series']
+             -->
          <sch:assert id="relatedItem_05"
                      role="error"
                      test="mods:titleInfo/mods:title"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">mods:relatedItem type="series" muss immer mindestens ein mods:titleInfo/mods:title enthalten. Ist dies nicht der Fall, wird mods:relatedItem type="series" bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Das Element <sch:span class="monotype">mods:relatedItem</sch:span> mit dem Wert <sch:span class="monotype">series</sch:span> im Attribut <sch:span class="monotype">type</sch:span> muss mindestens ein Element <sch:span class="monotype">mods:titleInfo</sch:span>-Element mit dem Unterelement <sch:span class="monotype">mods:title</sch:span> enthalten.
+Ist dies nicht der Fall, wird <sch:span class="monotype">mods:relatedItem</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods[mods:relatedItem[@type='host']][not(mods:part)]">
-            <!-- mods:part fehlt -->
+            <!-- 
+               mods:part fehlt
+             -->
          <sch:assert id="part_01"
                      role="warn"
                      test="mods:part"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen müssen Informationen zur Bandzählung enthalten. Diese Information muss in mods:part/mods:detail/mods:number zur Verfügung gestellt werden. Zudem muss mods:part das Attribut order enthalten, in dem die Zählung in maschinenlesbarer Form (als integer) bereitgestellt wird. Diese Fehler verhindern nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Der Datensatz enthält das Element <sch:span class="monotype">mods:relatedItem</sch:span> mit dem Wert <sch:span class="monotype">host</sch:span> im Attribut <sch:span class="monotype">type</sch:span> und beschreibt daher den Teil eines Mehrteiligen Dokuments.
+Diese müssen im Element <sch:span class="monotype">mods:part</sch:span> Informationen zur Bandzählung enthalten. Die textliche Angabe erfolgt im Unterelement <sch:span class="monotype">mods:number</sch:span> des Unterelements <sch:span class="monotype">mods:detail</sch:span> und die maschienenlesbare Form (als Integer) im Attribut <sch:span class="monotype">order</sch:span> von <sch:span class="monotype">mods:part</sch:span>.
+Das Fehlen von <sch:span class="monotype">mods:part</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods[mods:relatedItem[@type='host']][not(mods:part[@order])]">
-            <!-- Attribut order fehlt in mods:part -->
+            <!-- 
+               Das Attribut order fehlt in mods:part
+             -->
          <sch:assert id="part_02"
                      role="warn"
                      test="mods:part[@order]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Um Bände bei Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Bandzählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss mods:part das Attribut order enthalten, dessen Wert ein integer ist. Das Fehlen des Attributs verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Der Datensatz enthält das Element <sch:span class="monotype">mods:relatedItem</sch:span> mit dem Wert <sch:span class="monotype">host</sch:span> im Attribut <sch:span class="monotype">type</sch:span> und beschreibt daher den Teil eines Mehrteiligen Dokuments.
+Das Element <sch:span class="monotype">mods:part</sch:span> muss mindestens daher das Attribut <sch:span class="monotype">mods:order</sch:span> enthalten. Der Wert dient zur Anzeige von Bänden in der richtigen Reihenfolge uns muss als Zahl in maschinenlesbarer Form (als Integer) vorliegen.
+Das Fehlen von <sch:span class="monotype">order</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods[mods:relatedItem[@type='host']]/mods:part">
-            <!-- Falscher Wert in dem Attribut order in mods:part -->
+            <!-- 
+               Ungültiger Wert im Attribut order von mods:part
+             -->
          <sch:assert id="part_03"
                      role="warn"
                      test="matches(@order, '^\d+$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Um Bände bei Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Bandzählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss mods:part das Attribut order enthalten, dessen Wert ein integer ist. Handelt es sich um einen Wert, der nicht maschinenlesbar ist, so verhindert dies nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Der Datensatz enthält das Element <sch:span class="monotype">mods:relatedItem</sch:span> mit dem Wert <sch:span class="monotype">host</sch:span> im Attribut <sch:span class="monotype">type</sch:span> und beschreibt daher den Teil eines Mehrteiligen Dokuments.
+Das Attribut <sch:span class="monotype">mods:order</sch:span> im Element <sch:span class="monotype">mods:part</sch:span> muss mindestens daher die Bandzählung in maschinenlesbarer Form (als Integer) enthalten.
+Das Fehlen der maschinenlesbaren Form der Bandzählung in <sch:span class="monotype">order</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:part[not(mods:detail/mods:number)]">
-            <!-- mods:number ist in mods:part nicht vorhanden -->
+            <!-- 
+               mods:number fehlt in mods:part
+             -->
          <sch:assert id="part_04"
                      role="error"
                      test="mods:detail/mods:number"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Bände von Mehrbändigen Werken, Zeitschriften und Ausgaben von Zeitungen müssen Informationen zur Bandzählung enthalten. Diese Information muss in mods:part/mods:detail/mods:number zur Verfügung gestellt werden. Ist dies nicht der Fall, dann wird mods:part bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.14.2.1 und 2.14.2.2</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Das Element <sch:span class="monotype">mods:part</sch:span> muss das Element <sch:span class="monotype">mods:detail</sch:span> mit dem Unterelement <sch:span class="monotype">mods:number</sch:span> enthalten. <sch:span class="monotype">mods:number</sch:span> enthält die textliche Zählung des Teils eines Mehrteiligen Dokuments.
+Fehlt <sch:span class="monotype">mods:detail</sch:span> mit dem Unterelement <sch:span class="monotype">mods:number</sch:span> in <sch:span class="monotype">mods:part</sch:span>, wird <sch:span class="monotype">mods:part</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:xmlData/mods:mods/mods:part/mods:detail">
-            <!-- Attribut type fehlt in mods:detail -->
+            <!-- 
+               Das Attribut type fehlt in mods:detail bzw. enthält einen ungültigen Wert
+             -->
          <sch:assert id="part_05"
                      role="warn"
                      test="@type = ('volume', 'issue')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">In mods:part muss das Unterelement mods:detail ein Attribut type enthalten, dessen Wert volume oder issue sein muss. Die Verwendung anderer Werte verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Das Element <sch:span class="monotype">mods:detail</sch:span> muss das Attribut <sch:span class="monotype">type</sch:span> mit einem der folgenden Werte enthalten:
+ * <sch:span class="monotype">volume</sch:span>
+ * <sch:span class="monotype">issue</sch:span>
+Das Fehlen vom <sch:span class="monotype">type</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:mods/mods:part">
-            <!-- Wiederholung von mods:detail[@type='volume'] in mods:part -->
+            <!-- 
+               mods:detail[@type='volume'] ist in mods:part mehrfach vorhanden
+             -->
          <sch:report id="part_12"
                      role="error"
                      test="mods:detail[@type='volume'][mods:number][2] or mods:detail[mods:number[@type='volume']][2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Das Element mods:detail[@type='volume'] darf innerhalb von mods:part nicht wiederholt werden. Ist dies der Fall, werden bei der Transformation der Daten die weiteren Vorkommen von mods:detail[@type='volume'] entfernt und die Inhalte des Unterlements mods:number im ersten Vorkommen zusammengefasst. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.11.2.3.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/part">Das Element <sch:span class="monotype">mods:part</sch:span> darf das Element <sch:span class="monotype">mods:detail</sch:span> mit dem Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">volume</sch:span> nur einmal enthalten.
+Enthält <sch:span class="monotype">mods:part</sch:span> mehr als ein entsprechendes <sch:span class="monotype">mods:detail</sch:span>, werden bei der Transformation des Datensatzes alle entsprechenden Vorkommen von <sch:span class="monotype">mods:detail</sch:span> im ersten Vorkommen von <sch:span class="monotype">mods:detail</sch:span> zusammengefasst.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:identifier">
-            <!-- Attribut type fehlt in mods:identifier oder der Attributwert ist falsch -->
+            <!-- 
+               Das Attribut type fehlt in mods:identifier bzw. enthält einen ungültigen Wert
+             -->
          <sch:assert id="identifier_01"
                      role="info"
                      test="@type = ('purl', 'urn', 'isbn', 'issn', 'doi', 'handle', 'vd16', 'vd17', 'vd18', 'zdb')"
                      properties="dmd_id type"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/identifier">mods:identifier muss ein Attribut type enthalten. Nur die folgenden Werte werden bei der Transformation der Daten für die DDB berücksichtigt: purl, urn, isbn, issn, doi, handle, zdb, vd16, vd17 und vd18. Fehlt das Attribut type oder werden andere Werte verwendet, wird mods:identifier bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.12</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/identifier">Das Element <sch:span class="monotype">mods:identifier</sch:span> muss das Attribut <sch:span class="monotype">type</sch:span> mit einem der folgenden Werte enthalten:
+ * <sch:span class="monotype">doi</sch:span>
+ * <sch:span class="monotype">handle</sch:span>
+ * <sch:span class="monotype">isbn</sch:span>
+ * <sch:span class="monotype">issn</sch:span>
+ * <sch:span class="monotype">purl</sch:span>
+ * <sch:span class="monotype">urn</sch:span>
+ * <sch:span class="monotype">vd16</sch:span>
+ * <sch:span class="monotype">vd17</sch:span>
+ * <sch:span class="monotype">vd18</sch:span>
+ * <sch:span class="monotype">zdb</sch:span>
+Fehlt <sch:span class="monotype">type</sch:span> in <sch:span class="monotype">mods:identifier</sch:span> bzw. enthält es einen ungültigen Wert, wird <sch:span class="monotype">mods:identifier</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:identifier (https://wiki.deutsche-digitale-bibliothek.de/x/N8MeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:xmlData/mods:mods/mods:location">
-            <!--  mods:physicalLocation fehlt in mods:location -->
+      <sch:rule context="mets:xmlData/mods:mods/mods:location[not(mods:url)]">
+            <!-- 
+               mods:location ist unvollständig
+             -->
          <sch:assert id="location_01"
                      role="error"
                      test="mods:physicalLocation"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">mods:location muss das Element mods:physicalLocation enthalten. Fehlt mods:physicalLocation, wird mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Das Element <sch:span class="monotype">mods:location</sch:span> muss das Element <sch:span class="monotype">mods:physicalLocation</sch:span> oder das Element <sch:span class="monotype">mods:url</sch:span> enthalten.
+Ist dies nicht der Fall, wird <sch:span class="monotype">mods:location</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Standortangabe fehlt -->
+            <!-- 
+               mods:physicalLocation fehlt in der primären mets:dmdSec
+             -->
          <sch:assert id="location_03"
                      role="warn"
                      test="mods:location/mods:physicalLocation"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Ist kein mods:location mit dem Unterelement mods:physicalLocation in der primären mets:dmdSec vorhanden, kann der Standort eines Bandes bzw. eines Objekts nicht in der DDB angezeigt werden. Das Fehlen von mods:physicalLocation verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Das primäre <sch:span class="monotype">mets:dmdSec</sch:span>-Element muss das Element <sch:span class="monotype">mods:location</sch:span> mit dem Unterelement <sch:span class="monotype">mods:physicalLocation</sch:span> enthalten.
+Das Fehlen von <sch:span class="monotype">mods:physicalLocation</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, Ihr Objekt wird dort aber ohne Standorts angezeigt. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:location/mods:physicalLocation[starts-with(text()[1], 'DE-')]">
-            <!-- URI der ISIL nicht vorhanden -->
+            <!-- 
+               Das Attribut valueURI im Element mods:physicalLocation fehlt oder enthält einen ungültigen Wert
+             -->
          <sch:assert id="location_04"
                      role="warn"
                      test="starts-with(@valueURI, 'http://ld.zdb-services.de/resource/organisations/') or starts-with(@valueURI, 'https://ld.zdb-services.de/resource/organisations/') or starts-with(@valueURI, 'http://lobid.org/organisations/') or starts-with(@valueURI, 'https://lobid.org/organisations/')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Wenn mods:physicalLocation den ISIL der Institution enthalten soll, in der sich der digitalisierte Band bzw. das digitalisierte Objekt befindet, dann muss dieser ISIL in Form des http-URI in dem Attribut valueURI stehen. Das Fehlen der valueURI verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.  Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Enthält das Element <sch:span class="monotype">mods:physicalLocation</sch:span> im Element <sch:span class="monotype">mods:location</sch:span> als Wert einen ISIL, muss das Attribut <sch:span class="monotype">valueURI</sch:span> von <sch:span class="monotype">mods:physicalLocation</sch:span> einen entsprenden URI der ISIL enthalten.
+Die DDB unterstützt entsprechende URI der Deutschen ISIL-Agentur und Sigelstelle (https://sigel.staatsbibliothek-berlin.de) (z. B. <sch:span class="monotype">https://ld.zdb-services.de/resource/organisations/DE-7</sch:span>) und lobid (http://lobid.org/organisations) (z. B. <sch:span class="monotype">https://lobid.org/organisations/DE-7</sch:span>).
+Das Fehlen von <sch:span class="monotype">valueURI</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:location[mods:physicalLocation]">
-            <!-- Wiederholung von mods:physicalLocation -->
+            <!-- 
+               mods:physicalLocation ist in mods:location mehrfach vorhanden
+             -->
          <sch:report id="location_05"
                      role="error"
                      test="mods:physicalLocation[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Innerhalb eines mods:location darf mods:physicalLocation nicht wiederholt werden. Ist mehr als ein mods:physicalLocation in mods:location vorhanden, wird das erste Vorkommen bei der Transformation der Daten berücksichtigt, alle anderen Vorkommen werden entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Das Element <sch:span class="monotype">mods:location</sch:span> darf das Element <sch:span class="monotype">mods:physicalLocation</sch:span> nur einmal enthalten. Enthält <sch:span class="monotype">mods:titleInfo</sch:span> mehr als ein <sch:span class="monotype">mods:physicalLocation</sch:span>, wird bei der Transformation des Datensatzes das erste Vorkommen von <sch:span class="monotype">mods:physicalLocation</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:physicalLocation</sch:span> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:location/mods:url">
-            <!-- mods:url mit ungültigem Wert im Attribut access -->
+            <!-- 
+               Das Attribut access fehlt in mods:url bzw. enthält einen ungültigen Wert
+             -->
          <sch:assert id="location_06"
                      role="error"
                      test="./@access = ('preview', 'object in context', 'raw object')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Das Element mods:url wird zurzeit bei der Bearbeitung der Datensätze entfernt. Perspektivisch unterstützt die DDB mods:url nur mit einem gültigen Wert im Attribut access ("preview", "object in context" und "raw object"). Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Das Element <sch:span class="monotype">mods:url</sch:span> wird zurzeit bei der Transformation des Datensatzes entfernt.
+Perspektivisch unterstützt die DDB <sch:span class="monotype">mods:url</sch:span> nur mit dem Attribut <sch:span class="monotype">access</sch:span> mit einem der folgenden Werte:
+ * <sch:span class="monotype">preview</sch:span>
+ * <sch:span class="monotype">object in context</sch:span>
+ * <sch:span class="monotype">raw object</sch:span>Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:location[mods:physicalLocation]">
          <sch:let name="current_physicalLocation" value="mods:physicalLocation[1]"/>
-         <!-- mods:physicalLocation mit unterschiedlichen Werten -->
+         <!-- 
+               mods:physicalLocation enthält unterschiedliche Werte
+             -->
          <sch:report id="location_07"
                      role="error"
                      test="./preceding-sibling::mods:location[mods:physicalLocation/text() != $current_physicalLocation]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Ein Datensatz darf im allen Unterelementen mods:physicalLocation von mods:location nur einen Wert enthalten. Enthält der Datensatz mehr als einen unterschiedlichen Wert in allen mods:physicalLocation, werden die weiteren Vorkommen (XML-Reihenfolge) von mods:physicalLocation bzw. die entsprechenden mods:location bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.13.2</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/location">Der Datensatz enthält <sch:span class="monotype">mods:location</sch:span>-Elemente mit unterschiedlichen Werten im Unterelement <sch:span class="monotype">mods:physicalLocation</sch:span>.
+Ein Dokument kann nicht mehrere Standorte besitzen und daher werden bei der Transformation des Datensatzes die weiteren Vorkommen (XML-Reihenfolge) von <sch:span class="monotype">mods:physicalLocation</sch:span> innerhalb von <sch:span class="monotype">mods:location</sch:span> bzw. die entsprechenden weiteren Vorkommen von <sch:span class="monotype">mods:location</sch:span> entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mods:accessCondition[@type='use and reproduction']/@*[local-name()= 'href']">
-            <!-- Falscher Namensraum für das Attribut href von mods:accessCondition -->
+            <!-- 
+               Falscher Namensraum für das Attribut href in mods:accessCondition
+             -->
          <sch:assert id="accessCondition_02"
                      role="error"
                      test="namespace-uri() = 'http://www.w3.org/1999/xlink'"
                      properties="dmd_id"
-                     see="https://wiki.dnb.de/pages/viewpage.action?pageId=148607412#MODS(Empfehlung2.0)-Rechtehinweis/Lizenz">Das Attribut href des Elements mods:accessCondition muss zum Namensraum "http://www.w3.org/1999/xlink" gehören. Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs href in den Namensraum "http://www.w3.org/1999/xlink" gesetzt und entsprechend ausgewertet.</sch:assert>
+                     see="https://wiki.dnb.de/pages/viewpage.action?pageId=148607412#MODS(Empfehlung2.0)-Rechtehinweis/Lizenz">Das Attribut <sch:span class="monotype">href</sch:span> im Element <sch:span class="monotype">mods:accessCondition</sch:span> muss zum Namensraum <sch:span class="monotype">http://www.w3.org/1999/xlink</sch:span> gehören.
+Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs <sch:span class="monotype">href</sch:span> in den Namensraum <sch:span class="monotype">http://www.w3.org/1999/xlink</sch:span> gesetzt und entsprechend ausgewertet.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Der Identifier des Datensatzes fehlt -->
+            <!-- 
+               mods:recordIdentifier fehlt im primären mets:dmdSec
+             -->
          <sch:assert id="recordInfo_01"
                      role="fatal"
                      test="mods:recordInfo/mods:recordIdentifier"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Die mets:dmdSec, die das gesamte Werk beschreibt, muss ein mods:recordInfo mit dem Unterelement mods:recordIdentifier enthalten. Dieser mods:recordIdentifier muss durch den Wert im Attribut source eindeutig identifizierbar sein. Wenn mods:recordIdentifier und/oder das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Das primäre <sch:span class="monotype">mets:dmdSec</sch:span>-Element muss das Element <sch:span class="monotype">mods:recordInfo</sch:span> mit dem Unterelement <sch:span class="monotype">mods:recordIdentifier</sch:span> enthalten. <sch:span class="monotype">mods:recordIdentifier</sch:span> muss darüber hinaus das Attribut <sch:span class="monotype">source</sch:span> enthalten um eindeutig identifizierbar sein.
+Fehlt <sch:span class="monotype">mods:recordIdentifier</sch:span> mit dem Attribut <sch:span class="monotype">source</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier">
-            <!-- Identifier des Datensatzes ist nicht eindeutig -->
+            <!-- 
+               Das Attribut source fehlt in mods:recordIdentifier
+             -->
          <sch:assert id="recordInfo_02"
                      role="fatal"
                      test="string-length(normalize-space(@source)) &gt; 0"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">mods:recordIdentifier muss das Attribut source enthalten. Der Wert dieses Attribut muss die Herkunft des Identifiers des Datensatzes eindeutig identifizieren. Wenn das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Das Element <sch:span class="monotype">mods:recordIdentifier</sch:span> im Element <sch:span class="monotype">mods:recordInfo</sch:span> muss das Attribut <sch:span class="monotype">source</sch:span> enthalten, damit der Wert in <sch:span class="monotype">mods:recordIdentifier</sch:span> eindeutig identifizierbar ist.
+Fehlt <sch:span class="monotype">source</sch:span> in <sch:span class="monotype">mods:recordIdentifier</sch:span> wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods">
-            <!-- Der Identifier des Datensatzes wird wiederholt -->
+            <!-- 
+               mods:recordIdentifier ist in mods:recordInfo mehrfach vorhanden
+             -->
          <sch:report id="recordInfo_03"
                      role="error"
                      test="mods:recordInfo/mods:recordIdentifier[2] or mods:recordInfo[mods:recordIdentifier][2]"
-                     properties="dmd_id source"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Jeder METS-Datensatz muss durch ein mods:recordIdentifier Element eindeutig identifiziert werden. Ist mehr als ein mods:recordIdentifier vorhanden, wird nach Rücksprache mit dem DP anhand der im Attribut source genannten Quelle des Identifiers entschieden, welches mods:recordIdentifier bei der Bereinigung des Datensatzes erhalten bleibt. Alle anderen mods:recordIdentifier werden bei der Bereinigung des Datensatzes entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15.2.1</sch:report>
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Das Element <sch:span class="monotype">mods:recordInfo</sch:span> darf das Element <sch:span class="monotype">mods:recordIdentifier</sch:span> nur einmal enthalten.
+Enthält <sch:span class="monotype">mods:recordInfo</sch:span> mehr als ein <sch:span class="monotype">mods:recordIdentifier</sch:span>, teilen Sie uns bitte mit welches <sch:span class="monotype">mods:recordIdentifier</sch:span> in Abhängigkeit des Wertes im Attribut <sch:span class="monotype">source</sch:span> bei der Transformation des Datensatzes erhalten bleibt. Alle anderen Vorkommen von <sch:span class="monotype">mods:recordIdentifier</sch:span> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier">
-            <!-- Der Identifier des Datensatzes ist nicht valide -->
+            <!-- 
+               Ungültiger Wert in mods:recordIdentifier
+             -->
          <sch:assert id="recordInfo_04"
                      role="fatal"
                      test="matches(text()[1], '^[^ /]+$')"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und/oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und/oder Sonderzeichen enthalten, nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Der Wert im Element <sch:span class="monotype">mods:recordIdentifier</sch:span> enthält Leer- und / oder Sonderzeichen. Dies kann zu Problemen bei der Verarbeitung in der DDB führen, daher wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:xmlData/mods:mods">
-            <!-- mods:recordInfo ist in mods:mods mehrmals vorhanden -->
+            <!-- 
+               mods:recordInfo ist in mods:mods mehrmals vorhanden
+             -->
          <sch:report id="recordInfo_05"
                      role="error"
                      test="mods:recordInfo[2]"
                      properties="dmd_id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Das Element mods:mods darf das Element mods:recordInfo nur einmal enthalten. Enthält mods:mods mehr als ein mods:recordInfo, werden bei der Bereinigung des Datensatzes die Unterelemente aller mods:recordInfo im erste Vorkommen zusammengefasst und die weiteren Vorkommen von mods:recordInfo entfernt. Weitere Informationen zu diesem Element s. MODS-Anwendungsprofil Kapitel 2.15.1</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/recordInfo">Das Element <sch:span class="monotype">mods:mods</sch:span> darf das Element <sch:span class="monotype">mods:recordInfo</sch:span> nur einmal enthalten. Enthält <sch:span class="monotype">mods:mods</sch:span> mehr als ein <sch:span class="monotype">mods:recordInfo</sch:span>, werden bei der Bereinigung des Datensatzes die Unterelemente aller <sch:span class="monotype">mods:recordInfo</sch:span> im erste Vorkommen zusammengefasst und die weiteren Vorkommen von <sch:span class="monotype">mods:recordInfo</sch:span> entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:structMap TYPE="LOGICAL" fehlt -->
+            <!-- 
+               Das primäre mets:dmdSec-Element fehlt
+             -->
+         <sch:assert id="dmdSec_01"
+                     role="fatal"
+                     test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Das primäre <sch:span class="monotype">mets:dmdSec</sch:span>-Element beschreibt das gesamte im Datensatz beschriebene Dokument. Es muss das Unterelement <sch:span class="monotype">mets:mdWrap</sch:span> mit dem Unterelement <sch:span class="monotype">mets:xmlData</sch:span> enthalten, welches ein Unterelement <sch:span class="monotype">mods:mods</sch:span> besitzt.
+Die Selektion des primären <sch:span class="monotype">mets:dmdSec</sch:span> erfolgt über ein im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> enthaltenes <sch:span class="monotype">mets:div</sch:span>-Element über die folgenden Kriterien:
+ * <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> enthält kein <sch:span class="monotype">mets:div</sch:span> mit dem Unterelement <sch:span class="monotype">mets:mptr</sch:span>: Das Kind von <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span>
+ * <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> enthält ein <sch:span class="monotype">mets:div</sch:span> mit dem Unterelement <sch:span class="monotype">mets:mptr</sch:span>: Das Kind des <sch:span class="monotype">mets:div</sch:span> mit dem Unterelement <sch:span class="monotype">mets:mptr</sch:span>
+Das nach den o. g. Kriterien selektierte <sch:span class="monotype">mets:div</sch:span> referenziert über sein Attribut <sch:span class="monotype">DMDID</sch:span> das Attribut <sch:span class="monotype">ID</sch:span> des primären <sch:span class="monotype">mets:dmdSec</sch:span>.
+Fehlt das primäre <sch:span class="monotype">mets:dmdSec</sch:span> bzw. ist keine eindeutige Selektion möglich, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
+      </sch:rule>
+      <sch:rule context="mets:dmdSec[not(@ID=$work_dmdid)]">
+            <!-- 
+               mets:dmdSec ist unvollständig
+             -->
+         <sch:assert id="dmdSec_02"
+                     role="error"
+                     test="mets:mdWrap/mets:xmlData/mods:mods"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Das Element <sch:span class="monotype">mets:dmdSec</sch:span> muss das Unterelement <sch:span class="monotype">mets:mdWrap</sch:span> mit dem Unterelement <sch:span class="monotype">mets:xmlData</sch:span> enthalten, welches ein Unterelement <sch:span class="monotype">mods:mods</sch:span> besitzt.
+Ist dies nicht der Fall, wird <sch:span class="monotype">mets:dmdSec</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:dmdSec">
+            <!-- 
+               mets:dmdSec ohne eindeutigen Identifier im Attribut ID
+             -->
+         <sch:assert id="dmdSec_03"
+                     role="fatal"
+                     test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Das Element <sch:span class="monotype">mets:dmdSec</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:dmdSec">
+            <!-- 
+               mets:dmdSec ohne Referenz
+             -->
+         <sch:assert id="dmdSec_04"
+                     role="error"
+                     test="key('structMap_LOGICAL_dmdids', @ID)"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Das Element <sch:span class="monotype">mets:dmdSec</sch:span> muss genau einmal von einem <sch:span class="monotype">mets:div</sch:span>-Element innerhalb des Elements <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> referenziert werden.
+Die Referenzierung erfolgt über einen Wert im Attribut <sch:span class="monotype">DMDID</sch:span> von <sch:span class="monotype">mets:div</sch:span> auf das Attribut <sch:span class="monotype">ID</sch:span> des Elements <sch:span class="monotype">mets:dmdSec</sch:span>.
+Fehlt diese Referenz, wird <sch:span class="monotype">mets:dmdSec</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets">
+            <!-- 
+               mets:amdSec fehlt
+             -->
+         <sch:assert id="amdSec_01"
+                     role="fatal"
+                     test="mets:amdSec"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Ein Datensatz muss das Element <sch:span class="monotype">mets:amdSec</sch:span> enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
+      </sch:rule>
+      <sch:rule context="mets:amdSec">
+            <!-- 
+               mets:amdSec ohne eindeutigen Identifier im Attribut ID
+             -->
+         <sch:assert id="amdSec_02"
+                     role="warn"
+                     test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element <sch:span class="monotype">mets:amdSec</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
+Das Fehlen von <sch:span class="monotype">ID</sch:span> bzw. ungültige Zeichen in Attribut <sch:span class="monotype">ID</sch:span> verhindern nicht das Einspielen Ihrer Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]">
+            <!-- 
+               dv:license fehlt
+             -->
+         <sch:assert id="amdSec_04"
+                     role="error"
+                     test="mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction']"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Jeder Datensatz muss das Element <sch:span class="monotype">dv:license</sch:span> mit Rechteinformationen zum beschriebenen Digitalisat enthalten.
+Alternativ zu diesem Element kann die Rechteinformation auch im Attribut <sch:span class="monotype">xlink:href</sch:span> des Elements <sch:span class="monotype">mods:accessCondition</sch:span> mit dem Attribut <sch:span class="monotype">type</sch:span> und dem Wert <sch:span class="monotype">use and reproduction</sch:span> angegeben werden.
+Die Rechteinformation muss im o. g. Element bzw. Attribut in Form eines URI gemäß den Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) vorliegen. Im <sch:span class="monotype">dv:license</sch:span> können darüber hinaus die kodierten Werte aus dem METS-Anwendungsprofil (Kapitel 2.7.2.11) (https://dfg-viewer.de/fileadmin/groups/dfgviewer/METS-Anwendungsprofil_2.3.1.pdf) verwendet werden. Bitte beachten Sie hierbei, dass die DDB die CC-Lizenz-Werte als Version 4.0 und den Wert <sch:span class="monotype">reserved</sch:span> als Urheberrechtsschutz nicht bewertet (Europeana Rightstatement "CNE") (http://rightsstatements.org/vocab/CNE/1.0/) interpretiert.
+Ist im Datensatz keine Rechteinformation wie oben beschrieben vorhanden, kann bei der Transformation des Datensatzes eine von Ihnen bestimmte Standard-URI von der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) gesetzt werden, die für alle Ihre Datensätze gilt. Bitte teilen Sie diese der Fachstelle Bibliothek mit.
+Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB) und mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB). Informationen zu den möglichen Rechte-URI finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek).</sch:assert>
+      </sch:rule>
+      <sch:rule context="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]">
+            <!-- 
+               Ungültiger Wert in dv:license bzw. im Attribut xlink:href von mods:accessCondition[@type='use and reproduction']
+             -->
+         <sch:assert id="amdSec_05"
+                     role="error"
+                     test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Jeder Datensatz muss das Element <sch:span class="monotype">dv:license</sch:span> mit Rechteinformationen zum beschriebenen Digitalisat enthalten.
+Alternativ zu diesem Element kann die Rechteinformation auch im Attribut <sch:span class="monotype">xlink:href</sch:span> des Elements <sch:span class="monotype">mods:accessCondition</sch:span> mit dem Attribut <sch:span class="monotype">type</sch:span> und dem Wert <sch:span class="monotype">use and reproduction</sch:span> angegeben werden.
+Die Rechteinformation muss im o. g. Element bzw. Attribut in Form eines URI gemäß den Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) vorliegen. Im <sch:span class="monotype">dv:license</sch:span> können darüber hinaus die kodierten Werte aus dem METS-Anwendungsprofil (Kapitel 2.7.2.11) (https://dfg-viewer.de/fileadmin/groups/dfgviewer/METS-Anwendungsprofil_2.3.1.pdf) verwendet werden. Bitte beachten Sie hierbei, dass die DDB die CC-Lizenz-Werte als Version 4.0 und den Wert <sch:span class="monotype">reserved</sch:span> als Urheberrechtsschutz nicht bewertet (Europeana Rightstatement "CNE") (http://rightsstatements.org/vocab/CNE/1.0/) interpretiert.
+Ist im Datensatz keine Rechteinformation wie oben beschrieben vorhanden, kann bei der Transformation des Datensatzes eine von Ihnen bestimmte Standard-URI von der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) gesetzt werden, die für alle Ihre Datensätze gilt. Bitte teilen Sie diese der Fachstelle Bibliothek mit.
+Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB) und mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB). Informationen zu den möglichen Rechte-URI finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:amdSec[@ID=$work_amdid]/mets:digiprovMD | mets:amdSec[not(@ID=$work_amdid)][1]/mets:digiprovMD">
+            <!-- 
+               mets:digiprovMD ist unvollständig
+             -->
+         <sch:assert id="amdSec_06"
+                     role="error"
+                     test="mets:mdWrap/mets:xmlData/dv:links/dv:reference[matches(text()[1], '^http[s]?://.+')] or mets:mdWrap/mets:xmlData/dv:links/dv:presentation[matches(text()[1], '^http[s]?://.+')]"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element <sch:span class="monotype">mets:amdSec</sch:span>, das über sein Attribut <sch:span class="monotype">ID</sch:span> vom primären <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> über dessen Attribut <sch:span class="monotype">ADMID</sch:span> referenziert wird, muss das Unterelement <sch:span class="monotype">mets:digiprovMD</sch:span> enthalten.
+Dieses muss auf der untersten Ebene das Element <sch:span class="monotype">dv:presentation</sch:span> oder das Element <sch:span class="monotype">dv:reference</sch:span> mit einem http- oder https-URI enthalten, der auf die Anzeige des Digitalisats bei Ihrer Institution, bzw. das Katalogisat in Ihrem Katalog referenziert.
+Fehlt sowohl <sch:span class="monotype">dv:presentation</sch:span> als auch <sch:span class="monotype">dv:reference</sch:span> bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird <sch:span class="monotype">mets:digiprovMD</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:digiprovMD (https://wiki.deutsche-digitale-bibliothek.de/x/tsIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights">
+            <!-- 
+               dv:owner ist in dv:rights mehrfach vorhanden
+             -->
+         <sch:report id="amdSec_07"
+                     role="fatal"
+                     test="dv:owner[2]"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element <sch:span class="monotype">dv:rights</sch:span> darf das Element <sch:span class="monotype">dv:owner</sch:span> nur einmal enthalten. Enthält <sch:span class="monotype">dv:rights</sch:span> mehr als ein <sch:span class="monotype">dv:owner</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets[mets:structMap[@TYPE='LOGICAL']//mets:div[tokenize(@DMDID, ' ') = $work_dmdid][contains(@ADMID, ' ')]]">
+            <!-- 
+               Das primäre mets:div in mets:structMap[@TYPE='LOGICAL'] referenziert mehr als ein mets:amdSec
+             -->
+         <sch:report id="amdSec_08"
+                     role="fatal"
+                     test="contains($work_amdid, ' ')"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das primäre <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> referenziert im Attribut <sch:span class="monotype">ADMID</sch:span> mehrere <sch:span class="monotype">mets:amdSec</sch:span>-Elemente.
+Dadurch ist keine eindeutige Zuordnung der adminstrativen Metadaten für den Datensatz möglich und er wird nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB). Informationen zum Kontext der Elemente finden Sie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:report>
+      </sch:rule>
+      <sch:rule context="mets:mets[not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]]">
+            <!-- 
+               mets:amdSec ohne Referenzierung
+             -->
+         <sch:report id="amdSec_09"
+                     role="fatal"
+                     test="not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element <sch:span class="monotype">mets:amdSec</sch:span> muss über sein Attribut <sch:span class="monotype">ID</sch:span> mit einem <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> über dessen Attribut <sch:span class="monotype">ADMID</sch:span> referenziert werden.
+Enthält ein Datensatz kein <sch:span class="monotype">mets:amdSec</sch:span>, das vom primären <sch:span class="monotype">mets:div</sch:span> im <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> referenziert wird und darüber hinaus mehrere <sch:span class="monotype">mets:amdSec</sch:span> ohne eine Referenzierung, ist keine eindeutige Zuordnung der adminstrativen Metadaten für den Datensatz möglich und er wird nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB). Informationen zum Kontext der Elemente finden Sie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:report>
+      </sch:rule>
+      <sch:rule context="mets:mets">
+            <!-- 
+               Das primäre mets:div in mets:structMap[@TYPE='LOGICAL'] referenziert kein mets:amdSec
+             -->
+         <sch:assert id="amdSec_10"
+                     role="error"
+                     test="mets:amdSec[@ID=$work_amdid]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das primäre <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss im Attribut <sch:span class="monotype">ADMID</sch:span> genau ein <sch:span class="monotype">mets:amdSec</sch:span>-Element über dessen Attribut <sch:span class="monotype">ID</sch:span> referenzieren.
+Ist dies nicht der Fall und der Datensatz verfügt nur über genau ein <sch:span class="monotype">mets:amdSec</sch:span>, wird eine Referenz auf dieses bei Transformation des Datensatzes erzeugt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB). Informationen zum Kontext der Elemente finden Sie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(tokenize(@DMDID, ' ') = $work_dmdid)][@ADMID]">
+            <!-- 
+               mets:amdSec für nicht-primäre mets:div
+             -->
+         <sch:report id="amdSec_11"
+                     role="info"
+                     test="key('amdsec_ids', @ADMID)"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Der Datensatz enthält <sch:span class="monotype">mets:amdSec</sch:span>-Elemente, die im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> von dem primären <sch:span class="monotype">mets:div</sch:span>-Element untergeordneten <sch:span class="monotype">mets:div</sch:span>-Elementen referenziert werden.
+Die DDB berücksichtigt zurzeit nur das <sch:span class="monotype">mets:amdSec</sch:span>, das von primären <sch:span class="monotype">mets:div</sch:span> referenziert wird.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights">
+            <!-- 
+               dv:license ist in dv:rights mehrmals vorhanden
+             -->
+         <sch:report id="amdSec_12"
+                     role="error"
+                     test="dv:license[2]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element <sch:span class="monotype">dv:rights</sch:span> darf das Element <sch:span class="monotype">dv:license</sch:span> nur einmal enthalten. Enthält <sch:span class="monotype">dv:rights</sch:span> mehr als ein <sch:span class="monotype">dv:license</sch:span>, wird bei der Bereinigung des Datensatzes das erste Vorkommen von <sch:span class="monotype">dv:license</sch:span> mit gültigem Rechte-URI übernommen, alle anderen <sch:span class="monotype">dv:license</sch:span> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
+            <!-- 
+               Hinweis auf ungültige Rechteangabe
+             -->
+         <sch:report id="amdSec_13"
+                     role="caution"
+                     test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910"
+                     properties="dmd_id">Die Lizenzen aus dem Lizenzkorb der DDB (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen.
+Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im "Lizenzkorb" enthaltene Rechtehinweis "Public Domain Mark" in Frage.
+Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.Weitere Informationen zu Rechteangaben in der DDB finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek). Bei Fragen wenden Sie sich bitte an Armin Talke (https://pro.deutsche-digitale-bibliothek.de/ueber-uns/ansprechpartner_innen/armin-talke).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]">
+            <!-- 
+               Widersprüchliche Rechteangaben in dv:license
+             -->
+         <sch:report id="amdSec_14"
+                     role="fatal"
+                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
+                     properties="dmd_id">Der Datensatz enthält mehrere <sch:span class="monotype">dv:license</sch:span>-Elemente mit unterschiedlichen Rechteangaben aus dem Lizenzkorb der DDB (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek). Bitte beachten Sie hierbei, dass die DDB die CC-Lizenz-Werte aus dem METS-Anwendungsprofil (Kapitel 2.7.2.11) (https://dfg-viewer.de/fileadmin/groups/dfgviewer/METS-Anwendungsprofil_2.3.1.pdf) als Version 4.0 und den Wert <sch:span class="monotype">reserved</sch:span> als Urheberrechtsschutz nicht bewertet (Europeana Rightstatement "CNE") (http://rightsstatements.org/vocab/CNE/1.0/) interpretiert.
+Die DDB benötigt eindeutige Rechteangaben, daher wird der Datensatz nicht in die DDB eingespielt.</sch:report>
+      </sch:rule>
+      <sch:rule context="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]">
+            <!-- 
+               Widersprüchliche Rechteangaben in mods:accessCondition[@type='use and reproduction']
+             -->
+         <sch:report id="amdSec_16"
+                     role="fatal"
+                     test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1"
+                     properties="dmd_id">Der Datensatz enthält mehrere <sch:span class="monotype">mods:accessCondition[@type='use and reproduction']</sch:span>-Elemente mit unterschiedlichen Rechteangaben aus dem Lizenzkorb der DDB (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) im Attribut <sch:span class="monotype">xlink:href</sch:span>.
+Die DDB benötigt eindeutige Rechteangaben, daher wird der Datensatz nicht in die DDB eingespielt.</sch:report>
+      </sch:rule>
+      <sch:rule context="mets:mets">
+            <!-- 
+               Widersprüchliche Rechteangaben in dv:license und im Attribut xlink:href von mods:accessCondition[@type='use and reproduction']
+             -->
+         <sch:report id="amdSec_17"
+                     role="error"
+                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
+                     properties="dmd_id">Der Datensatz enthält im Element <sch:span class="monotype">mods:accessCondition[@type='use and reproduction']</sch:span> im Attribut <sch:span class="monotype">xlink:href</sch:span> und im Element <sch:span class="monotype">dv:license</sch:span> sich widersprechende Rechteangaben aus dem Lizenzkorb der DDB (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek). Bitte beachten Sie hierbei, dass die DDB die CC-Lizenz-Werte aus dem METS-Anwendungsprofil (Kapitel 2.7.2.11) (https://dfg-viewer.de/fileadmin/groups/dfgviewer/METS-Anwendungsprofil_2.3.1.pdf) als Version 4.0 und den Wert <sch:span class="monotype">reserved</sch:span> als Urheberrechtsschutz nicht bewertet (Europeana Rightstatement "CNE") (http://rightsstatements.org/vocab/CNE/1.0/) interpretiert.
+Bei der Transformation des Datensatzes übernimmt die DDB in diesem Fall die Rechteangabe aus <sch:span class="monotype">mods:accessCondition[@type='use and reproduction']</sch:span>.</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets">
+            <!-- 
+               dv:presentation fehlt in dv:digiprovMD
+             -->
+         <sch:assert id="amdSec_15"
+                     role="warn"
+                     test="mets:amdSec/mets:digiprovMD/mets:mdWrap/mets:xmlData/dv:links/dv:presentation[matches(text(), '^https?://')]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element <sch:span class="monotype">mets:amdSec</sch:span> muss das Unterelement <sch:span class="monotype">mets:digiprovMD</sch:span> enthalten.
+Dieses muss auf der untersten Ebene das Element <sch:span class="monotype">dv:presentation</sch:span> enthalten, das einen http- bzw. https-URI enthält, der auf die Anzeige des Digitalisats bei Ihrer Institution referenziert.
+Fehlt <sch:span class="monotype">dv:presentation</sch:span> im Datensatz wird in der DDB der Button "Objekt anzeigen" ausgeblendet.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:digiprovMD (https://wiki.deutsche-digitale-bibliothek.de/x/tsIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets">
+            <!-- 
+               dv:ownerSiteURL fehlt in mets:rightsMD
+             -->
+         <sch:assert id="amdSec_18"
+                     role="warn"
+                     test="mets:amdSec/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:ownerSiteURL[matches(text(), '^https?://')]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element <sch:span class="monotype">mets:amdSec</sch:span> muss das Unterelement <sch:span class="monotype">mets:rightsMD</sch:span> enthalten.
+Dieses muss auf der untersten Ebene das Element <sch:span class="monotype">dv:ownerSiteURL</sch:span> enthalten, das einen http- bzw. https-URI enthält, der auf die Webseite Ihrer Institution referenziert.
+Fehlt <sch:span class="monotype">dv:ownerSiteURL</sch:span> im Datensatz, ist der Datengeber-Link im Buchviewer der DDB ohne Referenz.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets">
+            <!-- 
+               mets:fileSec fehlt
+             -->
+         <sch:assert id="fileSec_01"
+                     role="fatal"
+                     test="$is_anchor or mets:fileSec"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Datensätze, die Einteilige Dokumente oder Teile von Mehrteiligen Dokumenten beschreiben, müssen das Element <sch:span class="monotype">mets:fileSec</sch:span> enthalten. Fehlt <sch:span class="monotype">mets:fileSec</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB) und in den entsprechenden Unterseiten der Seite Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
+      </sch:rule>
+      <sch:rule context="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='DEFAULT'])]">
+            <!-- 
+               mets:fileGrp[@USE='DEFAULT'] fehlt
+             -->
+         <sch:assert id="fileSec_02"
+                     role="fatal"
+                     test="mets:fileGrp[@USE='DEFAULT'] or $is_anchor"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Beschreibt der Datensatz Einteilige Dokumente oder Teile von Mehrteiligen Dokumenten, muss das Element <sch:span class="monotype">mets:fileSec</sch:span> das Element <sch:span class="monotype">mets:fileGrp</sch:span> mit dem Attribut <sch:span class="monotype">USE</sch:span> mit dem Wert <sch:span class="monotype">DEFAULT</sch:span> enthalten.
+Fehlt ein entsprechendes <sch:span class="monotype">mets:fileGrp</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</sch:assert>
+      </sch:rule>
+      <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']">
+            <!-- 
+               mets:fileGrp[@USE='DEFAULT'] ist unvollständig
+             -->
+         <sch:report id="fileSec_03"
+                     role="fatal"
+                     test="mets:file[mets:FLocat[string-length(@xlink:href) = 0]]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Das Element <sch:span class="monotype">mets:fileGrp</sch:span> mit dem Attribut <sch:span class="monotype">USE</sch:span> mit dem Wert <sch:span class="monotype">DEFAULT</sch:span> muss mindestens ein <sch:span class="monotype">mets:file</sch:span>-Element enthalten. Dieses muss das Unterelement <sch:span class="monotype">mets:FLocat</sch:span> mit dem Attribut <sch:span class="monotype">xlink:href</sch:span> besitzen.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp/mets:file">
+            <!-- 
+               mets:file ohne eindeutigen Identifier im Attribut ID
+             -->
+         <sch:assert id="fileSec_04"
+                     role="fatal"
+                     test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Das Element <sch:span class="monotype">mets:file</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
+Fehlt das Attribut <sch:span class="monotype">ID</sch:span> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:fileSec">
+            <!-- 
+               Attribut MIMETYPE fehlt in mets:file
+             -->
+         <sch:report id="fileSec_08"
+                     role="warn"
+                     test="//mets:file[string-length(@MIMETYPE) = 0]"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Das Element <sch:span class="monotype">mets:file</sch:span> muss das Attribut <sch:span class="monotype">MIMETYPE</sch:span> besitzen. Der Datensatz enthält mindestens ein <sch:span class="monotype">mets:file</sch:span> ohne das Attribut <sch:span class="monotype">MIMETYPE</sch:span>.
+Das Fehlen des Attributs <sch:span class="monotype">MIMETYPE</sch:span> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE=('DEFAULT', 'THUMBS', 'FULLTEXT')]/mets:file">
+            <!-- 
+               mets:file ohne Referenzierung
+             -->
+         <sch:assert id="fileSec_09"
+                     role="fatal"
+                     test="key('structMap_PHYSICAL_fptr_FILEID', @ID)"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Das Element <sch:span class="monotype">mets:file</sch:span> muss über sein Attribut <sch:span class="monotype">ID</sch:span> mit einem <sch:span class="monotype">mets:fptr</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> über dessen Attribut <sch:span class="monotype">FILEID</sch:span> referenziert werden.
+Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB) und mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets">
+            <!-- 
+               mets:structMap[@TYPE='LOGICAL'] fehlt
+             -->
          <sch:assert id="structMapLogical_01"
                      role="fatal"
                      test="mets:structMap[@TYPE='LOGICAL']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">mets:structMap TYPE="LOGICAL" ist notwendig, um die logische Struktur eines Dokuments anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz muss das Element <sch:span class="monotype">mets:structMap</sch:span> mit dem Attribut <sch:span class="monotype">TYPE</sch:span> mit dem Wert <sch:span class="monotype">LOGICAL</sch:span> enthalten.
+Fehlt ein entsprechendes <sch:span class="monotype">mets:structMap</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']">
-            <!-- mets:structMap TYPE="LOGICAL" enthält keine mets:div -->
+            <!-- 
+               mets:structMap[@TYPE='LOGICAL'] ist unvollständig
+             -->
          <sch:assert id="structMapLogical_02"
                      role="fatal"
                      test="mets:div"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der structMap TYPE="LOGICAL" durch ineinander verschachtelte mets:div repräsentiert werden. Die mets:structMap TYPE="LOGICAL" muss mindestens für die oberste dieser Ebenen eine mets:div enthalten, in der die oberste Ebene des Dokuments beschrieben wird. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:structMap</sch:span> mit dem Attribut <sch:span class="monotype">TYPE</sch:span> mit dem Wert <sch:span class="monotype">LOGICAL</sch:span> muss mindestens ein <sch:span class="monotype">mets:div</sch:span>-Element enthalten. Dieses muss das Unterelement <sch:span class="monotype">mets:FLocat</sch:span> mit dem Attribut <sch:span class="monotype">xlink:href</sch:span> besitzen.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div">
-            <!-- Eindeutiger Identifier fehlt in mets:div in mets:structMap TYPE="LOGICAL" -->
+            <!-- 
+               mets:div in mets:structMap[@TYPE='LOGICAL'] ohne eindeutigen Identifier im Attribut ID
+             -->
          <sch:assert id="structMapLogical_03"
                      role="fatal"
                      test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der mets:structMap TYPE="LOGICAL" durch ineinander verschachtelte mets:div repräsentiert werden. Jede dieser mets:div muss in dem Attribut ID einen eindeutigen Identifier enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
+Fehlt das Attribut <sch:span class="monotype">ID</sch:span> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div[@DMDID] | key('structMap_LOGICAL_dmdids', $work_dmdid)[@DMDID]">
-            <!-- Notwendiger Identifier der logischen Strukturebene fehlt im mets:structLink -->
+            <!-- 
+               mets:div in mets:structMap[@TYPE='LOGICAL'] ohne Referenzierung
+             -->
          <sch:assert id="structMapLogical_04"
                      role="fatal"
                      test="$is_anchor or key('structLink_from_ids', @ID)"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer mets:div in der structMap TYPE="LOGICAL" im mets:structLink den jeweiligen Identifiern der Seiten zugeordnet werden. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.3</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> mit dem Attribut <sch:span class="monotype">DMDID</sch:span> muss über sein Attribut <sch:span class="monotype">ID</sch:span> von mindestens einem <sch:span class="monotype">mets:smLink</sch:span>-Element im Element <sch:span class="monotype">mets:structLink</sch:span> über dessen Attribut <sch:span class="monotype">xlink:from</sch:span> referenziert werden.
+Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB).</sch:assert>
       </sch:rule>
       <sch:rule context="key('structMap_LOGICAL_dmdids', $work_dmdid)//mets:div | key('structMap_LOGICAL_dmdids', $work_dmdid)">
-            <!-- Identifier der logischen Strukturebene fehlt im mets:structLink -->
+            <!-- 
+               mets:div in mets:structMap[@TYPE='LOGICAL'] ohne Referenzierung
+             -->
          <sch:assert id="structMapLogical_21"
                      role="warn"
                      test="$is_anchor or key('structLink_from_ids', @ID)"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer mets:div in der structMap TYPE="LOGICAL" im mets:structLink den jeweiligen Identifiern der Seiten zugeordnet werden. Fehlende Zuordnungen verhindern nicht das Einspielen der Daten in die DDB, führen dort aber zu Anzeigeproblemen im Viewer. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.3</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss über sein Attribut <sch:span class="monotype">ID</sch:span> von mindestens einem <sch:span class="monotype">mets:smLink</sch:span>-Element im Element <sch:span class="monotype">mets:structLink</sch:span> über dessen Attribut <sch:span class="monotype">xlink:from</sch:span> referenziert werden.
+Eine fehlende Referenzierung verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen im Viewer führen. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]">
-            <!-- Das Attribut TYPE in der mets:div innerhalb von mets:structMap TYPE="LOGICAL" fehlt -->
+            <!-- 
+               Das Attribut TYPE fehlt in mets:div in mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:assert id="structMapLogical_05"
                      role="fatal"
                      test="@TYPE"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der mets:div in dem Attribut TYPE. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen. Fehlt das Attribut TYPE in einem der mets:div, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss das Attribut <sch:span class="monotype">TYPE</sch:span> mit einem Wert aus dem Strukturdatenset des DFG-Viewers (https://dfg-viewer.de/strukturdatenset/) (Spalte "XML") enthalten.
+Fehlt das Attribut <sch:span class="monotype">TYPE</sch:span> in <sch:span class="monotype">mets:div</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]">
-            <!-- Falsche Strukturtypen in der mets:div innerhalb von mets:structMap TYPE="LOGICAL" -->
+            <!-- 
+               Ungültiger Wert im Attribut TYPE von mets:div in mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:assert id="structMapLogical_06"
                      role="error"
                      test="@TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' )"
                      properties="id TYPE"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der mets:div in dem Attribut TYPE. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen (s. dort die Spalte XML). Werden in dem Attribut TYPE andere Begriffe als die in der Liste vorgesehenen verwendet, wird er bei der Bereinigung der Daten durch den Strukturtyp "section" ersetzt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss im Attribut <sch:span class="monotype">TYPE</sch:span> einem Wert aus dem Strukturdatenset des DFG-Viewers (https://dfg-viewer.de/strukturdatenset/) (Spalte "XML") enthalten.
+Enthält das Attribut <sch:span class="monotype">TYPE</sch:span> von <sch:span class="monotype">mets:div</sch:span> einen ungültigen Wert, wird er bei der Transformation des Datensatzes durch den Wert <sch:span class="monotype">section</sch:span> ersetzt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div">
-            <!-- Zeitungsstrukturen in der mets:structMap[@TYPE='LOGICAL'] -->
+            <!-- 
+               Zeitungsstrukturen in mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:report id="structMapLogical_19"
                      role="fatal"
                      test="./@TYPE = ('year', 'month', 'day')"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz enthält in der mets:structMap[@TYPE='LOGICAL'] ein Strukturelement vom Typ "year", "month" oder "day", die nur zur Gliederung von Zeitungen vorgesehen sind. Datensätze mit diesen Strukturtypen werden aus dieser Lieferung entfernt. Sie können sie aber über das Deutsche Zeitungsportal an die DDB liefern. Wenn Sie eine Lieferung der entsprechender Datensätze an das Deutsche Zeitungsportal durchführen möchten, teilen Sie dies bitte der Fachstelle Bibliothek mit.</sch:report>
+                     properties="id">Der Datensatz enthält im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> mindestens ein <sch:span class="monotype">mets:div</sch:span>-Element mit einem der folgenden Werte im Attribut <sch:span class="monotype">TYPE</sch:span>:
+ * <sch:span class="monotype">year</sch:span>
+ * <sch:span class="monotype">month</sch:span>
+ * <sch:span class="monotype">day</sch:span>
+Diese Werte sind nur in Datensätzen, die für das Zeitungsportal bestimmt sind, gültig und werden daher nicht in die DDB eingespielt.
+Wenn Sie den Datensatz in das Zeitungsportal einspielen möchten (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/lieferung-subportale/lieferungen-an-das-deutsche-zeitungsportal), teilen Sie dies bitte der Fachstelle Bibliothek (mailto:bibliothek@deutsche-digitale-bibliothek.de) mit.Weitere Informationen zur Struktur von Datensätzen für das Zeitungsportal finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite Aufbau für Zeitungsausgaben (https://wiki.deutsche-digitale-bibliothek.de/x/ugGuB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]">
-            <!-- Falsche Strukturtypen bei Teilen von Zeitschriften, Mehrbändigen Werken und Zeitungen -->
+            <!-- 
+               Ungültiger Wert im Attribut TYPE des primären mets:div in mets:structMap[@TYPE='LOGICAL'] für den Teil eines Mehrteiligen Dokuments
+             -->
          <sch:assert id="structMapLogical_07"
                      role="warn"
-                     test="@TYPE = ('volume', 'year', 'issue')"
+                     test="@TYPE = ('volume', 'additional', 'illustration', 'map', 'folder', 'musical_notation', 'part')"
                      properties="id type"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Beschreibt der METS-Datensatz einen Band/Teil einer Zeitschrift, eines mehrbändigen Werkes oder einer Zeitung, muss das Attribut TYPE in der dazugehörigen mets:div in der mets:structMap TYPE="LOGICAL" den Wert "volume" oder "year" oder "issue" haben. Ist dies nicht der Fall, wird der Datensatz dennoch in die DDB eingespielt, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS Strukturdatenset</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das primäre <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> enthält im referenzierten <sch:span class="monotype">mets:dmdSec</sch:span>-Element das Element <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span>. Es beschreibt damit den Teil eines Mehrteiligen Dokuments und muss daher im Attribut <sch:span class="monotype">TYPE</sch:span> einen der folgenden Werte enthalten:
+ * <sch:span class="monotype">additional</sch:span>
+ * <sch:span class="monotype">folder</sch:span>
+ * <sch:span class="monotype">illustration</sch:span>
+ * <sch:span class="monotype">map</sch:span>
+ * <sch:span class="monotype">musical_notation</sch:span>
+ * <sch:span class="monotype">part</sch:span>
+ * <sch:span class="monotype">volume</sch:span>
+Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="key('structMap_LOGICAL_dmdids', $work_dmdid) [ancestor::mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']]">
-            <!-- mets:mptr fehlt bei Teilen von Zeitschriften, Mehrbändigen Werken und Zeitungen -->
+            <!-- 
+               mets:mptr fehlt in mets:div
+             -->
          <sch:assert id="structMapLogical_08"
                      role="fatal"
                      test="./parent::mets:div/mets:mptr"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Beschreibt der METS-Datensatz einen Band/Teil einer Zeitschrift, eines mehrbändigen Werkes oder einer Zeitung, muss in der structMap TYPE="LOGICAL" eine eigene mets:div für die Gesamtaufnahme enthalten sein, die in dem Unterelement mets:mptr auf den Datensatz der Titelaufnahme des Gesamtwerks verweist. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS Strukturdatenset</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz enthält im primären <sch:span class="monotype">mets:dmdSec</sch:span>-Element das Element <sch:span class="monotype">mods:relatedItem[@type='host']</sch:span> und beschreibt damit den Teil eines Mehrteiligen Dokuments. Daher muss das Elternelement <sch:span class="monotype">mets:div</sch:span> des primären <sch:span class="monotype">mets:div</sch:span>-Elements im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> das Unterelement <sch:span class="monotype">mets:mptr</sch:span> enthalten.
+Ist dies nicht der Fall, fehlt dem Datensatz die Referenz auf den Ankersatz des Mehrteiligen Dokuments und er wird nicht in die DDB eingespielt.Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]">
-            <!-- mets:structMap type="LOGICAL" verlinkt auf nicht vorhandene mets:dmdSec -->
+            <!-- 
+               Ungültige Referenz im Attribut DMDID von mets:div in mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:assert id="structMapLogical_09"
                      role="error"
                      test="sum( for $dmdid in tokenize(@DMDID, ' ') return if (key('dmdsec_ids', $dmdid)) then 0 else 1 ) = 0"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Ist das Attribut DMDID des Elements mets:div in der mets:structMap type="LOGICAL" vorhanden, muss es eine dazugehörige mets:dmdSec mit dem gleichen Wert im Attribut ID geben. Ist dies nicht der Fall, wird die Verknüpfung in der mets:structMap type="LOGICAL" entfernt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Attribut <sch:span class="monotype">DMDID</sch:span> des <sch:span class="monotype">mets:div</sch:span>-Elements im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss den Wert des Attributs <sch:span class="monotype">ID</sch:span> eines <sch:span class="monotype">mets:dmdSec</sch:span>-Elements referenzieren.
+Fehlt ein <sch:span class="monotype">mets:dmdSec</sch:span> mit einem entsprechendem Wert im Attribut <sch:span class="monotype">ID</sch:span>, wird das Attribut <sch:span class="monotype">DMDID</sch:span> des <sch:span class="monotype">mets:div</sch:span> bei der Transformation des Datensatz entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[mets:mptr]">
-            <!-- mets:structMap type="LOGICAL" enthält mehr als einen mets:mptr -->
+            <!-- 
+               mets:div mit mets:mptr enthält innerhalb mets:structMap[@TYPE='LOGICAL'] mets:div mit mets:mptr
+             -->
          <sch:report id="structMapLogical_10"
                      role="fatal"
                      test="./descendant::mets:div[mets:mptr]"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">In der mets:structMap type="LOGICAL" dürfen Kinder eines mets:div, das ein mets:mptr Element enthält, selbst keine mets:mptr Elemente enthalten. Ist dies der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> beschreibt das Element <sch:span class="monotype">mets:div</sch:span>, das das Unterelement <sch:span class="monotype">mets:mptr</sch:span> enthält, das Mehrteilige Dokument des im Datensatz beschriebenen Teils eines Mehrteiligen Dokuments. <sch:span class="monotype">mets:mptr</sch:span> dient dabei zur Referenzierung des entsprechenden Ankersatzes. Alle Nachkommen dieses <sch:span class="monotype">mets:div</sch:span> beschreiben den Teil des Mehrteiligen Dokuments bzw. Unselbständige Dokumente innerhalb desselben und dürfen daher keine <sch:span class="monotype">mets:mptr</sch:span> enthalten.
+Gibt es <sch:span class="monotype">mets:div</sch:span>-Nachkommen eines <sch:span class="monotype">mets:div</sch:span> mit <sch:span class="monotype">mets:mptr</sch:span>, die <sch:span class="monotype">mets:mptr</sch:span> enthalten, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='periodical']">
-            <!-- Falsche Verwendung des Strukturtyps "periodical" -->
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[tokenize(@DMDID, ' ') = $work_dmdid][@TYPE='periodical']">
+            <!-- 
+               Primäres mets:div mit Attribut TYPE mit Wert periodical im Teil eines Mehrteiligen Dokuments
+             -->
          <sch:report id="structMapLogical_11"
                      role="fatal"
                      test="./ancestor::mets:mets/mets:structLink/mets:smLink or ./ancestor::mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Strukturtyp "periodical" darf nur für die Gesamtaufnahme eines fortlaufenden Sammelwerks (Zeitschrift, Jahrbuch u.ä.) verwendet werden. Handelt es sich bei dem METS-Datensatz nicht um die Gesamtaufnahme, sondern um einen einzelnen Band oder ein Heft, muss der Strukturtyp "volume" bzw. "issue" verwendet werden. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.4</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz enthält das Element <sch:span class="monotype">mets:fileSec</sch:span> mit dem Unterelement <sch:span class="monotype">mets:fileGrp[@USE='DEFAULT']</sch:span> bzw. das Element <sch:span class="monotype">mets:structLink</sch:span> mit mindestens einem Unterelement <sch:span class="monotype">mets:smLink</sch:span> und beschreibt damit den Teil eines Mehrteiligen Dokuments.
+Das primäre <sch:span class="monotype">mets:div</sch:span>-Element enthält im Attribut <sch:span class="monotype">TYPE</sch:span> jedoch den Wert <sch:span class="monotype">periodical</sch:span>. Dieser Wert darf nur für das primäre <sch:span class="monotype">mets:div</sch:span> in Ankersätzen, die das Mehrteilige Dokument beschreiben, verwendet werden. Der Datensatz wird daher nicht in die DDB eingespielt.
+Bitte verwenden Sie im Attribut <sch:span class="monotype">TYPE</sch:span> des primären <sch:span class="monotype">mets:div</sch:span> in Teilen von Mehrteiligen Dokumenten des Typs <sch:span class="monotype">periodical</sch:span> die Werte <sch:span class="monotype">volume</sch:span> oder <sch:span class="monotype">issue</sch:span>.Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][@TYPE='multivolume_work']">
-            <!-- Falsche Verwendung des Strukturtyps "multivolume_work" -->
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[tokenize(@DMDID, ' ') = $work_dmdid][@TYPE='multivolume_work']">
+            <!-- 
+               Primäres mets:div mit Attribut TYPE mit Wert multivolume_work im Teil eines Mehrteiligen Dokuments
+             -->
          <sch:report id="structMapLogical_16"
                      role="fatal"
                      test="./ancestor::mets:mets/mets:structLink/mets:smLink or ./ancestor::mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Strukturtyp "multivolume_work" darf nur für die Gesamtaufnahme einer mehrteiligen Monographie verwendet werden. Handelt es sich bei dem METS-Datensatz nicht um die Gesamtaufnahme sondern um einen einzelnen Band, muss der Strukturtyp "volume" verwendet werden. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz enthält das Element <sch:span class="monotype">mets:fileSec</sch:span> mit dem Unterelement <sch:span class="monotype">mets:fileGrp[@USE='DEFAULT']</sch:span> bzw. das Element <sch:span class="monotype">mets:structLink</sch:span> mit mindestens einem Unterelement <sch:span class="monotype">mets:smLink</sch:span> und beschreibt damit den Teil eines Mehrteiligen Dokuments.
+Das primäre <sch:span class="monotype">mets:div</sch:span>-Element enthält im Attribut <sch:span class="monotype">TYPE</sch:span> jedoch den Wert <sch:span class="monotype">multivolume_work</sch:span>. Dieser Wert darf nur für das primäre <sch:span class="monotype">mets:div</sch:span> in Ankersätzen, die das Mehrteilige Dokument beschreiben, verwendet werden. Der Datensatz wird daher nicht in die DDB eingespielt.
+Bitte verwenden Sie im Attribut <sch:span class="monotype">TYPE</sch:span> des primären <sch:span class="monotype">mets:div</sch:span> in Teilen von Mehrteiligen Dokumenten des Typs <sch:span class="monotype">multivolume_work</sch:span> nur den Wert <sch:span class="monotype">volume</sch:span>.Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:mptr">
-            <!-- Ungültiger Verweis auf externe METS-Datei -->
+            <!-- 
+               Ungültige Referenz im Attribut xlink:href von mets:mptr in mets:structMap[@TYPE='LOGICAL']
+             -->
          <sch:assert id="structMapLogical_17"
                      role="fatal"
                      test="matches(./@xlink:href, '^(http|https)://[a-zA-Z0-9\-\.]+\.[a-zA-Z][a-zA-Z]+(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?,/\\\+&amp;%\$#=~:])*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Die mets:mptr Elemente in der mets:structMap TYPE="LOGICAL" müssen im Attribut xlink:href eine valide URL einer externen METS-Datei enthalten. Ist dies nicht der Fall können wichtige Informationen daraus nicht geladen werden und der Datensatz wird nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.2</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Attribut <sch:span class="monotype">xlink:href</sch:span> des <sch:span class="monotype">mets:mptr</sch:span>-Elements im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss einen validen http-URL enthalten.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]">
-            <!-- Strukturelemente mit identischer mets:dmdSec -->
+            <!-- 
+               mets:dmdSec mit mehrfacher Referenzierung
+             -->
          <sch:report id="structMapLogical_20"
                      role="fatal"
                      test="sum( for $dmdid in tokenize(@DMDID, ' ') return count(key('structMap_LOGICAL_dmdids', $dmdid)) ) &gt; count(tokenize(@DMDID, ' '))"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz enthält in der mets:structMap[@TYPE='LOGICAL'] mindestens zwei Strukturelemente, die über das Attribut DMDID auf die gleiche mets:dmdSec verweisen. Dies führt zu Problemen bei der Zuordnung der Hierarchie und daher wird der METS-Datensatz nicht in die DDB eingespielt.</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz enthält im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span>
+            <sch:span class="monotype">mets:div</sch:span>-Elemente, die über ihr Attribut <sch:span class="monotype">DMDID</sch:span> dasselbe <sch:span class="monotype">mets:dmdSec</sch:span>-Element über dessen Attribut <sch:span class="monotype">ID</sch:span> referenzieren.
+Ein <sch:span class="monotype">mets:dmdSec</sch:span> darf nur von genau einem <sch:span class="monotype">mets:div</sch:span> in <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> referenziert werden, daher wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)]//mets:div[@DMDID]">
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[tokenize(@DMDID, ' ') = $work_dmdid]//mets:div[@DMDID]">
          <sch:let name="logid" value="@ID"/>
          <sch:let name="physical_div_id"
                   value="./ancestor::mets:mets/mets:structLink/mets:smLink[@xlink:from = $logid][1]/@xlink:to"/>
          <sch:let name="fileids"
                   value="key('structMap_PHYSICAL_ids', $physical_div_id)/descendant-or-self::mets:div[mets:fptr][parent::mets:div][1]/mets:fptr/@FILEID"/>
-         <!-- Strukturelemente ohne mets:file in der mets:fileGrp[@USE='DEFAULT'] -->
+         <!-- 
+               mets:div in mets:structMap[@TYPE='LOGICAL'] ohne Referenz auf mets:file in mets:fileGrp[@USE='DEFAULT']
+             -->
          <sch:assert id="structMapLogical_22"
                      role="error"
                      test="key('fileGrp_DEFAULT_file_ids', $fileids) or $is_anchor"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Jedes Strukturelement (mets:div in mets:structMap[@TYPE='LOGICAL']) muss für die Anzeige in der DDB mindestens ein mets:file Element im Element mets:fileGrp[@USE='DEFAULT'] zugewiesen sein. Ist dies nicht der Fall, wird das Strukturelement bei der Transformation des Datensatzes entfernt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz beschreibt ein Einteiliges Dokument bzw. einen Teil eines Mehrteiligen Dokuments und daher muss das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> über die Elemente <sch:span class="monotype">mets:structLink</sch:span> und <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> mindestens ein <sch:span class="monotype">mets:file</sch:span>-Element im Element <sch:span class="monotype">mets:fileGrp[@USE='DEFAULT']</sch:span> referenzieren.
+Fehlt diese Referenz, kann <sch:span class="monotype">mets:div</sch:span> für die Anzeige in der DDB kein Bild zugewiesen werden und es wird mit allen anderen Referenzen bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:structMap TYPE="PHYSICAL" fehlt -->
+            <!-- 
+               mets:structMap[@TYPE='PHYSICAL'] fehlt
+             -->
          <sch:assert id="structMapPhysical_01"
                      role="fatal"
                      test="$is_anchor or mets:structMap[@TYPE='PHYSICAL']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">mets:structMap TYPE="PHYSICAL" ist notwendig, um die Seiten des Dokuments in der richtigen Reihenfolge anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz beschreibt ein Einteiliges Dokument bzw. einen Teil eines Mehrteiligen Dokuments und muss daher das Element <sch:span class="monotype">mets:structMap</sch:span> mit dem Attribut <sch:span class="monotype">TYPE</sch:span> mit dem Wert <sch:span class="monotype">PHYSICAL</sch:span> enthalten.
+Fehlt ein entsprechendes <sch:span class="monotype">mets:structMap</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][not(mets:div[@TYPE='physSequence'])]">
-            <!-- Innerhalb von mets:structMap TYPE="PHYSICAL" fehlt die Beschreibung der obersten Ebene -->
+            <!-- 
+               mets:div[@TYPE='physSequence'] fehlt in mets:structMap[@TYPE='PHYSICAL']
+             -->
          <sch:assert id="structMapPhysical_02"
                      role="fatal"
                      test="mets:div[@TYPE='physSequence']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">mets:structMap TYPE="PHYSICAL" muss auf der obersten Ebene immer eine mets:div enthalten, die in dem Attribut TYPE den Wert physSequence enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:structMap</sch:span> mit dem Attribut <sch:span class="monotype">TYPE</sch:span> mit dem Wert <sch:span class="monotype">PHYSICAL</sch:span> muss das Unterelement <sch:span class="monotype">mets:div</sch:span> mit dem Attribut <sch:span class="monotype">TYPE</sch:span> den Wert <sch:span class="monotype">physSequence</sch:span> enthalten.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']">
-            <!-- Innerhalb von mets:structMap TYPE="PHYSICAL" fehlt die Liste der Seiten -->
+            <!-- 
+               mets:div[@TYPE='page'] fehlt in mets:div[@TYPE='physSequence']
+             -->
          <sch:assert id="structMapPhysical_03"
                      role="fatal"
                      test="mets:div[@TYPE='physSequence']/mets:div[@TYPE='page']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">mets:structMap TYPE="PHYSICAL" muss mindestens eine mets:div enthalten, die in dem Attribut TYPE den Wert page enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> mit dem Attribut <sch:span class="monotype">TYPE</sch:span> dem Wert <sch:span class="monotype">physSequence</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> muss mindestens ein <sch:span class="monotype">mets:div</sch:span> mit dem Attribut <sch:span class="monotype">TYPE</sch:span> mit dem Wert <sch:span class="monotype">page</sch:span> enthalten.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div">
-            <!-- Eindeutiger Identifier fehlt in mets:div in mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               mets:div in mets:structMap[@TYPE='PHYSICAL'] ohne eindeutigen Identifier im Attribut ID
+             -->
          <sch:assert id="structMapPhysical_04"
                      role="fatal"
                      test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" muss in dem Attribut ID einen eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> muss das Attribut <sch:span class="monotype">ID</sch:span> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
+Fehlt das Attribut <sch:span class="monotype">ID</sch:span> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page'][not(@ORDER)]">
-            <!-- Attribut order fehlt in mets:div in mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               Attribut order fehlt in mets:div in mets:structMap[@TYPE='PHYSICAL']
+             -->
          <sch:assert id="structMapPhysical_05"
                      role="warn"
                      test="@ORDER"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" die das Attribut TYPE mit dem Wert "page" enthält, muss auch ein Attribut order enthalten. Das Fehlen des Attributs order verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> innerhalb des Elements <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span>, das das Attribut <sch:span class="monotype">TYPE</sch:span> mit dem Wert <sch:span class="monotype">page</sch:span> besitzt, muss auch das Attribut <sch:span class="monotype">order</sch:span> enthalten.
+Fehlt das Attribut <sch:span class="monotype">order</sch:span> verhindert dies nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']">
-            <!-- Falscher Attributwert in mets:div in mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               Ungültiger Wert im Attribut order von mets:div in mets:structMap[@TYPE='PHYSICAL']
+             -->
          <sch:assert id="structMapPhysical_06"
                      role="warn"
                      test="matches(@ORDER, '^\d+$')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">In der structMap TYPE="PHYSICAL" muss der Wert in dem Attribut order innerhalb der mets:div mit TYPE="page" immer ein integer sein. Ist dies nicht der Fall, verhindert es nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen, da es Probleme bei der Anzeige der Seiten im Viewer nach sich ziehen kann. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Attribut <sch:span class="monotype">order</sch:span> vom Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span>muss als Wert einen Integer enthalten.
+Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL']//mets:div[@TYPE='page']">
-            <!-- Verknüpfung zur mets:fileSec fehlt -->
+            <!-- 
+               Das Attribut FILEID fehlt in mets:fptr
+             -->
          <sch:assert id="structMapPhysical_07"
                      role="fatal"
                      test="mets:fptr[string-length(@FILEID) &gt; 0]"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL", die das Attribut TYPE="page" enthält, muss das Unterelement mets:fptr enthalten, das in den Attributen FILEID den Identifier enthält, der auf die jeweiligen Bilder in der mets:fileSec verlinkt. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:fptr</sch:span> im Element <sch:span class="monotype">mets:div[@TYPE='page']</sch:span> muss das Attribut <sch:span class="monotype">FILEID</sch:span> enthalten.
+Fehlt <sch:span class="monotype">FILEID</sch:span> in <sch:span class="monotype">mets:div[@TYPE='page']</sch:span> wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets/mets:structMap[@TYPE='PHYSICAL'][//mets:div[@TYPE='page'][starts-with(@CONTENTIDS, 'urn:')]]//mets:div[@TYPE='page']">
-            <!-- Seiten ohne URN -->
+            <!-- 
+               Das Attribut CONTENTIDS fehlt in mets:div[@TYPE='page'] bzw. enthält keinen URN
+             -->
          <sch:assert id="structMapPhysical_08"
                      role="fatal"
                      test="starts-with(@CONTENTIDS, 'urn:')"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Wenn in einem Datensatz URNs auf Seitenebene vergeben werden, muss für jede Seite eine URN vorhanden sein. Das bedeutet, wenn in der mets:structMap TYPE="PHYSICAL" mindestens ein mets:div mit dem Attribut TYPE und dem Wert "page" zusätzlich ein Attribut CONTENTIDS mit einer URN enthält, müssen alle mets:div mit dem Attribut TYPE und dem Wert "page" ebenfalls ein Attribut CONTENTIDS mit einer URN enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz enthält in mindestens einem <sch:span class="monotype">mets:div[@TYPE='page']</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span>im Attribut <sch:span class="monotype">CONTENTIDS</sch:span> einen URN. Ist dies der Fall, müssen alle <sch:span class="monotype">mets:div[@TYPE='page']</sch:span> das Attribut <sch:span class="monotype">CONTENTIDS</sch:span> mit einem URN besitzen.
+Fehlt <sch:span class="monotype">CONTENTIDS</sch:span> mit einem URN in einem <sch:span class="monotype">mets:div[@TYPE='page']</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="mets:mets">
-            <!-- mets:structLink fehlt -->
+            <!-- 
+               mets:structLink fehlt
+             -->
          <sch:assert id="structLink_01"
                      role="fatal"
                      test="$is_anchor or mets:structLink"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">mets:structLink ist notwendig, um die Ebenen der logischen Struktur mit den dazugehörigen Seiten zu verknüpfen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.3</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Der Datensatz beschreibt ein Einteiliges Dokument bzw. einen Teil eines Mehrteiligen Dokuments und muss daher das Element <sch:span class="monotype">mets:structLink</sch:span> enthalten.
+Fehlt <sch:span class="monotype">mets:structLink</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structLink[not(mets:smLink)]">
-            <!-- mets:smLink fehlt -->
+            <!-- 
+               mets:smLink fehlt in mets:structLink
+             -->
          <sch:assert id="structLink_02"
                      role="fatal"
                      test="mets:smLink"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink. Ist kein mets:smLink vorhanden, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.3.2.1</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Das Element <sch:span class="monotype">mets:structLink</sch:span> muss mindestens ein <sch:span class="monotype">mets:smLink</sch:span>-Element enthalten.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structLink/mets:smLink[not(string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0)]">
-            <!-- Verknüpfung zwischen der logischen und physischen Struktur fehlt -->
+            <!-- 
+               Attribut xlink:from bzw. xlink:to fehlt in mets:smLink
+             -->
          <sch:assert id="structLink_03"
                      role="fatal"
                      test="string-length(@xlink:from) &gt; 0 and string-length(@xlink:to) &gt; 0"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink über die Attribute xlink:from und xlink:to. Fehlt eines dieser Attribute, wird der Datensatz nicht in die DDB eingespielt.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Das Element <sch:span class="monotype">mets:smLink</sch:span> muss die Attribute <sch:span class="monotype">xlink:from</sch:span> und <sch:span class="monotype">xlink:to</sch:span> enthalten.
+Fehlen diese Attribute, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element, seinen Attributen und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
       <sch:rule context="mets:mets/mets:structLink/mets:smLink">
-            <!-- Identifier aus mets:structLink fehlt in der mets:structMap TYPE="PHYSICAL" -->
+            <!-- 
+               Ungültige Referenz im Attribut xlink:to von mets:smLink
+             -->
          <sch:assert id="structLink_04"
                      role="fatal"
                      test="key('structMap_PHYSICAL_ids', @xlink:to)"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink über die Attribute xlink:from und xlink:to. Dafür muss jeder Identifier, der in einem mets:smLink steht einem ID in der structMap TYPE="PHYSICAL" entsprechen. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.2 und 2.3</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets">
-            <!-- mets:fileSec fehlt -->
-         <sch:assert id="fileSec_01"
-                     role="fatal"
-                     test="$is_anchor or mets:fileSec"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Die mets:fileSec enthält die Links zu den digitalen Bildern. Fehlt die mets:fileSec, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4</sch:assert>
-      </sch:rule>
-      <sch:rule context="mets:mets/mets:fileSec[not(mets:fileGrp[@USE='DEFAULT'])]">
-            <!-- mets:fileGrp USE=DEFAULT fehlt -->
-         <sch:assert id="fileSec_02"
-                     role="fatal"
-                     test="mets:fileGrp[@USE='DEFAULT'] or $is_anchor"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Die mets:fileSec enthält die Links zu den digitalen Bildern in unterschiedlichen Auflösungen. Um welche Art von Auflösung es sich dabei handelt, wird über die mets:fileGrp angegeben. Jede Auflösung eines Bildes wird daher der entsprechenden fileGrp zugeordnet. Eine mets:fileSec muss mindestens die mets:fileGrp mit dem Attribut USE="DEFAULT" enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.1</sch:assert>
-      </sch:rule>
-      <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT']">
-            <!-- mets:file fehlt -->
-         <sch:report id="fileSec_03"
-                     role="fatal"
-                     test="mets:file[mets:FLocat[string-length(@xlink:href) = 0]]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">In der mets:fileSec sind innerhalb der mets:fileGrp die einzelnen Bilder gelistet. Die mets:fileGrp use="DEFAULT" muss mindestens ein mets:file enthalten und dieses muss in dem Unterelement mets:FLocat das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt mets:file mit dem Attribut xlink:href im Unterelement mets:FLocat, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.3</sch:report>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets/mets:fileSec/mets:fileGrp/mets:file">
-            <!-- Eindeutiger Identifier fehlt in mets:file -->
-         <sch:assert id="fileSec_04"
-                     role="fatal"
-                     test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Jedes mets:file in der mets:fileSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.2</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets/mets:fileSec">
-            <!-- mets:file ohne Attribut MIMETYPE -->
-         <sch:report id="fileSec_08"
-                     role="warn"
-                     test="//mets:file[string-length(@MIMETYPE) = 0]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/fileSec">Jedes mets:file Element im Element mets:fileSec muss das Attribut MIMETYPE besitzen. Der Datensatz enthält mindestens ein mets:file ohne das Attribut MIMETYPE. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.4.2.2</sch:report>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets">
-            <!-- mets:dmdSec fehlt -->
-         <sch:assert id="dmdSec_01"
-                     role="fatal"
-                     test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Die mets:dmdSec enthält die bibliographische Beschreibung des Werks. Innerhalb eines METS-Datensatzes muss es mindestens eine mets:dmdSec geben, die MODS-Daten enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5</sch:assert>
-      </sch:rule>
-      <sch:rule context="mets:dmdSec[not(@ID=$work_dmdid)]">
-            <!-- Unterelemente fehlen in mets:dmdSec -->
-         <sch:assert id="dmdSec_02"
-                     role="error"
-                     test="mets:mdWrap/mets:xmlData/mods:mods"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede mets:dmdSec muss das Unterelement mets:mdWrap mit dem Unterelement mets:xmlData enthalten. Und mets:xmlData muss das Unterelement mods:mods enthalten. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5.2.1</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:dmdSec">
-            <!-- Kein eindeutiger Identifier für mets:dmdSec -->
-         <sch:assert id="dmdSec_03"
-                     role="fatal"
-                     test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede mets:dmdSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5.1</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:dmdSec">
-            <!-- Identifier der mets:dmdSec fehlt in der structMap TYPE="LOGICAL" -->
-         <sch:assert id="dmdSec_04"
-                     role="error"
-                     test="key('structMap_LOGICAL_dmdids', @ID)"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/dmdSec">Jede mets:dmdSec muss über ihren Identifier mit der dazugehörigen logischen Ebene verknüpft werden. Der Identifier der mets:dmdSec muss darum in der mets:div, die die logische Ebene beschreibt in dem Attribut DMDID vorkommen. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt.</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets">
-            <!-- mets:amdSec fehlt -->
-         <sch:assert id="amdSec_01"
-                     role="fatal"
-                     test="mets:amdSec"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Die mets:amdSec enthält die administrativen Metadaten zum Digitalisat. Innerhalb eines METS-Datensatzes muss eine mets:amdSec für das primäre logische Strukturelement geben. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.6</sch:assert>
-      </sch:rule>
-      <sch:rule context="mets:amdSec">
-            <!-- Kein eindeutiger Identifier für mets:amdSec -->
-         <sch:assert id="amdSec_02"
-                     role="warn"
-                     test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Jede mets:amdSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Das Fehlen der ID verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.6.1</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]">
-            <!-- Rechteangabe fehlt -->
-         <sch:assert id="amdSec_04"
-                     role="error"
-                     test="mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction']"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Jeder Datensatz muss Informationen über die Rechte an den Digitalisaten enthalten, damit er in die DDB eingespielt werden kann. Der Link zu einer Lizenz bzw. einem Rightsstatement steht in der mets:rightsMD in dem Element dv:license, das ein Unterelement von dv:rights, das wiederum ein Unterelement von mets:xmlData, das wiederum ein Unterelement von mets:mdWrap ist. Ist die Verwendung von dv:license nicht möglich, muss die Lizenz bzw. das Rightsstatement in mods:accessCondition type="use and reproduction" stehen. Ist keines von beiden der Fall, wird nach Rücksprache mit dem Datengeber für alle Datensätze bei der Bereinigung der Daten eine Standard-Lizenz gesetzt. Weitere Informationen zu diesem Element s. </sch:assert>
-      </sch:rule>
-      <sch:rule context="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]">
-            <!-- Rechteangabe weicht von den Vorgaben ab -->
-         <sch:assert id="amdSec_05"
-                     role="error"
-                     test="key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) or key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) or key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) or key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values)"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Die von der DDB akzeptierten Rechteangaben entsprechen der von Europeana veröffentlichten Liste der rights statements (s. \url{https://pro.europeana.eu/page/available-rights-statements}). Entsprechen die Rechteangaben in den Daten nicht den in dieser Liste erlaubten URIs, werden sie nach Rücksprache mit den Datengebern bei der Bereinigung der Daten in eine der dort genannten Lizenzen bzw. Rechteangaben konvertiert.</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:amdSec[@ID=$work_amdid]/mets:digiprovMD | mets:amdSec[not(@ID=$work_amdid)][1]/mets:digiprovMD">
-            <!-- Link zum Objekt beim Datengeber fehlt -->
-         <sch:assert id="amdSec_06"
-                     role="error"
-                     test="mets:mdWrap/mets:xmlData/dv:links/dv:reference[matches(text()[1], '^http[s]?://.+')] or mets:mdWrap/mets:xmlData/dv:links/dv:presentation[matches(text()[1], '^http[s]?://.+')]"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">In der mets:amdSec des primären logischen Strukturelements enthält das Unterelement mets:digiprovMD einen Link zu dem Digitalisat beim Datenpartner. Dieser Link muss in Form eines http- oder https-URI in dv:presentation oder dv:reference vorhanden sein. Beide Elemente sind Unterelemente von dv:links, das ein Unterelement von mets:xmlData ist, welches ein Unterelement von mets:mdWrap ist welches ein Unterelement von mets:digiprovMD ist. Ist weder dv:presentation noch dv:reference vorhanden bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird mets:digiprovMD bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.4</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights">
-            <!-- Wiederholung von dv:owner -->
-         <sch:report id="amdSec_07"
-                     role="fatal"
-                     test="dv:owner[2]"
-                     properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Innerhalb von dv:rights darf dv:owner nicht wiederholt werden. Ist mehr als ein dv:owner in dv:rights vorhanden, schlägt die Zuordnung des METS-Datensatzes zum Datenpartner fehl und kann daher nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.2.1</sch:report>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets[mets:structMap[@TYPE='LOGICAL']//mets:div[contains(@DMDID, $work_dmdid)][contains(@ADMID, ' ')]]">
-            <!-- Mehr als eine mets:amdSec zum primären Strukturelement zugeordnet -->
-         <sch:report id="amdSec_08"
-                     role="fatal"
-                     test="contains($work_amdid, ' ')"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Sind mit dem primären Strukturelement (das primäre mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" mehrere mets:amdSec verlinkt, ist keine eindeutige Zuordnung der adminstrativen Metadaten zum METS-Datensatz möglich. Er kann daher nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1 und 2.6.1</sch:report>
-      </sch:rule>
-      <sch:rule context="mets:mets[not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]]">
-            <!-- Mehrere mets:amdSec ohne Verlinkung -->
-         <sch:report id="amdSec_09"
-                     role="fatal"
-                     test="not(mets:amdSec[@ID=$work_amdid]) and mets:amdSec[not(key('structMap_LOGICAL_admids', @AMDID))][2]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Der Datensatz enthält mehrere mets:amdSec, die nicht von einem mets:div in der mets:structMap[@TYPE='LOGICAL'] über das Attribut "ADMID" referenziert werden. Darüber hinaus fehlt die Verlinkung des primären Strukturelements (primäres mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" mit einer mets:amdSec. Daher ist keine eindeutige Zuordnung der adminstrativen Metadaten zum METS-Datensatz möglich und er kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1 und 2.6.1</sch:report>
-      </sch:rule>
-      <sch:rule context="mets:mets">
-            <!-- Verlinkung des primären Strukturelements zur mets:amdSec fehlt -->
-         <sch:assert id="amdSec_10"
-                     role="error"
-                     test="mets:amdSec[@ID=$work_amdid]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das primäre Strukturelement (primäres mets:div in der mets:structMap[@TYPE='LOGICAL']) muss über das Attribut "ADMID" mit genau einer mets:amdSec verlinkt sein. Ist dies nicht der Fall und der METS-Datensatz verfügt nur über genau eine mets:amdSec wird die Verlinkung bei der Transformation der Daten erzeugt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.1 und 2.6.1</sch:assert>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(contains(@DMDID, $work_dmdid))][@ADMID]">
-            <!-- mets:amdSec für Strukturelemente -->
-         <sch:report id="amdSec_11"
-                     role="info"
-                     test="key('amdsec_ids', @ADMID)"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Die administrativen Metadaten in der mets:amdSec werden für den METS-Datensatz ausschließlich aus der mets:amdSec abgeleitet, die mit dem primären Strukturelement (primäres mets:div in der mets:structMap[@TYPE='LOGICAL']) über das Attribut "ADMID" verlinkt ist. Besitzt der Datensatz darüber hinaus weitere mets:amdSec, die mit anderen Strukturelementen verlinkt sind, werden deren administrative Metadaten von der DDB zurzeit nicht berücksichtigt.</sch:report>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights">
-            <!-- dv:license ist in dv:rights mehrmals vorhanden -->
-         <sch:report id="amdSec_12"
-                     role="error"
-                     test="dv:license[2]"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/amdSec">Das Element dv:rights darf das Element dv:license nur einmal enthalten. Enthält dv:rights mehr als ein dv:license, wird bei der Bereinigung des Datensatzes das erste Vorkommen von dv:license mit gültiger Lizenz-URI übernommen, alle anderen dv:license werden entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.2.11</sch:report>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-            <!-- Hinweis auf möglicherweise ungültige Rechteangabe -->
-         <sch:report id="amdSec_13"
-                     role="warn"
-                     test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910"
-                     properties="dmd_id">Die Lizenzen aus dem Lizenzkorb der DDB können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen. Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im „Lizenzkorb“ enthaltene Rechtehinweis "Public Domain Mark" in Frage. Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.</sch:report>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]">
-            <!-- Widersprüchliche Rechteangaben in dv:license -->
-         <sch:report id="amdSec_14"
-                     role="fatal"
-                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
-                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
-      </sch:rule>
-      <sch:rule context="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]">
-            <!-- Widersprüchliche Rechteangaben in mods:accessCondition[@type='use and reproduction'] -->
-         <sch:report id="amdSec_16"
-                     role="fatal"
-                     test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1"
-                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element mods:accessCondition[@type='use and reproduction'] widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</sch:report>
-      </sch:rule>
-      <sch:rule context="mets:mets">
-            <!-- Widersprüchliche Rechteangaben in dv:license -->
-         <sch:report id="amdSec_17"
-                     role="error"
-                     test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1"
-                     properties="dmd_id">Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält in den Elementen mods:accessCondition[@type='use and reproduction'] und dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB. Bei der Transformation der Daten übernimmt die DDB in diesem Fall die Rechteangabe aus mods:accessCondition[@type='use and reproduction']. Bitte beachten Sie darüber hinaus, dass die DDB die codierten CC-Lizenz-Werte aus dem METS-AP für dv:license als Version 4.0 und den Wert "reserved" als "Urheberrechtsschutz nicht bewertet" (Europeana Rightstatement "CNE") interpretiert.</sch:report>
-      </sch:rule>
-   </sch:pattern>
-   <sch:pattern>
-      <sch:rule context="mets:mets">
-            <!-- dv:presentation fehlt -->
-         <sch:assert id="amdSec_15"
-                     role="warn"
-                     test="mets:amdSec/mets:digiprovMD/mets:mdWrap/mets:xmlData/dv:links/dv:presentation[string-length(text()) &gt; 0]">Im Datensatz fehlt das Element dv:presentation mit dem URL zur Anzeige des Digitalisats bei Ihrer Institution. Daher fehlt in der DDB der Button "Objekt anzeigen" mit dem entsprechend Link zu Ihrer lokalen Präsentation.</sch:assert>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Das Attribut <sch:span class="monotype">xlink:to</sch:span> des Elements <sch:span class="monotype">mets:smLink</sch:span> muss den Wert des Attributs <sch:span class="monotype">ID</sch:span> eines <sch:span class="monotype">mets:div</sch:span>-Elements im Element <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> referenzieren.
+Enthält ein <sch:span class="monotype">xlink:to</sch:span> eine ungültige Referenz, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen, ihren Attributen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
 </sch:schema>

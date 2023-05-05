@@ -1,7 +1,61 @@
 # Changelog
-Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für digitalisierte Medien der Fachstelle Bibliothek.
+Changelog der Schematron-Validierung für das DDB-METS/MODS Anwendungsprofil für digitalisierte Medien der Fachstelle Bibliothek.
 
-Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
+Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
+
+## v2023-05-05T15:50:49
+
+### Added
+- Meldungs-Level `caution` hinzugefügt: "Datensätze, bei denen ein Verdacht auf Fehler vorliegt"
+- Prüfung `originInfo_16` hinzugefügt: "mods:displayDate ist in mods:originInfo mehrmals vorhanden"
+- Prüfung `originInfo_17` hinzugefügt: "mods:originInfo muss mods:dateIssued oder mods:dateCreated enthalten"
+- Prüfung `originInfo_18` hinzugefügt: "mods:originInfo ist mit Attribut eventType mit dem Wert digitization bzw. mit mods:edition mit dem Wert \[Electronic ed.\] mehrfach vorhanden"  
+- Prüfung `subject_02` hinzugefügt: "mods:title fehlt in mods:titleInfo"
+- Prüfung `subject_03` hinzugefügt: "mods:displayForm fehlt in mods:name"
+- Prüfung `subject_04` hinzugefügt: "Unterelemente fehlen in mods:cartographic"
+- Prüfung `fileSec_09` hinzugefügt: "mets:file ohne Referenzierung"
+- Prüfung `amdSec_18` hinzugefügt: "dv:ownerSiteURL fehlt in dv:rights"
+
+### Changed
+- Umfangreiche Überarbeitung der Meldungstexte der Prüfungen
+    - Die textlichen Hinweise auf die [METS- und MODS-Anwendungsprofile für digitalisierte Medien](https://dfg-viewer.de/metadaten) sind durch Links auf entsprechende Seiten des [DDB-METS/MODS Anwendungsprofils](https://wiki.deutsche-digitale-bibliothek.de/x/uwQiAQ) ersetzt
+    - Meldungstexte sind technischer formuliert, der inhaltliche Bezug ist im [DDB-METS/MODS Anwendungsprofil](https://wiki.deutsche-digitale-bibliothek.de/x/uwQiAQ) dargestellt
+    - Die Elemente `sch:assert` und `sch:report` können jetzt neben dem Meldungstext zusätzlich das Unterelement `sch:span` mit dem Attribut `type` enthalten, Details s. [Schematron-Validierungen der Fachstelle Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Schematron-Validierungen+der+Fachstelle+Bibliothek#SchematronValidierungenderFachstelleBibliothek-MeldungstextundHinweisaufdasAnwendungsprofil)
+- Prüfung `titleInfo_02`: Die Prüfung ist nun für Anchordateien deaktiviert.
+- Prüfung `titleInfo_08`: Das Meldungs-Level der Prüfung ist von `warn` auf `caution` geändert.
+- Prüfung `name_03`: Das Meldungs-Level der Prüfung ist von `error` auf `caution` geändert
+- Prüfung `originInfo_02`: `mods:dateCaptured` aus der Prüfung entfernt, Text der Fehlermeldung überarbeitet und Meldungs-Level von `info` auf `warn` hochgestuft.
+- Prüfung `originInfo_03`: Das Meldungs-Level der Prüfung ist von `error` auf `caution` geändert und der Text entsprechend angepasst.
+- Prüfung `originInfo_04`: Das Meldungs-Level der Prüfung ist von `error` auf `caution` geändert und der Text entsprechend angepasst.
+- Prüfung `originInfo_05`: Das Meldungs-Level der Prüfung ist von `warn` auf `caution` geändert.
+- Prüfung `subject_01`: Die Prüfung testet nun ebenfalls die Unterelemente `mods:mods:geographic`, `mods:name`und `mods:titleInfo`. Sie akzeptiert darüber hinaus zusätzlich Geonames-URIs. Die Prüfung greift nur, wenn `mods:subject` oder die genannten Unterelementen das Attribut `valueURI` besitzen.
+- Prüfung `location_01`: Die Prüfung ignoriert nun `mods:location`, die ein `mods:url` enthalten. 
+- Prüfung `amdSec_13`: Das Meldungs-Level der Prüfung ist von `warn`  auf `caution` geändert.
+- Prüfung `amdSec_15` Die Prüfung testet nun zusätzlich, ob der Wert in `dv:presentation` ein HTTP- bzw. HTTPS-URI ist.
+- Prüfung `structMapLogical_07`: Die gültigen Werte sind an das aktuelle [DDB-METS/MODS AP](https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB) angepasst
+- Die Lizenzen [Rechte vorbehalten – Freier Zugang](http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/) und [Rechte vorbehalten – Zugang nach Autorisierung](http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/) sind aus der Liste der gültigen Lizenzen entfernt. Dies betrifft folgende Prüfungen
+    - `amdSec_05` 
+    - `amdSec_13`
+    - `amdSec_14`
+    - `amdSec_16`
+    - `amdSec_17`
+- Die Selektion des primären `mets:div`-Elements korrigiert bzw. präzisiert. Dies betrifft folgende Prüfungen:
+    - `amdSec_04`
+    - `amdSec_05`
+    - `amdSec_06`
+    - `amdSec_08`
+    - `amdSec_09`
+    - `amdSec_10`
+    - `amdSec_11`
+    - `amdSec_13`
+    - `amdSec_14`
+    - `amdSec_17`
+    - `structMapLogical_11` 
+    - `structMapLogical_16`
+    - `structMapLogical_22`
+
+### Removed
+- Prüfung `location_06` entfernt: "Wiederholung von mods:namePart in mods:name bei Körperschaften"
 
 ## v2022-11-10T08:51:13
 
@@ -24,8 +78,8 @@ Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden S
 - Prüfung `location_01`: Die Prüfung testet nur noch das Vorhandensein von `mods:physicalLocation`.
 - Prüfung `subject_01`: Die DDB unterstützt nun neben GND- auch Wikidata- und AAT-URIs. Prüfung entsprechend angepasst.
 - Prüfung `recordInfo_04`: Die DDB erlaubt weitere Zeichen im Element `mods:recordIdentifier`. Prüfung entsprechend angepasst.
-- Prüfung `amdSec_05`: Die Prüfung berücksichtigt das Attribut `href`von `mods:accessCondition` nun unabhängig vom Namespace
-- Prüfung `amdSec_13`: Die Prüfung berücksichtigt das Attribut `href`von `mods:accessCondition` nun unabhängig vom Namespace
+- Prüfung `amdSec_05`: Die Prüfung berücksichtigt das Attribut `href` von `mods:accessCondition` nun unabhängig vom Namespace
+- Prüfung `amdSec_13`: Die Prüfung berücksichtigt das Attribut `href` von `mods:accessCondition` nun unabhängig vom Namespace
 - Prüfung `amdSec_14`: Die Prüfung geändert in "Widersprüchliche Rechteangaben in dv:license", sie testet nur noch dv:license
 
 ### Removed

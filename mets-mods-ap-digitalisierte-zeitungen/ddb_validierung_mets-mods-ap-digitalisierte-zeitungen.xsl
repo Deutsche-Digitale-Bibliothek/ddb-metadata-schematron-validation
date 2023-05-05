@@ -42,6 +42,9 @@
    <xsl:key name="structMap_PHYSICAL_ids"
             match="mets:structMap[@TYPE='PHYSICAL']//mets:div"
             use="@ID"/>
+   <xsl:key name="structMap_PHYSICAL_fptr_FILEID"
+            match="mets:structMap[@TYPE='PHYSICAL']//mets:fptr"
+            use="@FILEID"/>
    <xsl:key name="structMap_LOGICAL_dmdids"
             match="mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID]"
             use="tokenize(@DMDID, ' ')"/>
@@ -183,7 +186,7 @@
    <xsl:template match="/">
       <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                               title="Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS-Anwendungsprofil für Zeitungen"
-                              schemaVersion="v2022-11-10T08:51:24">
+                              schemaVersion="v2023-05-05T15:51:41">
          <xsl:comment>
             <xsl:value-of select="$archiveDirParameter"/>   
 		 <xsl:value-of select="$archiveNameParameter"/>  
@@ -197,13 +200,6 @@
          <svrl:ns-prefix-in-attribute-values uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi"/>
          <svrl:ns-prefix-in-attribute-values uri="dcg:maps" prefix="maps"/>
          <svrl:ns-prefix-in-attribute-values uri="http://www.openarchives.org/OAI/2.0/" prefix="oai"/>
-         <svrl:active-pattern>
-            <xsl:attribute name="document">
-               <xsl:value-of select="document-uri(/)"/>
-            </xsl:attribute>
-            <xsl:apply-templates/>
-         </svrl:active-pattern>
-         <xsl:apply-templates select="/" mode="M27"/>
          <svrl:active-pattern>
             <xsl:attribute name="document">
                <xsl:value-of select="document-uri(/)"/>
@@ -596,6 +592,13 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M83"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M84"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -654,10 +657,6 @@
          <license_uri>https://rightsstatements.org/vocab/NoC-NC/1.0/</license_uri>
          <license_uri>http://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
          <license_uri>https://rightsstatements.org/vocab/NoC-OKLR/1.0/</license_uri>
-         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
-         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/</license_uri>
-         <license_uri>http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
-         <license_uri>https://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/</license_uri>
       </license_uris>
    </xsl:variable>
    <xsl:variable name="iso639-1_codes">
@@ -1382,7 +1381,7 @@
               select="//mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID = $work_dmdid]/@ADMID"/>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:*" priority="1000" mode="M27">
+   <xsl:template match="mods:*" priority="1000" mode="M28">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:*"/>
       <!--ASSERT warn-->
       <xsl:choose>
@@ -1403,15 +1402,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M27"/>
+      <xsl:apply-templates select="*" mode="M28"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M27"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M27">
-      <xsl:apply-templates select="*" mode="M27"/>
+   <xsl:template match="text()" priority="-1" mode="M28"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M28">
+      <xsl:apply-templates select="*" mode="M28"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:*[mods:*]" priority="1000" mode="M28">
+   <xsl:template match="mods:*[mods:*]" priority="1000" mode="M29">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:*[mods:*]"/>
       <!--REPORT error-->
       <xsl:if test="matches(string-join(text(), ''), '\w')">
@@ -1429,15 +1428,15 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M28"/>
+      <xsl:apply-templates select="*" mode="M29"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M28"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M28">
-      <xsl:apply-templates select="*" mode="M28"/>
+   <xsl:template match="text()" priority="-1" mode="M29"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M29">
+      <xsl:apply-templates select="*" mode="M29"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:mods/mods:*" priority="1000" mode="M29">
+   <xsl:template match="mods:mods/mods:*" priority="1000" mode="M30">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:mods/mods:*"/>
       <!--ASSERT fatal-->
       <xsl:choose>
@@ -1461,15 +1460,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M29"/>
+      <xsl:apply-templates select="*" mode="M30"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M29"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M29">
-      <xsl:apply-templates select="*" mode="M29"/>
+   <xsl:template match="text()" priority="-1" mode="M30"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M30">
+      <xsl:apply-templates select="*" mode="M30"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mods:*/@valueURI" priority="1000" mode="M30">
+   <xsl:template match="mods:*/@valueURI" priority="1000" mode="M31">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mods:*/@valueURI"/>
       <!--ASSERT error-->
       <xsl:choose>
@@ -1490,17 +1489,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M30"/>
+      <xsl:apply-templates select="*" mode="M31"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M30"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M30">
-      <xsl:apply-templates select="*" mode="M30"/>
+   <xsl:template match="text()" priority="-1" mode="M31"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M31">
+      <xsl:apply-templates select="*" mode="M31"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:*//mods:mods"
                  priority="1000"
-                 mode="M31">
+                 mode="M32">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:*//mods:mods"/>
       <!--REPORT error-->
@@ -1512,24 +1511,24 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das mods:mods Wurzelelement der mets:dmdSec enthält weitere mods:mods Elemente, die dort nicht zulässig sind. Sie werden bei der Transformation der Daten entfernt.</svrl:text>
+            <svrl:text>Das <xsl:text/>mods:mods<xsl:text/> Wurzelelement der <xsl:text/>mets:dmdSec<xsl:text/> enthält weitere <xsl:text/>mods:mods<xsl:text/> Elemente, die dort nicht zulässig sind. Sie werden bei der Transformation der Daten entfernt.</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M31"/>
+      <xsl:apply-templates select="*" mode="M32"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M31"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M31">
-      <xsl:apply-templates select="*" mode="M31"/>
+   <xsl:template match="text()" priority="-1" mode="M32"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M32">
+      <xsl:apply-templates select="*" mode="M32"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mods:*[starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')]"
                  priority="1000"
-                 mode="M32">
+                 mode="M33">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mods:*[starts-with(@valueURI, 'http://d-nb.info/gnd/') or starts-with(@valueURI, 'https://d-nb.info/gnd/')]"/>
       <!--ASSERT error-->
@@ -1551,15 +1550,15 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M32"/>
+      <xsl:apply-templates select="*" mode="M33"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M32"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M32">
-      <xsl:apply-templates select="*" mode="M32"/>
+   <xsl:template match="text()" priority="-1" mode="M33"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M33">
+      <xsl:apply-templates select="*" mode="M33"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods" priority="1000" mode="M33">
+   <xsl:template match="mets:xmlData/mods:mods" priority="1000" mode="M34">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods"/>
       <!--ASSERT error-->
@@ -1572,39 +1571,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede mets:dmdSec muss mindestens ein mods:typeOfResource enthalten. Ist dies nicht der Fall, wird bei der Bereinigung der Daten als Default-Wert mods:typeOfResource mit dem Wert text eingefügt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp</svrl:text>
-               <svrl:property id="dmd_id">
-                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                                select="ancestor-or-self::mets:dmdSec/@ID"/>
-               </svrl:property>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="*" mode="M33"/>
-   </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M33"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M33">
-      <xsl:apply-templates select="*" mode="M33"/>
-   </xsl:template>
-   <!--PATTERN -->
-   <!--RULE -->
-   <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:typeOfResource]"
-                 priority="1000"
-                 mode="M34">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:typeOfResource]"/>
-      <!--ASSERT error-->
-      <xsl:choose>
-         <xsl:when test="mods:typeOfResource[text()='text']"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mods:typeOfResource[text()='text']">
-               <xsl:attribute name="id">typeOfResource_02</xsl:attribute>
-               <xsl:attribute name="role">error</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>Die mets:dmdSec der Ausgabe muss in mods:typeOfResource den Wert "text" enthalten. Ist dies nicht der Fall, dann wird bei der Bereinigung der Daten der vorhandene Wert durch den Wert text ersetzt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp</svrl:text>
+               <svrl:text>Jede <xsl:text/>mets:dmdSec<xsl:text/> muss mindestens ein <xsl:text/>mods:typeOfResource<xsl:text/> enthalten. Ist dies nicht der Fall, wird bei der Bereinigung der Daten als Default-Wert <xsl:text/>mods:typeOfResource<xsl:text/> mit dem Wert text eingefügt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1620,9 +1587,41 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
+   <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:typeOfResource]"
+                 priority="1000"
+                 mode="M35">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:typeOfResource]"/>
+      <!--ASSERT error-->
+      <xsl:choose>
+         <xsl:when test="mods:typeOfResource[text()='text']"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="mods:typeOfResource[text()='text']">
+               <xsl:attribute name="id">typeOfResource_02</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/> der Ausgabe muss in <xsl:text/>mods:typeOfResource<xsl:text/> den Wert <xsl:text/>text<xsl:text/> enthalten. Ist dies nicht der Fall, dann wird bei der Bereinigung der Daten der vorhandene Wert durch den Wert text ersetzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp).</svrl:text>
+               <svrl:property id="dmd_id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M35"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M35"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M35">
+      <xsl:apply-templates select="*" mode="M35"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[not(mods:originInfo[@eventType='publication'])]"
                  priority="1002"
-                 mode="M35">
+                 mode="M36">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[not(mods:originInfo[@eventType='publication'])]"/>
       <!--ASSERT fatal-->
@@ -1636,7 +1635,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Es muss mindestens ein mods:originInfo mit dem eventType="publication" vorhanden sein. Ist dies nicht der Fall,kann die Ausgabe nicht in das Zeitungsportal übernommen werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Erscheinungsangaben</svrl:text>
+               <svrl:text>Es muss mindestens ein <xsl:text/>mods:originInfo[@eventType='publication']<xsl:text/> vorhanden sein. Ist dies nicht der Fall,kann die Ausgabe nicht in das Zeitungsportal übernommen werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Erscheinungsangaben).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1644,12 +1643,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M35"/>
+      <xsl:apply-templates select="*" mode="M36"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication'][not(mods:dateIssued)]"
                  priority="1001"
-                 mode="M35">
+                 mode="M36">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication'][not(mods:dateIssued)]"/>
       <!--ASSERT fatal-->
@@ -1662,7 +1661,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:dmdSec der Ausgabe muss in mods:dateIssued das Erscheinungdatum enthalten. Ist dies nicht der Fall, kann die Ausgabe nicht in das Zeitungsportal übernommen werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</svrl:text>
+               <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/> der Ausgabe muss in <xsl:text/>mods:dateIssued<xsl:text/> das Erscheinungdatum enthalten. Ist dies nicht der Fall, kann die Ausgabe nicht in das Zeitungsportal übernommen werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1670,12 +1669,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M35"/>
+      <xsl:apply-templates select="*" mode="M36"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication'][mods:dateIssued[2]]"
                  priority="1000"
-                 mode="M35">
+                 mode="M36">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication'][mods:dateIssued[2]]"/>
       <!--REPORT error-->
@@ -1686,18 +1685,19 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>mods:dateIssued darf innerhalb von mods:originInfo nicht wiederholt werden. Ist dies der Fall, wird bei der Transformation der Daten die erste Datumsangabe übernommen, alle anderen werden entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</svrl:text>
+            <svrl:text>
+               <xsl:text/>mods:dateIssued<xsl:text/> darf innerhalb von <xsl:text/>mods:originInfo<xsl:text/> nicht wiederholt werden. Ist dies der Fall, wird bei der Transformation der Daten die erste Datumsangabe übernommen, alle anderen werden entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M35"/>
+      <xsl:apply-templates select="*" mode="M36"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M35"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M35">
-      <xsl:apply-templates select="*" mode="M35"/>
+   <xsl:template match="text()" priority="-1" mode="M36"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M36">
+      <xsl:apply-templates select="*" mode="M36"/>
    </xsl:template>
    <!--PATTERN -->
    <xsl:variable name="current_year"
@@ -1705,7 +1705,7 @@
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(matches(text()[1], '^\d\d\d\d-\d\d-\d\d$'))]"
                  priority="1004"
-                 mode="M36">
+                 mode="M37">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(matches(text()[1], '^\d\d\d\d-\d\d-\d\d$'))]"/>
       <!--ASSERT fatal-->
@@ -1719,7 +1719,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Der Wert in mods:dateIssued muss einem Tagesdatum nach dem ISO 8601 Standard entsprechen. Ist dies nicht der Fall, kann die Ausgabe nicht dem richtigen Datum im Kalender des Zeitungsportals zugeordnet werden und kann daher nicht in das Zeitungsportal übernommen werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</svrl:text>
+               <svrl:text>Der Wert in <xsl:text/>mods:dateIssued<xsl:text/> muss einem Tagesdatum nach dem ISO 8601 Standard entsprechen. Ist dies nicht der Fall, kann die Ausgabe nicht dem richtigen Datum im Kalender des Zeitungsportals zugeordnet werden und kann daher nicht in das Zeitungsportal übernommen werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1727,12 +1727,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M36"/>
+      <xsl:apply-templates select="*" mode="M37"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(text()[1] castable as xs:date)]"
                  priority="1003"
-                 mode="M36">
+                 mode="M37">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(text()[1] castable as xs:date)]"/>
       <!--ASSERT fatal-->
@@ -1754,12 +1754,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M36"/>
+      <xsl:apply-templates select="*" mode="M37"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(matches(text()[1], '^((1[5-9]\d\d)|(2[012]\d\d))-((0\d)|(1[012]))-(([012])\d|3([01]))$'))]"
                  priority="1002"
-                 mode="M36">
+                 mode="M37">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[not(matches(text()[1], '^((1[5-9]\d\d)|(2[012]\d\d))-((0\d)|(1[012]))-(([012])\d|3([01]))$'))]"/>
       <!--ASSERT fatal-->
@@ -1773,7 +1773,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Der Wert in mods:dateIssued liegt außerhalb des erwarteten Zeitraums (ab 1500) oder besitzt ungültige Monats- bzw. Tagesangaben. Die Ausgabe kann daher nicht ins Zeitungsportal übernommen werden, da dies dort zu Fehldarstellung führt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe</svrl:text>
+               <svrl:text>Der Wert in <xsl:text/>mods:dateIssued<xsl:text/> liegt außerhalb des erwarteten Zeitraums (ab 1500) oder besitzt ungültige Monats- bzw. Tagesangaben. Die Ausgabe kann daher nicht ins Zeitungsportal übernommen werden, da dies dort zu Fehldarstellung führt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1781,12 +1781,12 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M36"/>
+      <xsl:apply-templates select="*" mode="M37"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[ number(substring-before(text(), '-')) &gt; $current_year ]"
                  priority="1001"
-                 mode="M36">
+                 mode="M37">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[ number(substring-before(text(), '-')) &gt; $current_year ]"/>
       <!--REPORT fatal-->
@@ -1805,12 +1805,12 @@
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M36"/>
+      <xsl:apply-templates select="*" mode="M37"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued"
                  priority="1000"
-                 mode="M36">
+                 mode="M37">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued"/>
       <xsl:variable name="year" select="number(substring-before(text(), '-'))"/>
@@ -1822,24 +1822,25 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das angegebene Erscheinungsdatum der Ausgabe ist 1960 oder später. Auf Grund des geringen Alters der Ausgabe und geltender urheberrechtlicher Beschränkungen bitten wir Sie, zu prüfen ob diese Ausgaben bereits frei zugänglich sind. Ist dies der Fall besteht von Ihrer Seite kein Handlungsbedarf. Sollten die betroffenen Ausgaben aber noch nicht an das Deutsche Zeitungsportal geliefert werden, informieren Sie bitte die Fachstelle Bibliothek.</svrl:text>
+            <svrl:text>Das angegebene Erscheinungsdatum der Ausgabe ist 1960 oder später. Auf Grund des geringen Alters der Ausgabe und geltender urheberrechtlicher Beschränkungen bitten wir Sie, zu prüfen ob diese Ausgaben bereits frei zugänglich sind.
+Ist dies der Fall besteht von Ihrer Seite kein Handlungsbedarf. Sollten die betroffenen Ausgaben aber noch nicht an das Deutsche Zeitungsportal geliefert werden, informieren Sie bitte die Fachstelle Bibliothek.</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M36"/>
+      <xsl:apply-templates select="*" mode="M37"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M36"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M36">
-      <xsl:apply-templates select="*" mode="M36"/>
+   <xsl:template match="text()" priority="-1" mode="M37"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M37">
+      <xsl:apply-templates select="*" mode="M37"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:language/mods:languageTerm"
                  priority="1000"
-                 mode="M37">
+                 mode="M38">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:language/mods:languageTerm"/>
       <!--ASSERT error-->
@@ -1853,7 +1854,9 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mods:language/mods:languageTerm muss einen Code aus ISO 639-2 enthalten. Sollen mehrere Sprachen angegeben werden, muss mods:language/mods:languageTerm wiederholt werden. Die Angaben von mehreren Sprachen in einem mod:languageTerm Element ist nicht erlaubt. Handelt es sich bei dem Eintrag in mods:language/mods:languageTerm um einen anderen Wert als die oben genannten Codes bzw. sind mehrere Codes enthalten, wird mods:language bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache</svrl:text>
+               <svrl:text>
+                  <xsl:text/>mods:language/mods:languageTerm<xsl:text/> muss einen Code aus dem ISO 639-2b Standard (https://id.loc.gov/vocabulary/iso639-2) enthalten. Sollen mehrere Sprachen angegeben werden, muss <xsl:text/>mods:language/mods:languageTerm<xsl:text/> wiederholt werden. Die Angaben von mehreren Sprachen in einem mod:languageTerm Element ist nicht erlaubt.
+Handelt es sich bei dem Eintrag in <xsl:text/>mods:language/mods:languageTerm<xsl:text/> um einen anderen Wert als die oben genannten Codes bzw. sind mehrere Codes enthalten, wird <xsl:text/>mods:language<xsl:text/> bei der Bereinigung der Daten entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1864,17 +1867,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M37"/>
+      <xsl:apply-templates select="*" mode="M38"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M37"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M37">
-      <xsl:apply-templates select="*" mode="M37"/>
+   <xsl:template match="text()" priority="-1" mode="M38"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M38">
+      <xsl:apply-templates select="*" mode="M38"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M38">
+                 mode="M39">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT error-->
@@ -1888,7 +1891,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die Sprache muss in mods:language/mods:languageTerm angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache</svrl:text>
+               <svrl:text>Die Sprache muss in <xsl:text/>mods:language/mods:languageTerm<xsl:text/> angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards (https://id.loc.gov/vocabulary/iso639-2) zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1896,17 +1899,17 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M38"/>
+      <xsl:apply-templates select="*" mode="M39"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M38"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M38">
-      <xsl:apply-templates select="*" mode="M38"/>
+   <xsl:template match="text()" priority="-1" mode="M39"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M39">
+      <xsl:apply-templates select="*" mode="M39"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:xmlData/mods:mods/mods:physicalDescription/mods:extent"
                  priority="1000"
-                 mode="M39">
+                 mode="M40">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:xmlData/mods:mods/mods:physicalDescription/mods:extent"/>
       <!--REPORT error-->
@@ -1918,24 +1921,25 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>mods:extent sollte die Umfangsangabe des digitalisierten Originals enthalten. Wenn in mods:extent Begriffe wie "Online" oder "Electronic" enthalten sind, wird davon ausgegangen, dass es sich um Angaben zum Digitalisat handelt. In diesem Fall wird mods:extent bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PhysischeBeschreibung</svrl:text>
+            <svrl:text>
+               <xsl:text/>mods:extent<xsl:text/> sollte die Umfangsangabe des digitalisierten Originals enthalten. Wenn in <xsl:text/>mods:extent<xsl:text/> Begriffe wie "Online" oder "Electronic" enthalten sind, wird davon ausgegangen, dass es sich um Angaben zum Digitalisat handelt. In diesem Fall wird <xsl:text/>mods:extent<xsl:text/> bei der Bereinigung der Daten entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PhysischeBeschreibung).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
             </svrl:property>
          </svrl:successful-report>
       </xsl:if>
-      <xsl:apply-templates select="*" mode="M39"/>
+      <xsl:apply-templates select="*" mode="M40"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M39"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M39">
-      <xsl:apply-templates select="*" mode="M39"/>
+   <xsl:template match="text()" priority="-1" mode="M40"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M40">
+      <xsl:apply-templates select="*" mode="M40"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
-                 mode="M40">
+                 mode="M41">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT error-->
@@ -1949,90 +1953,9 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss die mets:dmdSec, die eine Ausgabe beschreibt, ein mods:relatedItem type="host" enthalten, das den mods:recordInfo/mods:recordIdentifier der Gesamtaufnahme enthält. Zudem muss mods:recordIdentifier das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element mods:recordIdentifier verwendet wird. Fehlt mods:relatedItem type="host" oder mods:recordIdentifier oder das Attribut source, so lassen sich die Daten der Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme</svrl:text>
-               <svrl:property id="dmd_id">
-                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                                select="ancestor-or-self::mets:dmdSec/@ID"/>
-               </svrl:property>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="*" mode="M40"/>
-   </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M40"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M40">
-      <xsl:apply-templates select="*" mode="M40"/>
-   </xsl:template>
-   <!--PATTERN -->
-   <!--RULE -->
-   <xsl:template match="mets:mets[not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'])]"
-                 priority="1002"
-                 mode="M41">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:mets[not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'])]"/>
-      <!--ASSERT fatal-->
-      <xsl:choose>
-         <xsl:when test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'] or mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='newspaper']/mets:mptr[@xlink:href]"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'] or mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='newspaper']/mets:mptr[@xlink:href]">
-               <xsl:attribute name="id">relatedItem_07</xsl:attribute>
-               <xsl:attribute name="role">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier in mods:relatedItem type="host" mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in mods:relatedItem type="host", wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen. Enthält auch die Gesamtaufnahme keinen mods:identifier type="zdb", so kann die Ausgabe nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme</svrl:text>
-               <svrl:property id="dmd_id">
-                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                                select="ancestor-or-self::mets:dmdSec/@ID"/>
-               </svrl:property>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="*" mode="M41"/>
-   </xsl:template>
-   <!--RULE -->
-   <xsl:template match="mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host'][mods:identifier[@type='zdb']]"
-                 priority="1001"
-                 mode="M41">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host'][mods:identifier[@type='zdb']]"/>
-      <!--REPORT error-->
-      <xsl:if test="mods:identifier[@type='zdb'][2]">
-         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                 test="mods:identifier[@type='zdb'][2]">
-            <xsl:attribute name="id">relatedItem_10</xsl:attribute>
-            <xsl:attribute name="role">error</xsl:attribute>
-            <xsl:attribute name="location">
-               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-            </xsl:attribute>
-            <svrl:text>Innerhalb von mods:relatedItem[@type='host'] darf mods:identifier[@type='zdb'] nicht wiederholt werden. Ist mehr als ein mods:identifier[@type='zdb'] in mods:relatedItem[@type='host'] vorhanden, wird das erste Vorkommen bei der Transformation der Daten übernommen und alle weiteren Vorkommen entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</svrl:text>
-            <svrl:property id="dmd_id">
-               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                             select="ancestor-or-self::mets:dmdSec/@ID"/>
-            </svrl:property>
-         </svrl:successful-report>
-      </xsl:if>
-      <xsl:apply-templates select="*" mode="M41"/>
-   </xsl:template>
-   <!--RULE -->
-   <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
-                 priority="1000"
-                 mode="M41">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
-      <!--ASSERT error-->
-      <xsl:choose>
-         <xsl:when test="mods:relatedItem[@type='host']/mods:identifier[@type='zdb']"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mods:relatedItem[@type='host']/mods:identifier[@type='zdb']">
-               <xsl:attribute name="id">relatedItem_11</xsl:attribute>
-               <xsl:attribute name="role">error</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der digtalen Ausgabe im Element mods:identifier[@type='zdb'] in mods:relatedItem[@type='host'] mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in mods:relatedItem[@type='host'], wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</svrl:text>
+               <svrl:text>Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss die <xsl:text/>mets:dmdSec<xsl:text/>, die eine Ausgabe beschreibt, ein <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> enthalten, das den <xsl:text/>mods:recordInfo/mods:recordIdentifier<xsl:text/> der Gesamtaufnahme enthält.
+Zudem muss <xsl:text/>mods:recordIdentifier<xsl:text/> das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element <xsl:text/>mods:recordIdentifier<xsl:text/> verwendet wird.
+Fehlt <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> oder <xsl:text/>mods:recordIdentifier<xsl:text/> oder das Attribut source, so lassen sich die Daten der Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2048,6 +1971,57 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
+   <xsl:template match="mets:mets[not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'])]"
+                 priority="1002"
+                 mode="M42">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets[not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'])]"/>
+      <!--ASSERT fatal-->
+      <xsl:choose>
+         <xsl:when test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'] or mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='newspaper']/mets:mptr[@xlink:href]"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:identifier[@type='zdb'] or mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='newspaper']/mets:mptr[@xlink:href]">
+               <xsl:attribute name="id">relatedItem_07</xsl:attribute>
+               <xsl:attribute name="role">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen. Enthält auch die Gesamtaufnahme keinen <xsl:text/>mods:identifier[@type='zdb']<xsl:text/>, so kann die Ausgabe nicht in die DDB eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme).</svrl:text>
+               <svrl:property id="dmd_id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M42"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host'][mods:identifier[@type='zdb']]"
+                 priority="1001"
+                 mode="M42">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host'][mods:identifier[@type='zdb']]"/>
+      <!--REPORT error-->
+      <xsl:if test="mods:identifier[@type='zdb'][2]">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="mods:identifier[@type='zdb'][2]">
+            <xsl:attribute name="id">relatedItem_10</xsl:attribute>
+            <xsl:attribute name="role">error</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Innerhalb von <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> darf <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> nicht wiederholt werden. Ist mehr als ein <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> vorhanden, wird das erste Vorkommen bei der Transformation der Daten übernommen und alle weiteren Vorkommen entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M42"/>
+   </xsl:template>
+   <!--RULE -->
    <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
                  priority="1000"
                  mode="M42">
@@ -2055,16 +2029,16 @@
                        context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
       <!--ASSERT error-->
       <xsl:choose>
-         <xsl:when test="mods:relatedItem[@type='host']/mods:relatedItem[@type='original']/mods:identifier[@type='zdb']"/>
+         <xsl:when test="mods:relatedItem[@type='host']/mods:identifier[@type='zdb']"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mods:relatedItem[@type='host']/mods:relatedItem[@type='original']/mods:identifier[@type='zdb']">
-               <xsl:attribute name="id">relatedItem_08</xsl:attribute>
+                                test="mods:relatedItem[@type='host']/mods:identifier[@type='zdb']">
+               <xsl:attribute name="id">relatedItem_11</xsl:attribute>
                <xsl:attribute name="role">error</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der Druckausgabe mit Bestandsinformationen zu der Zeitung in der ZDB verknüpft. Fehlt der ZDB-Identifier der Druckausgabe, wird er bei der Transformation der Daten aus der ZDB-Aufnahme der Online-Ausgabe übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme</svrl:text>
+               <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der digtalen Ausgabe im Element <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2096,7 +2070,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Das Element mods:relatedItem[@type='host'] mit den Informationen zur Zeitung muss einen Titel in mods:titleInfo/mods:title enthalten. Fehlt der Titel der Zeitung, wird er bei der Transformation der Daten aus der ZDB-Aufnahme der Online-Ausgabe übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-TitelderZeitung</svrl:text>
+               <svrl:text>Das Element <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit den Informationen zur Zeitung muss einen Titel in <xsl:text/>mods:titleInfo/mods:title<xsl:text/> enthalten. Fehlt der Titel der Zeitung, wird er bei der Transformation der Daten aus der ZDB-Aufnahme der Online-Ausgabe übernommen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-TitelderZeitung).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2128,7 +2102,11 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ausgaben von Zeitungen müssen mindestens einen persistenten Identifier enthalten, der in mods:identifier nachgewiesen wird. Erlaubt sind Identifier vom Typ "urn", "purl", "doi" oder "handle". Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PersistenterURIderAusgabe</svrl:text>
+               <svrl:text>Ausgaben von Zeitungen müssen mindestens einen persistenten Identifier enthalten, der in <xsl:text/>mods:identifier<xsl:text/> nachgewiesen wird. Erlaubt sind Identifier vom Typ:
+ * <xsl:text/>urn<xsl:text/>
+ * <xsl:text/>purl<xsl:text/>
+ * <xsl:text/>doi<xsl:text/>
+ * <xsl:text/>handle<xsl:text/>Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PersistenterURIderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2160,7 +2138,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die ZDB-ID der Zeitung darf nur aus maximal 10 Zahlen, optional gefolgt von einem Bindestrich und einer weiteren Zahl bzw. einem "X" bestehen. Entspricht die ZDB-ID nicht diesen Vorgaben, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</svrl:text>
+               <svrl:text>Die ZDB-ID der Zeitung darf nur aus maximal 10 Zahlen, optional gefolgt von einem Bindestrich und einer weiteren Zahl bzw. einem <xsl:text/>X<xsl:text/> bestehen. Entspricht die ZDB-ID nicht diesen Vorgaben, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2187,7 +2165,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die ZDB-ID der Zeitung enthält an der letzten Stelle eine Prüfziffer, die durch einen Bindestrich eingeleitet werden kann. Da der Bindestrich für das Einspielen in das Deutsche Zeitungsportal erforderlich ist, wird er bei der Transformation der Daten ergänzt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe</svrl:text>
+               <svrl:text>Die ZDB-ID der Zeitung enthält an der letzten Stelle eine Prüfziffer, die durch einen Bindestrich eingeleitet werden kann. Da der Bindestrich für das Einspielen in das Deutsche Zeitungsportal erforderlich ist, wird er bei der Transformation der Daten ergänzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2219,7 +2197,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Wenn für die Angabe der Lizenz das Element mods:accessCondition verwendet wird, so sollte dies den Empfehlungen für Rechteinformationen in Metadaten der DINI AG KIM entsprechend erfolgen (s. https://wiki.dnb.de/pages/viewpage.action?pageId=148607377). Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Rechteinformationen</svrl:text>
+               <svrl:text>Wenn für die Angabe der Lizenz das Element <xsl:text/>mods:accessCondition<xsl:text/> verwendet wird, so sollte dies den Empfehlungen für Rechteinformationen in Metadaten der DINI AG KIM (https://wiki.dnb.de/pages/viewpage.action?pageId=148607377) entsprechend erfolgen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Rechteinformationen).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2251,7 +2229,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Das Attribut href des Elements mods:accessCondition muss zum Namensraum "http://www.w3.org/1999/xlink" gehören. Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs href in den Namensraum "http://www.w3.org/1999/xlink" gesetzt und entsprechend ausgewertet.</svrl:text>
+               <svrl:text>Das Attribut href des Elements <xsl:text/>mods:accessCondition<xsl:text/> muss zum Namensraum <xsl:text/>http://www.w3.org/1999/xlink<xsl:text/> gehören. Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs <xsl:text/>href<xsl:text/> in den Namensraum <xsl:text/>http://www.w3.org/1999/xlink<xsl:text/> gesetzt und entsprechend ausgewertet.</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2280,7 +2258,7 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element mods:part ist in Ausgaben von Zeitungen nicht wiederholbar. Gibt es in einem Datensatz mehr als ein mods:part ist die Sortierung der Ausgabe nicht mehr eindeutig und er kann daher nicht in das Zeitungsportal eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</svrl:text>
+            <svrl:text>Das Element <xsl:text/>mods:part<xsl:text/> ist in Ausgaben von Zeitungen nicht wiederholbar. Gibt es in einem Datensatz mehr als ein <xsl:text/>mods:part<xsl:text/> ist die Sortierung der Ausgabe nicht mehr eindeutig und er kann daher nicht in das Zeitungsportal eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2306,7 +2284,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ausgaben von Zeitungen müssen Informationen zur Zählung enthalten, die im Zeitungsportal für die Anzeige der Ausgabe verwendet werden. Diese Information muss in mods:part/mods:detail/mods:number zur Verfügung gestellt werden. Fehlt mods:part, so wird der Inhalt des Elements mods:number bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. mods:dateIssued) generiert. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</svrl:text>
+               <svrl:text>Ausgaben von Zeitungen müssen Informationen zur Zählung enthalten, die im Zeitungsportal für die Anzeige der Ausgabe verwendet werden. Diese Information muss in <xsl:text/>mods:part/mods:detail/mods:number<xsl:text/> zur Verfügung gestellt werden.
+Fehlt <xsl:text/>mods:part<xsl:text/>, so wird der Inhalt des Elements <xsl:text/>mods:number<xsl:text/> bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. <xsl:text/>mods:dateIssued<xsl:text/>) generiert.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2332,7 +2311,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Damit die Ausgaben in der richtigen Reihenfolge angezeigt werden muss mods:part das Attribut order enthalten. Der Wert in diesem Attribut muss dem Erscheinungsdatum in Form eines Integer (also yyyymmdd ggf. mit angehängter zweistelliger Zählung) entsprechen. Fehlt das Attribut order in mods:part, so wird der Inhalt des Attributs bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. mods:dateIssued) generiert. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</svrl:text>
+               <svrl:text>Damit die Ausgaben in der richtigen Reihenfolge angezeigt werden muss <xsl:text/>mods:part<xsl:text/> das Attribut order enthalten. Der Wert in diesem Attribut muss dem Erscheinungsdatum in Form eines Integer (also <xsl:text/>YYYYMMDD<xsl:text/> ggf. mit angehängter zweistelliger Zählung) entsprechen.
+Fehlt das Attribut order in <xsl:text/>mods:part<xsl:text/>, so wird der Inhalt des Attributs bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. <xsl:text/>mods:dateIssued<xsl:text/>) generiert.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2359,7 +2339,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss mods:part das Attribut order enthalten, dessen Wert ein integer ist. Handelt es sich um einen Wert, der nicht maschinenlesbar ist, so verhindert dies nicht das Einspielen der Daten in das Zeitungsportal, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</svrl:text>
+               <svrl:text>Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss <xsl:text/>mods:part<xsl:text/> das Attribut <xsl:text/>order<xsl:text/> enthalten, dessen Wert ein Integer ist. Handelt es sich um einen Wert, der nicht maschinenlesbar ist, so verhindert dies nicht das Einspielen der Daten in das Zeitungsportal, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2386,7 +2366,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Der vorliegende Wert als Integer erfüllt die Anforderungen weicht aber in der Struktur von der Empfehlung im Anwendungsprofil (YYYYMMTT ggf. mit angehängter zweistelliger Zählung) ab. Wir empfehlen die empfohlene Struktur zu übernehmen um Sortierfehler im Zeitungsportal zu vermeiden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</svrl:text>
+               <svrl:text>Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Der vorliegende Wert als Integer erfüllt die Anforderungen weicht aber in der Struktur von der Empfehlung im Anwendungsprofil (<xsl:text/>YYYYMMTT<xsl:text/> ggf. mit angehängter zweistelliger Zählung) ab. Wir empfehlen die empfohlene Struktur zu übernehmen um Sortierfehler im Zeitungsportal zu vermeiden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2418,7 +2398,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>In mods:part von Ausgaben von Zeitungen muss das Unterelement mods:detail ein Attribut type mit dem Wert issue enthalten. Darüber hinaus muss das Element mods:detail ein Unterelement mods:number enthalten. Fehlen diese Angaben wird bei der Transformation der Daten in dem vorhandenen mods:part ein mods:detail mit dem type="issue" erzeugt und der Wert für das Unterelement mods:number aus dem Erscheinungsdatum übernommen (s. mods:dateIssued). Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe</svrl:text>
+               <svrl:text>In <xsl:text/>mods:part<xsl:text/> von Ausgaben von Zeitungen muss das Unterelement <xsl:text/>mods:detail<xsl:text/> ein Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>issue<xsl:text/> enthalten. Darüber hinaus muss das Element <xsl:text/>mods:detail<xsl:text/> ein Unterelement <xsl:text/>mods:number<xsl:text/> enthalten.
+Fehlen diese Angaben wird bei der Transformation der Daten in dem vorhandenen <xsl:text/>mods:part<xsl:text/> ein <xsl:text/>mods:detail<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>issue<xsl:text/> erzeugt und der Wert für das Unterelement <xsl:text/>mods:number<xsl:text/> aus dem Erscheinungsdatum übernommen (s. <xsl:text/>mods:dateIssued<xsl:text/>).Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2450,7 +2431,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:dmdSec, die das gesamte Werk beschreibt, muss ein mods:recordInfo mit dem Unterelement mods:recordIdentifier enthalten. Dieser mods:recordIdentifier muss durch den Wert im Attribut source eindeutig identifizierbar sein. Wenn mods:recordIdentifier und/oder das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</svrl:text>
+               <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/>, die das gesamte Werk beschreibt, muss ein <xsl:text/>mods:recordInfo<xsl:text/> mit dem Unterelement <xsl:text/>mods:recordIdentifier<xsl:text/> enthalten. Dieser <xsl:text/>mods:recordIdentifier<xsl:text/> muss durch den Wert im Attribut <xsl:text/>source<xsl:text/> eindeutig identifizierbar sein. Wenn <xsl:text/>mods:recordIdentifier<xsl:text/> und / oder das Attribut <xsl:text/>source<xsl:text/> fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2482,7 +2463,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mods:recordIdentifier muss das Attribut source enthalten. Der Wert dieses Attribut muss die Herkunft des Identifiers des Datensatzes eindeutig identifizieren. Wenn das Attribut source fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</svrl:text>
+               <svrl:text>
+                  <xsl:text/>mods:recordIdentifier<xsl:text/> muss das Attribut <xsl:text/>source<xsl:text/> enthalten. Der Wert dieses Attribut muss die Herkunft des Identifiers des Datensatzes eindeutig identifizieren. Wenn das Attribut <xsl:text/>source<xsl:text/> fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2511,7 +2493,7 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Jeder METS-Datensatz muss durch ein mods:recordIdentifier Element eindeutig identifiziert werden. Ist mehr als ein mods:recordIdentifier vorhanden, wird nach Rücksprache mit dem DP anhand der im Attribut source genannten Quelle des Identifiers entschieden, welches mods:recordIdentifier bei der Bereinigung des Datensatzes erhalten bleibt. Alle anderen mods:recordIdentifier werden bei der Bereinigung des Datensatzes entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</svrl:text>
+            <svrl:text>Jeder METS-Datensatz muss durch ein <xsl:text/>mods:recordIdentifier<xsl:text/> Element eindeutig identifiziert werden. Ist mehr als ein <xsl:text/>mods:recordIdentifier<xsl:text/> vorhanden, wird nach Rücksprache mit Ihnen anhand der im Attribut <xsl:text/>source<xsl:text/> genannten Quelle des Identifiers entschieden, welches <xsl:text/>mods:recordIdentifier<xsl:text/> bei der Bereinigung des Datensatzes erhalten bleibt. Alle anderen <xsl:text/>mods:recordIdentifier<xsl:text/> werden bei der Bereinigung des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2542,7 +2524,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und/oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und/oder Sonderzeichen enthalten, nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz</svrl:text>
+               <svrl:text>Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und / oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und / oder Sonderzeichen enthalten, nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2571,7 +2553,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mets:structMap TYPE="LOGICAL" ist notwendig, um die logische Struktur eines Dokuments anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>
+                  <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> ist notwendig, um die logische Struktur eines Dokuments anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -2593,7 +2576,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der structMap TYPE="LOGICAL" durch ineinander verschachtelte mets:div repräsentiert werden. Die mets:structMap TYPE="LOGICAL" muss mindestens für die oberste dieser Ebenen eine mets:div enthalten, in der die oberste Ebene des Dokuments beschrieben wird. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> durch ineinander verschachtelte <xsl:text/>mets:div<xsl:text/> repräsentiert werden. Die <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss mindestens für die oberste dieser Ebenen eine <xsl:text/>mets:div<xsl:text/> enthalten, in der die oberste Ebene des Dokuments beschrieben wird. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -2621,7 +2604,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der mets:structMap TYPE="LOGICAL" durch ineinander verschachtelte mets:div repräsentiert werden. Jede dieser mets:div muss in dem Attribut ID einen eindeutigen Identifier enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> durch ineinander verschachtelte <xsl:text/>mets:div<xsl:text/> repräsentiert werden. Jede dieser <xsl:text/>mets:div<xsl:text/> muss in dem Attribut <xsl:text/>ID<xsl:text/> einen eindeutigen Identifier enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2652,7 +2635,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer mets:div in der structMap TYPE="LOGICAL" im mets:structLink den jeweiligen Identifiern der Seiten zugeordnet werden. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer <xsl:text/>mets:div<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> im <xsl:text/>mets:structLink<xsl:text/> den jeweiligen Identifiern der Seiten zugeordnet werden. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2668,7 +2651,7 @@
    <!--PATTERN -->
    <!--RULE -->
    <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]"
-                 priority="1000"
+                 priority="1001"
                  mode="M57">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not(@TYPE)]"/>
@@ -2682,9 +2665,39 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der mets:div in dem Attribut TYPE. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen. Fehlt das Attribut TYPE in einem der mets:div, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der <xsl:text/>mets:div<xsl:text/> in dem Attribut <xsl:text/>TYPE<xsl:text/>. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen. Fehlt das Attribut <xsl:text/>TYPE<xsl:text/> in einem der <xsl:text/>mets:div<xsl:text/>, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M57"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]"
+                 priority="1000"
+                 mode="M57">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]"/>
+      <!--ASSERT error-->
+      <xsl:choose>
+         <xsl:when test="@TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' )"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="@TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' )">
+               <xsl:attribute name="id">structMapLogical_06</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der <xsl:text/>mets:div<xsl:text/> in dem Attribut <xsl:text/>TYPE<xsl:text/>. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen (https://dfg-viewer.de/strukturdatenset/) (s. dort die Spalte XML).
+Werden in dem Attribut <xsl:text/>TYPE<xsl:text/> andere Begriffe als die in der Liste vorgesehenen verwendet, wird er bei der Bereinigung der Daten durch den Strukturtyp <xsl:text/>section<xsl:text/> ersetzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+               <svrl:property id="id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
+               </svrl:property>
+               <svrl:property id="TYPE">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@TYPE"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -2713,7 +2726,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ist das Attribut DMDID des Elements mets:div in der mets:structMap type="LOGICAL" vorhanden, muss es eine dazugehörige mets:dmdSec mit dem gleichen Wert im Attribut ID geben. Ist dies nicht der Fall, wird die Verknüpfung in der mets:structMap type="LOGICAL" entfernt.</svrl:text>
+               <svrl:text>Ist das Attribut <xsl:text/>DMDID<xsl:text/> des Elements <xsl:text/>mets:div<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> vorhanden, muss es eine dazugehörige <xsl:text/>mets:dmdSec<xsl:text/> mit dem gleichen Wert im Attribut <xsl:text/>ID<xsl:text/> geben. Ist dies nicht der Fall, wird die Verknüpfung in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2741,7 +2754,12 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Für die Darstellung der logischen Struktur in Zeitungsausgaben ist die Verwendung der Strukturtypen vorgegeben. In der obersten mets:div wird auf die Gesamtaufnahme verwiesen, der Wert im Attribut TYPE muss "newspaper" lauten. In der darunterliegenden mets:div wird auf den Jahrgang verwiesen, der Wert im Attribut TYPE muss "year" lauten. In der darunterliegenden mets:div wird auf die einzelnen Monate verwiesen, in denen Ausgaben erschienen sind, der Wert im Attribut TYPE muss "month" lauten. In der darunterliegenden mets:div wird auf das tägliche Erscheinen verwiesen, der Wert im Attribut TYPE muss "day" lauten. In der darunterliegenden mets:div wird auf die Ausgabe verwiesen, der Wert im Attribut TYPE muss "issue" lauten. Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Transformation der Daten ggf. die entsprechenden Strukturtypen übernommen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Für die Darstellung der logischen Struktur in Zeitungsausgaben ist die Verwendung der Strukturtypen vorgegeben. In der obersten <xsl:text/>mets:div<xsl:text/> wird auf die Gesamtaufnahme verwiesen, der Wert im Attribut <xsl:text/>TYPE<xsl:text/> muss <xsl:text/>newspaper<xsl:text/> lauten.
+In der darunterliegenden <xsl:text/>mets:div<xsl:text/> wird auf den Jahrgang verwiesen, der Wert im Attribut <xsl:text/>TYPE<xsl:text/> muss <xsl:text/>year<xsl:text/> lauten.
+In der darunterliegenden <xsl:text/>mets:div<xsl:text/> wird auf die einzelnen Monate verwiesen, in denen Ausgaben erschienen sind, der Wert im Attribut <xsl:text/>TYPE<xsl:text/> muss <xsl:text/>month<xsl:text/> lauten.
+In der darunterliegenden <xsl:text/>mets:div<xsl:text/> wird auf das tägliche Erscheinen verwiesen, der Wert im Attribut <xsl:text/>TYPE<xsl:text/> muss <xsl:text/>day<xsl:text/> lauten.
+In der darunterliegenden <xsl:text/>mets:div<xsl:text/> wird auf die Ausgabe verwiesen, der Wert im Attribut <xsl:text/>TYPE<xsl:text/> muss <xsl:text/>issue<xsl:text/> lauten.
+Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Transformation der Daten ggf. die entsprechenden Strukturtypen übernommen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2771,7 +2789,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die Ausgabe enthält keinen mets:mptr, der auf den METS-Datensatz der Ausgabe verlinkt. Dieser Fehler verhindet nicht das Einspielen der Daten in die DDB, entspricht aber nicht den Vorgaben im METS/MODS-Anwendungsprofil für Zeitungen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Die Ausgabe enthält keinen <xsl:text/>mets:mptr<xsl:text/>, der auf den METS-Datensatz der Ausgabe verlinkt. Dieser Fehler verhindet nicht das Einspielen der Daten in die DDB, entspricht aber nicht den Vorgaben im METS/MODS-Anwendungsprofil für Zeitungen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2799,7 +2817,7 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Im METS-Datensatz zu der Ausgabe einer Zeitung darf kein mets:mptr enhalten sein, der auf eben diesen METS-Datensatz verweist. Ist dies der Fall, wird der mets:mptr bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+            <svrl:text>Im METS-Datensatz zu der Ausgabe einer Zeitung darf kein <xsl:text/>mets:mptr<xsl:text/> enhalten sein, der auf eben diesen METS-Datensatz verweist. Ist dies der Fall, wird der <xsl:text/>mets:mptr<xsl:text/> bei der Transformation der Daten entfernt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -2829,7 +2847,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede Ausgabe bzw. Beilage muss eine mets:dmdSec enthalten, die die bibliographische Beschreibung der Ausgabe bzw. Beilage enthält. Diese mets:dmdSec muss durch einen Identifier eindeutig beschrieben werden, der in der structMap TYPE="LOGICAL" in der mets:div mit dem Strukturtyp "issue" bzw. "additional" in dem Attribut DMDID steht. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Jede Ausgabe bzw. Beilage muss eine <xsl:text/>mets:dmdSec<xsl:text/> enthalten, die die bibliographische Beschreibung der Ausgabe bzw. Beilage enthält. Diese <xsl:text/>mets:dmdSec<xsl:text/> muss durch einen Identifier eindeutig beschrieben werden, der in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> in der <xsl:text/>mets:div<xsl:text/> mit dem Strukturtyp <xsl:text/>issue<xsl:text/> bzw. <xsl:text/>additional<xsl:text/> in dem Attribut <xsl:text/>DMDID<xsl:text/> steht.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2860,7 +2878,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:mptr Elemente in der mets:structMap TYPE="LOGICAL" müssen im Attribut xlink:href eine valide URL einer externen METS-Datei enthalten. Ist dies nicht der Fall können wichtige Informationen daraus nicht geladen werden und der Datensatz wird nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.1.2.2</svrl:text>
+               <svrl:text>Die <xsl:text/>mets:mptr<xsl:text/> Elemente in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> müssen im Attribut <xsl:text/>xlink:href<xsl:text/> eine valide URL einer externen METS-Datei enthalten. Ist dies nicht der Fall können wichtige Informationen daraus nicht geladen werden und der Datensatz wird nicht in die DDB eingespielt.</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2889,7 +2907,7 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet in der mets:structMap[@TYPE='LOGICAL'] darf nur ein mets:div[@TYPE='issue'] oder ein mets:div[@TYPE='additional'] vorhanden sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap</svrl:text>
+            <svrl:text>Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> darf nur ein <xsl:text/>mets:div[@TYPE='issue']<xsl:text/> oder ein <xsl:text/>mets:div[@TYPE='additional']<xsl:text/> vorhanden sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -2916,7 +2934,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mets:structMap TYPE="PHYSICAL" ist notwendig, um die Seiten des Dokuments in der richtigen Reihenfolge anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>
+                  <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> ist notwendig, um die Seiten des Dokuments in der richtigen Reihenfolge anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -2939,7 +2958,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mets:structMap TYPE="PHYSICAL" muss auf der obersten Ebene immer eine mets:div enthalten, die in dem Attribut TYPE den Wert physSequence enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>
+                  <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss auf der obersten Ebene immer eine <xsl:text/>mets:div<xsl:text/> enthalten, die in dem Attribut <xsl:text/>TYPE<xsl:text/> den Wert <xsl:text/>physSequence<xsl:text/> enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -2962,7 +2982,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mets:structMap TYPE="PHYSICAL" muss mindestens eine mets:div enthalten, die in dem Attribut TYPE den Wert page enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>
+                  <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss mindestens eine <xsl:text/>mets:div<xsl:text/> enthalten, die in dem Attribut <xsl:text/>TYPE<xsl:text/> den Wert <xsl:text/>page<xsl:text/> enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -2990,7 +3011,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" muss in dem Attribut ID einen eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Jede <xsl:text/>mets:div<xsl:text/> innerhalb von <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss in dem Attribut <xsl:text/>ID<xsl:text/> einen eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3020,7 +3041,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL" die das Attribut TYPE mit dem Wert "page" enthält, muss auch ein Attribut order enthalten. Das Fehlen des Attributs order verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Jede <xsl:text/>mets:div<xsl:text/> innerhalb von <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> die das Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>page<xsl:text/> enthält, muss auch ein Attribut order enthalten. Das Fehlen des Attributs order verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3045,7 +3066,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>In der structMap TYPE="PHYSICAL" muss der Wert in dem Attribut order innerhalb der mets:div mit TYPE="page" immer ein integer sein. Ist dies nicht der Fall, verhindert es nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen, da es Probleme bei der Anzeige der Seiten im Viewer nach sich ziehen kann. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>In der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss der Wert in dem Attribut <xsl:text/>order<xsl:text/> innerhalb der <xsl:text/>mets:div[@TYPE='page']<xsl:text/> immer ein Integer sein.
+Ist dies nicht der Fall, verhindert es nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen, da es Probleme bei der Anzeige der Seiten im Viewer nach sich ziehen kann.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3076,7 +3098,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede mets:div innerhalb von mets:structMap TYPE="PHYSICAL", die das Attribut TYPE="page" enthält, muss das Unterelement mets:fptr enthalten, das in den Attributen FILEID den Identifier enthält, der auf die jeweiligen Bilder in der mets:fileSec verlinkt. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe</svrl:text>
+               <svrl:text>Jede <xsl:text/>mets:div[@TYPE='page']<xsl:text/> innerhalb von <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss das Unterelement <xsl:text/>mets:fptr<xsl:text/> enthalten, das im Attribut <xsl:text/>FILEID<xsl:text/> den Identifier enthält, der auf die jeweiligen Bilder in der <xsl:text/>mets:fileSec<xsl:text/> verlinkt. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3107,7 +3129,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Wenn in einem Datensatz URNs auf Seitenebene vergeben werden, muss für jede Seite eine URN vorhanden sein. Das bedeutet, wenn in der mets:structMap TYPE="PHYSICAL" mindestens ein mets:div mit dem Attribut TYPE und dem Wert "page" zusätzlich ein Attribut CONTENTIDS mit einer URN enthält, müssen alle mets:div mit dem Attribut TYPE und dem Wert "page" ebenfalls ein Attribut CONTENTIDS mit einer URN enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</svrl:text>
+               <svrl:text>Wenn in einem Datensatz URNs auf Seitenebene vergeben werden, muss für jede Seite eine URN vorhanden sein. Das bedeutet, wenn in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> mindestens ein <xsl:text/>mets:div[@TYPE='page']<xsl:text/> zusätzlich ein Attribut <xsl:text/>CONTENTIDS<xsl:text/> mit einer URN enthält, müssen alle <xsl:text/>mets:div[@TYPE='page']<xsl:text/> ebenfalls ein Attribut <xsl:text/>CONTENTIDS<xsl:text/> mit einer URN enthalten.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3134,7 +3157,8 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>mets:structLink ist notwendig, um die Ebenen der logischen Struktur mit den dazugehörigen Seiten zu verknüpfen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur</svrl:text>
+               <svrl:text>
+                  <xsl:text/>mets:structLink<xsl:text/> ist notwendig, um die Ebenen der logischen Struktur mit den dazugehörigen Seiten zu verknüpfen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3156,7 +3180,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink. Ist kein mets:smLink vorhanden, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur</svrl:text>
+               <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> und den dazugehörigen Seiten in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> erfolgt im <xsl:text/>mets:structLink<xsl:text/> in den Unterelementen <xsl:text/>mets:smLink<xsl:text/>. Ist kein <xsl:text/>mets:smLink<xsl:text/> vorhanden, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3179,7 +3203,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink über die Attribute xlink:from und xlink:to. Fehlt eines dieser Attribute, wird der Datensatz nicht in die DDB eingespielt.</svrl:text>
+               <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> und den dazugehörigen Seiten in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> erfolgt im <xsl:text/>mets:structLink<xsl:text/> in den Unterelementen <xsl:text/>mets:smLink<xsl:text/> über die Attribute <xsl:text/>xlink:from<xsl:text/> und <xsl:text/>xlink:to<xsl:text/>. Fehlt eines dieser Attribute, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3202,7 +3226,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der mets:structMap TYPE="LOGICAL" und den dazugehörigen Seiten in der structMap TYPE="PHYSICAL" erfolgt im mets:structLink in den Unterelementen mets:smLink über die Attribute xlink:from und xlink:to. Dafür muss jeder Identifier, der in einem mets:smLink steht einem ID in der structMap TYPE="PHYSICAL" entsprechen. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur</svrl:text>
+               <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> und den dazugehörigen Seiten in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> erfolgt im <xsl:text/>mets:structLink<xsl:text/> in den Unterelementen <xsl:text/>mets:smLink<xsl:text/> über die Attribute <xsl:text/>xlink:from<xsl:text/> und <xsl:text/>xlink:to<xsl:text/>. Dafür muss jeder Identifier, der in einem <xsl:text/>mets:smLink<xsl:text/> steht einem <xsl:text/>mets:div/@ID<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> entsprechen. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3226,7 +3250,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:fileSec enthält die Links zu den digitalen Bildern. Fehlt die mets:fileSec, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</svrl:text>
+               <svrl:text>Die <xsl:text/>mets:fileSec<xsl:text/> enthält die Links zu den digitalen Bildern. Fehlt die <xsl:text/>mets:fileSec<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3249,7 +3273,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:fileSec enthält die Links zu den digitalen Bildern in unterschiedlichen Auflösungen. Um welche Art von Auflösung es sich dabei handelt, wird über die mets:fileGrp angegeben. Jede Auflösung eines Bildes wird daher der entsprechenden fileGrp zugeordnet. Eine mets:fileSec muss mindestens die mets:fileGrp mit dem Attribut USE="DEFAULT" enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</svrl:text>
+               <svrl:text>Die <xsl:text/>mets:fileSec<xsl:text/> enthält die Links zu den digitalen Bildern in unterschiedlichen Auflösungen. Um welche Art von Auflösung es sich dabei handelt, wird über die <xsl:text/>mets:fileGrp<xsl:text/> angegeben. Jede Auflösung eines Bildes wird daher der entsprechenden <xsl:text/>mets:fileGrp<xsl:text/> zugeordnet. Eine <xsl:text/>mets:fileSec<xsl:text/> muss mindestens die <xsl:text/>mets:fileGrp[@USE='DEFAULT']<xsl:text/> enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3272,7 +3296,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>In der mets:fileSec sind innerhalb der mets:fileGrp die einzelnen Bilder gelistet. Die mets:fileGrp use="DEFAULT" muss mindestens ein mets:file enthalten und dieses muss in dem Unterelement mets:FLocat das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt mets:file mit dem Attribut xlink:href im Unterelement mets:FLocat, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</svrl:text>
+               <svrl:text>In der <xsl:text/>mets:fileSec<xsl:text/> sind innerhalb der <xsl:text/>mets:fileGrp<xsl:text/> die einzelnen Bilder gelistet. Die <xsl:text/>mets:fileGrp[@USE='DEFAULT']<xsl:text/> muss mindestens ein <xsl:text/>mets:file<xsl:text/> enthalten und dieses muss in dem Unterelement <xsl:text/>mets:FLocat<xsl:text/> das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt <xsl:text/>mets:file<xsl:text/> mit dem Attribut <xsl:text/>xlink:href<xsl:text/> im Unterelement <xsl:text/>mets:FLocat<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3300,7 +3324,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jedes mets:file in der mets:fileSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</svrl:text>
+               <svrl:text>Jedes <xsl:text/>mets:file<xsl:text/> in der <xsl:text/>mets:fileSec<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3331,7 +3355,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>In der mets:fileSec wird innerhalb der mets:fileGrp mit dem Attribut USE="FULLTEXT" auf die Volltexte der einzelnen Seiten verlinkt. Die Bereitstellung von Volltexten ist für alle Zeitungsausgaben im Deutsche Zeitungsportal gewünscht, aber nicht verpflichtend. Die Volltextsuche ist der zentrale Einstieg zu den Inhalten des Zeitungsportals. Die Inhalte von Zeitungen ohne Volltext sind für NutzerInnen schwerer zugänglich. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</svrl:text>
+               <svrl:text>In der <xsl:text/>mets:fileSec<xsl:text/> wird innerhalb der <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> auf die Volltexte der einzelnen Seiten verlinkt. Die Bereitstellung von Volltexten ist für alle Zeitungsausgaben im Deutsche Zeitungsportal gewünscht, aber nicht verpflichtend. Die Volltextsuche ist der zentrale Einstieg zu den Inhalten des Zeitungsportals. Die Inhalte von Zeitungen ohne Volltext sind für NutzerInnen schwerer zugänglich.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3354,7 +3378,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:fileGrp USE="FULLTEXT" muss mindestens ein mets:file enthalten. Fehlt mets:file mit dem Attribut xlink:href im Unterelement mets:FLocat, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen</svrl:text>
+               <svrl:text>Die <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> muss mindestens ein <xsl:text/>mets:file<xsl:text/> enthalten. Fehlt <xsl:text/>mets:file<xsl:text/> mit dem Attribut xlink:href im Unterelement <xsl:text/>mets:FLocat<xsl:text/>, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3380,7 +3404,8 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>In der mets:fileGrp[@USE='FULLTEXT'] fehlt mindestens einem enthaltenden mets:file das Attribut MIMETYPE mit dem Wert "text/xml". Die mets:file in mets:fileGrp[@USE='FULLTEXT'] müssen in ihrem Unterelement mets:FLocat im Attribut xlink:href auf eine ALTO-Datei verweisen. Fehlt das zur entsprechenden Auszeichung benötigte Attribut MIMETYPE in mets:file oder besitzt es einen anderen Wert als "text/xml", geht das Zeitungsportal trotzdem davon aus, dass im Unterelement mets:FLocat im Attribut xlink:href eine ALTO-Datei referenziert wird. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei</svrl:text>
+            <svrl:text>In der <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> fehlt mindestens einem enthaltenden <xsl:text/>mets:file<xsl:text/> das Attribut MIMETYPE mit dem Wert <xsl:text/>text/xml<xsl:text/>. Die <xsl:text/>mets:file<xsl:text/> in <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> müssen in ihrem Unterelement <xsl:text/>mets:FLocat<xsl:text/> im Attribut <xsl:text/>xlink:href<xsl:text/> auf eine ALTO-Datei verweisen.
+Fehlt das zur entsprechenden Auszeichung benötigte Attribut <xsl:text/>MIMETYPE<xsl:text/> in <xsl:text/>mets:file<xsl:text/> oder besitzt es einen anderen Wert als <xsl:text/>text/xml<xsl:text/>, geht das Zeitungsportal trotzdem davon aus, dass im Unterelement <xsl:text/>mets:FLocat<xsl:text/> im Attribut <xsl:text/>xlink:href<xsl:text/> eine ALTO-Datei referenziert wird.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M74"/>
@@ -3403,7 +3428,7 @@
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Jedes mets:file Element im Element mets:fileSec muss das Attribut MIMETYPE besitzen. Der Datensatz enthält mindestens ein mets:file ohne das Attribut MIMETYPE. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei</svrl:text>
+            <svrl:text>Jedes <xsl:text/>mets:file<xsl:text/> Element im Element <xsl:text/>mets:fileSec<xsl:text/> muss das Attribut <xsl:text/>MIMETYPE<xsl:text/> besitzen. Der Datensatz enthält mindestens ein <xsl:text/>mets:file<xsl:text/> ohne das Attribut <xsl:text/>MIMETYPE<xsl:text/>. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M75"/>
@@ -3414,46 +3439,23 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M76">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
+   <xsl:template match="mets:mets/mets:fileSec/mets:fileGrp[@USE=('DEFAULT', 'THUMBS', 'FULLTEXT')]/mets:file"
+                 priority="1000"
+                 mode="M76">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets/mets:fileSec/mets:fileGrp[@USE=('DEFAULT', 'THUMBS', 'FULLTEXT')]/mets:file"/>
       <!--ASSERT fatal-->
       <xsl:choose>
-         <xsl:when test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
+         <xsl:when test="key('structMap_PHYSICAL_fptr_FILEID', @ID)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
-               <xsl:attribute name="id">dmdSec_01</xsl:attribute>
+                                test="key('structMap_PHYSICAL_fptr_FILEID', @ID)">
+               <xsl:attribute name="id">fileSec_09</xsl:attribute>
                <xsl:attribute name="role">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die mets:dmdSec der Ausgabe enthält ihre bibliographische Beschreibung. Sie muss mit dem mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" verlinkt sein. Ein Datensatz darf nur ein mets:div vom TYPE "issue" in der mets:structMap TYPE="LOGICAL" enthalten. Sind diese Vorraussetzungen nicht erfüllt, wird der Datensatz nicht in das Zeitungsportal eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap</svrl:text>
-               <svrl:property id="id">
-                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
-               </svrl:property>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="*" mode="M76"/>
-   </xsl:template>
-   <!--RULE -->
-   <xsl:template match="mets:dmdSec[not(@ID=$work_dmdid)]"
-                 priority="1000"
-                 mode="M76">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:dmdSec[not(@ID=$work_dmdid)]"/>
-      <!--ASSERT error-->
-      <xsl:choose>
-         <xsl:when test="mets:mdWrap/mets:xmlData/mods:mods"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="mets:mdWrap/mets:xmlData/mods:mods">
-               <xsl:attribute name="id">dmdSec_02</xsl:attribute>
-               <xsl:attribute name="role">error</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>Jede mets:dmdSec muss das Unterelement mets:mdWrap mit dem Unterelement mets:xmlData enthalten. Und mets:xmlData muss das Unterelement mods:mods enthalten. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5.2.1</svrl:text>
+               <svrl:text>Jedes <xsl:text/>mets:file<xsl:text/> Element in einem <xsl:text/>mets:fileGrp<xsl:text/> Element mit einem der Werte <xsl:text/>DEFAULT<xsl:text/>, <xsl:text/>THUMBS<xsl:text/> oder <xsl:text/>FULLTEXT<xsl:text/> im Attribut <xsl:text/>USE<xsl:text/> muss von einem <xsl:text/>mets:fptr<xsl:text/> Element innerhalb des Elements <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> über dessen Attribut <xsl:text/>FILEID<xsl:text/> referenziert sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3468,20 +3470,50 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:dmdSec" priority="1000" mode="M77">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:dmdSec"/>
+   <xsl:template match="mets:mets" priority="1001" mode="M77">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
       <!--ASSERT fatal-->
       <xsl:choose>
-         <xsl:when test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"/>
+         <xsl:when test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')">
-               <xsl:attribute name="id">dmdSec_03</xsl:attribute>
+                                test="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
+               <xsl:attribute name="id">dmdSec_01</xsl:attribute>
                <xsl:attribute name="role">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede mets:dmdSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.5.1</svrl:text>
+               <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/> der Ausgabe bzw. Beilage enthält ihre bibliographische Beschreibung. Sie muss mit dem <xsl:text/>mets:div[@TYPE='issue']<xsl:text/> bzw. <xsl:text/>mets:div[@TYPE='additional']<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> verlinkt sein.
+Ein Datensatz darf nur ein <xsl:text/>mets:div[@TYPE='issue']<xsl:text/> oder ein <xsl:text/>mets:div[@TYPE='additional']<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> enthalten. Sind diese Vorraussetzungen nicht erfüllt, wird der Datensatz nicht in das Zeitungsportal eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</svrl:text>
+               <svrl:property id="id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M77"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:dmdSec[not(@ID=$work_dmdid)]"
+                 priority="1000"
+                 mode="M77">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:dmdSec[not(@ID=$work_dmdid)]"/>
+      <!--ASSERT error-->
+      <xsl:choose>
+         <xsl:when test="mets:mdWrap/mets:xmlData/mods:mods"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="mets:mdWrap/mets:xmlData/mods:mods">
+               <xsl:attribute name="id">dmdSec_02</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Jede <xsl:text/>mets:dmdSec<xsl:text/> muss das Unterelement <xsl:text/>mets:mdWrap<xsl:text/> mit dem Unterelement <xsl:text/>mets:xmlData<xsl:text/> enthalten. Und <xsl:text/>mets:xmlData<xsl:text/> muss das Unterelement <xsl:text/>mods:mods<xsl:text/> enthalten. Ist dies nicht der Fall, wird die <xsl:text/>mets:dmdSec<xsl:text/> bei der Bereinigung der Daten entfernt.</svrl:text>
+               <svrl:property id="id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
+               </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3495,21 +3527,18 @@
    <!--RULE -->
    <xsl:template match="mets:dmdSec" priority="1000" mode="M78">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:dmdSec"/>
-      <!--ASSERT error-->
+      <!--ASSERT fatal-->
       <xsl:choose>
-         <xsl:when test="key('structMap_LOGICAL_dmdids', @ID)"/>
+         <xsl:when test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="key('structMap_LOGICAL_dmdids', @ID)">
-               <xsl:attribute name="id">dmdSec_04</xsl:attribute>
-               <xsl:attribute name="role">error</xsl:attribute>
+                                test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')">
+               <xsl:attribute name="id">dmdSec_03</xsl:attribute>
+               <xsl:attribute name="role">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede mets:dmdSec muss über ihren Identifier mit der dazugehörigen logischen Ebene verknüpft werden. Der Identifier der mets:dmdSec muss darum in der mets:div, die die logische Ebene beschreibt in dem Attribut DMDID vorkommen. Ist dies nicht der Fall, wird die mets:dmdSec bei der Bereinigung der Daten entfernt.</svrl:text>
-               <svrl:property id="id">
-                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
-               </svrl:property>
+               <svrl:text>Jede <xsl:text/>mets:dmdSec<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3521,39 +3550,20 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets" priority="1001" mode="M79">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
-      <!--ASSERT fatal-->
+   <xsl:template match="mets:dmdSec" priority="1000" mode="M79">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:dmdSec"/>
+      <!--ASSERT error-->
       <xsl:choose>
-         <xsl:when test="mets:amdSec"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="mets:amdSec">
-               <xsl:attribute name="id">amdSec_01</xsl:attribute>
-               <xsl:attribute name="role">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>Die mets:amdSec enthält die administrativen Metadaten zum Digitalisat. Innerhalb eines METS-Datensatzes muss eine mets:amdSec für das primäre logische Strukturelement geben. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="*" mode="M79"/>
-   </xsl:template>
-   <!--RULE -->
-   <xsl:template match="mets:amdSec" priority="1000" mode="M79">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:amdSec"/>
-      <!--ASSERT warn-->
-      <xsl:choose>
-         <xsl:when test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"/>
+         <xsl:when test="key('structMap_LOGICAL_dmdids', @ID)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')">
-               <xsl:attribute name="id">amdSec_02</xsl:attribute>
-               <xsl:attribute name="role">warn</xsl:attribute>
+                                test="key('structMap_LOGICAL_dmdids', @ID)">
+               <xsl:attribute name="id">dmdSec_04</xsl:attribute>
+               <xsl:attribute name="role">error</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jede mets:amdSec muss das Attribut ID mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Das Fehlen der ID verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten</svrl:text>
+               <svrl:text>Jede <xsl:text/>mets:dmdSec<xsl:text/> muss über ihren Identifier mit der dazugehörigen logischen Ebene verknüpft werden. Der Identifier der <xsl:text/>mets:dmdSec<xsl:text/> muss darum in der <xsl:text/>mets:div<xsl:text/>, die die logische Ebene beschreibt in dem Attribut <xsl:text/>DMDID<xsl:text/> vorkommen. Ist dies nicht der Fall, wird die <xsl:text/>mets:dmdSec<xsl:text/> bei der Bereinigung der Daten entfernt.</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3568,9 +3578,56 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
+   <xsl:template match="mets:mets" priority="1001" mode="M80">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
+      <!--ASSERT fatal-->
+      <xsl:choose>
+         <xsl:when test="mets:amdSec"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="mets:amdSec">
+               <xsl:attribute name="id">amdSec_01</xsl:attribute>
+               <xsl:attribute name="role">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Die <xsl:text/>mets:amdSec<xsl:text/> enthält die administrativen Metadaten zum Digitalisat. Innerhalb eines METS-Datensatzes muss eine <xsl:text/>mets:amdSec<xsl:text/> für das primäre logische Strukturelement geben. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M80"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:amdSec" priority="1000" mode="M80">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:amdSec"/>
+      <!--ASSERT warn-->
+      <xsl:choose>
+         <xsl:when test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(key('mets_ids', @ID)) = 1 and matches(@ID, '^[\i-[:]][\c-[:]]*$')">
+               <xsl:attribute name="id">amdSec_02</xsl:attribute>
+               <xsl:attribute name="role">warn</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Jede <xsl:text/>mets:amdSec<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Das Fehlen der <xsl:text/>ID<xsl:text/> verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</svrl:text>
+               <svrl:property id="id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M80"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M80"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M80">
+      <xsl:apply-templates select="*" mode="M80"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
    <xsl:template match="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]"
                  priority="1001"
-                 mode="M80">
+                 mode="M81">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:amdSec[@ID=$work_amdid]][not( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )] | mets:mets[mets:amdSec[not(@ID=$work_amdid)][1]][not( mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'] )]"/>
       <!--ASSERT error-->
@@ -3584,16 +3641,18 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Jeder Datensatz muss Informationen über die Rechte an den Digitalisaten enthalten, damit er in die DDB eingespielt werden kann. Der Link zu einer Lizenz bzw. einem Rightsstatement steht in der mets:rightsMD in dem Element dv:license, das ein Unterelement von dv:rights, das wiederum ein Unterelement von mets:xmlData, das wiederum ein Unterelement von mets:mdWrap ist. Ist die Verwendung von dv:license nicht möglich, muss die Lizenz bzw. das Rightsstatement in mods:accessCondition type="use and reproduction" stehen. Ist keines von beiden der Fall, wird nach Rücksprache mit dem Datengeber für alle Datensätze bei der Bereinigung der Daten eine Standard-Lizenz gesetzt. Weitere Informationen zu diesem Element s. https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten</svrl:text>
+               <svrl:text>Jeder Datensatz muss Informationen über die Rechte an den Digitalisaten enthalten, damit er in die DDB eingespielt werden kann. Der Link zu einer Lizenz bzw. einem Rightsstatement steht in der <xsl:text/>mets:rightsMD<xsl:text/> in dem Element <xsl:text/>dv:license<xsl:text/>, das ein Unterelement von <xsl:text/>dv:rights<xsl:text/>, das wiederum ein Unterelement von <xsl:text/>mets:xmlData<xsl:text/>, das wiederum ein Unterelement von <xsl:text/>mets:mdWrap<xsl:text/> ist.
+Ist die Verwendung von <xsl:text/>dv:license<xsl:text/> nicht möglich, muss die Lizenz bzw. das Rightsstatement in <xsl:text/>mods:accessCondition[@type='use and reproduction']<xsl:text/> stehen.
+Ist keines von beiden der Fall, wird nach Rücksprache mit dem Datengeber für alle Datensätze bei der Bereinigung der Daten eine Standard-Lizenz gesetzt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M80"/>
+      <xsl:apply-templates select="*" mode="M81"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]"
                  priority="1000"
-                 mode="M80">
+                 mode="M81">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:mets[mets:amdSec[@ID=$work_amdid] or mets:amdSec[not(@ID=$work_amdid)][1]]"/>
       <!--ASSERT error-->
@@ -3607,19 +3666,19 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die vom Deutschen Zeitungsportal akzeptierten Rechteangaben entsprechen der von Europeana veröffentlichten Liste der rights statements (s. \url{https://pro.europeana.eu/page/available-rights-statements}). Entsprechen die Rechteangaben in den Daten nicht den in dieser Liste erlaubten URIs, werden sie nach Rücksprache mit den Datengebern bei der Bereinigung der Daten in eine der dort genannten Lizenzen bzw. Rechteangaben konvertiert.</svrl:text>
+               <svrl:text>Die von der DDB akzeptierten Rechteangaben entsprechen der von Europeana veröffentlichten Liste der Rights Statements (https://pro.europeana.eu/page/available-rights-statements). Entsprechen die Rechteangaben in den Daten nicht den in dieser Liste erlaubten URIs, werden sie nach Rücksprache mit den Datengebern bei der Bereinigung der Daten in eine der dort genannten Lizenzen bzw. Rechteangaben konvertiert.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M80"/>
+      <xsl:apply-templates select="*" mode="M81"/>
    </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M80"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M80">
-      <xsl:apply-templates select="*" mode="M80"/>
+   <xsl:template match="text()" priority="-1" mode="M81"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M81">
+      <xsl:apply-templates select="*" mode="M81"/>
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:amdSec/mets:digiprovMD" priority="1000" mode="M81">
+   <xsl:template match="mets:amdSec/mets:digiprovMD" priority="1000" mode="M82">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="mets:amdSec/mets:digiprovMD"/>
       <!--ASSERT error-->
@@ -3633,42 +3692,15 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>In der mets:amdSec des primären logischen Strukturelements enthält das Unterelement mets:digiprovMD einen Link zu dem Digitalisat beim Datenpartner. Dieser Link muss in Form eines http- oder https-URI in dv:presentation oder dv:reference vorhanden sein. Beide Elemente sind Unterelemente von dv:links, das ein Unterelement von mets:xmlData ist, welches ein Unterelement von mets:mdWrap ist welches ein Unterelement von mets:digiprovMD ist. Ist weder dv:presentation noch dv:reference vorhanden bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird mets:digiprovMD bei der Transformation der Daten entfernt. Weitere Informationen zu diesem Element s. METS-Anwendungsprofil Kapitel 2.7.4</svrl:text>
+               <svrl:text>In der <xsl:text/>mets:amdSec<xsl:text/> des primären logischen Strukturelements enthält das Unterelement <xsl:text/>mets:digiprovMD<xsl:text/> einen Link zu dem Digitalisat beim Datenpartner. Dieser Link muss in Form eines http- oder https-URI in <xsl:text/>dv:presentation<xsl:text/> oder <xsl:text/>dv:reference<xsl:text/> vorhanden sein.
+Beide Elemente sind Unterelemente von <xsl:text/>dv:links<xsl:text/>, das ein Unterelement von <xsl:text/>mets:xmlData<xsl:text/> ist, welches ein Unterelement von <xsl:text/>mets:mdWrap<xsl:text/> ist welches ein Unterelement von <xsl:text/>mets:digiprovMD<xsl:text/> ist.
+Ist weder <xsl:text/>dv:presentation<xsl:text/> noch <xsl:text/>dv:reference<xsl:text/> vorhanden bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird <xsl:text/>mets:digiprovMD<xsl:text/> bei der Transformation der Daten entfernt.</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*" mode="M81"/>
-   </xsl:template>
-   <xsl:template match="text()" priority="-1" mode="M81"/>
-   <xsl:template match="@*|node()" priority="-2" mode="M81">
-      <xsl:apply-templates select="*" mode="M81"/>
-   </xsl:template>
-   <!--PATTERN -->
-   <!--RULE -->
-   <xsl:template match="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
-                 priority="1000"
-                 mode="M82">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
-      <!--REPORT warn-->
-      <xsl:if test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910">
-         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                 test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910">
-            <xsl:attribute name="id">amdSec_13</xsl:attribute>
-            <xsl:attribute name="role">warn</xsl:attribute>
-            <xsl:attribute name="location">
-               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-            </xsl:attribute>
-            <svrl:text>Die Lizenzen aus dem Lizenzkorb der DDB können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen. Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im „Lizenzkorb“ enthaltene Rechtehinweis "Public Domain Mark" in Frage. Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.</svrl:text>
-            <svrl:property id="dmd_id">
-               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                             select="ancestor-or-self::mets:dmdSec/@ID"/>
-            </svrl:property>
-         </svrl:successful-report>
-      </xsl:if>
       <xsl:apply-templates select="*" mode="M82"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M82"/>
@@ -3677,66 +3709,23 @@
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]"
-                 priority="1002"
+   <xsl:template match="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"
+                 priority="1000"
                  mode="M83">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]"/>
-      <!--REPORT fatal-->
-      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+                       context="mets:mets[ ( key('license_uris', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $license_uris) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][contains(text(), 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('license_uris', mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1], $license_uris) and not(mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][string-length(@*[local-name()='href'][1]) &gt; 0][1]/@*[local-name()='href'][1][contains(., 'creativecommons.org/publicdomain/mark/1.0/')]) ) or ( key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) or ( key('mets_ap_dv_license_values', mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1], $mets_ap_dv_license_values) and not(mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[1][text()='pdm']) ) ]/mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods"/>
+      <!--REPORT caution-->
+      <xsl:if test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910">
          <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
-            <xsl:attribute name="id">amdSec_14</xsl:attribute>
-            <xsl:attribute name="role">fatal</xsl:attribute>
+                                 test="max( ( mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateIssued[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]), mods:originInfo[not(mods:edition[text()='[Electronic ed.]'])]/mods:dateCreated[matches(text()[1], '^((-\d\d\d\d+)|(\d\d\d\d))(-\d\d)?(-\d\d)?$')]/number(tokenize(text(), '-')[1]) ) ) &lt; 1910">
+            <xsl:attribute name="id">amdSec_13</xsl:attribute>
+            <xsl:attribute name="role">caution</xsl:attribute>
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</svrl:text>
-            <svrl:property id="dmd_id">
-               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                             select="ancestor-or-self::mets:dmdSec/@ID"/>
-            </svrl:property>
-         </svrl:successful-report>
-      </xsl:if>
-      <xsl:apply-templates select="*" mode="M83"/>
-   </xsl:template>
-   <!--RULE -->
-   <xsl:template match="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]"
-                 priority="1001"
-                 mode="M83">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]"/>
-      <!--REPORT fatal-->
-      <xsl:if test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1">
-         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                 test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1">
-            <xsl:attribute name="id">amdSec_16</xsl:attribute>
-            <xsl:attribute name="role">fatal</xsl:attribute>
-            <xsl:attribute name="location">
-               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-            </xsl:attribute>
-            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element mods:accessCondition[@type='use and reproduction'] widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</svrl:text>
-            <svrl:property id="dmd_id">
-               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                             select="ancestor-or-self::mets:dmdSec/@ID"/>
-            </svrl:property>
-         </svrl:successful-report>
-      </xsl:if>
-      <xsl:apply-templates select="*" mode="M83"/>
-   </xsl:template>
-   <!--RULE -->
-   <xsl:template match="mets:mets" priority="1000" mode="M83">
-      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
-      <!--REPORT error-->
-      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
-         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
-            <xsl:attribute name="id">amdSec_17</xsl:attribute>
-            <xsl:attribute name="role">error</xsl:attribute>
-            <xsl:attribute name="location">
-               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-            </xsl:attribute>
-            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält in den Elementen mods:accessCondition[@type='use and reproduction'] und dv:license widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB. Bei der Transformation der Daten übernimmt die DDB in diesem Fall die Rechteangabe aus mods:accessCondition[@type='use and reproduction']. Bitte beachten Sie darüber hinaus, dass die DDB die codierten CC-Lizenz-Werte aus dem METS-AP für dv:license als Version 4.0 und den Wert "reserved" als "Urheberrechtsschutz nicht bewertet" (Europeana Rightstatement "CNE") interpretiert.</svrl:text>
+            <svrl:text>Die Lizenzen aus dem Lizenzkorb der DDB können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen.
+Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im "Lizenzkorb" enthaltene Rechtehinweis "Public Domain Mark" in Frage.
+Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3748,5 +3737,80 @@
    <xsl:template match="text()" priority="-1" mode="M83"/>
    <xsl:template match="@*|node()" priority="-2" mode="M83">
       <xsl:apply-templates select="*" mode="M83"/>
+   </xsl:template>
+   <!--PATTERN -->
+   <!--RULE -->
+   <xsl:template match="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]"
+                 priority="1002"
+                 mode="M84">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets[not( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)] or mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)] )]"/>
+      <!--REPORT fatal-->
+      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+            <xsl:attribute name="id">amdSec_14</xsl:attribute>
+            <xsl:attribute name="role">fatal</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element <xsl:text/>dv:license<xsl:text/> widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M84"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]"
+                 priority="1001"
+                 mode="M84">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:mets[ mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[mods:accessCondition[@type='use and reproduction'][ key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris) or key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris) ][2]] ]"/>
+      <!--REPORT fatal-->
+      <xsl:if test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="count(distinct-values(( mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', '') ))) &gt; 1">
+            <xsl:attribute name="id">amdSec_16</xsl:attribute>
+            <xsl:attribute name="role">fatal</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält im Element <xsl:text/>mods:accessCondition[@type='use and reproduction']<xsl:text/> widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB und wird daher nicht in die DDB eingespielt.</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M84"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:mets" priority="1000" mode="M84">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="mets:mets"/>
+      <!--REPORT error-->
+      <xsl:if test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+         <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                 test="count(distinct-values(( mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:amdSec[not(@ID=$work_amdid)][1]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(text(), 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(text(), '^https', 'http'), 'deed\.[a-z][a-z]$', ''), mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods/mods:accessCondition[@type='use and reproduction'][key('license_uris', replace(@*[local-name()='href'][1], 'deed\.[a-z][a-z]$', ''), $license_uris)]/replace(replace(@*[local-name()='href'][1], '^https', 'http'), 'deed\.[a-z][a-z]$', ''), key('mets_ap_dv_license_values', mets:amdSec[@ID=$work_amdid]/mets:rightsMD/mets:mdWrap/mets:xmlData/dv:rights/dv:license[key('mets_ap_dv_license_values', text(), $mets_ap_dv_license_values)]/text(), $mets_ap_dv_license_values)/@to ))) &gt; 1">
+            <xsl:attribute name="id">amdSec_17</xsl:attribute>
+            <xsl:attribute name="role">error</xsl:attribute>
+            <xsl:attribute name="location">
+               <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+            </xsl:attribute>
+            <svrl:text>Datensätze müssen eindeutige Rechteangaben zu den Digitalisaten enthalten. Der Datensatz enthält in den Elementen <xsl:text/>mods:accessCondition[@type='use and reproduction']<xsl:text/> und <xsl:text/>dv:license<xsl:text/> widersprüchliche Rechteinformationen aus dem Lizenzkorb der DDB.
+Bei der Transformation der Daten übernimmt die DDB in diesem Fall die Rechteangabe aus <xsl:text/>mods:accessCondition[@type='use and reproduction']<xsl:text/>. Bitte beachten Sie darüber hinaus, dass die DDB die codierten CC-Lizenz-Werte aus dem METS-AP für <xsl:text/>dv:license<xsl:text/> als Version 4.0 und den Wert <xsl:text/>reserved<xsl:text/> als "Urheberrechtsschutz nicht bewertet" (http://rightsstatements.org/vocab/CNE/1.0/) (Europeana Rightstatement "CNE") interpretiert.</svrl:text>
+            <svrl:property id="dmd_id">
+               <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                             select="ancestor-or-self::mets:dmdSec/@ID"/>
+            </svrl:property>
+         </svrl:successful-report>
+      </xsl:if>
+      <xsl:apply-templates select="*" mode="M84"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M84"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M84">
+      <xsl:apply-templates select="*" mode="M84"/>
    </xsl:template>
 </xsl:stylesheet>

@@ -3,6 +3,26 @@ Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Ze
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+## v2023-05-05T15:51:41
+
+### Added
+
+- Prüfung `fileSec_09` hinzugefügt: "Nicht referenziertes mets:file"
+- Fehler-Level `caution` hinzugefügt: "Datensätze, bei denen ein Verdacht auf Fehler vorliegt"
+
+### Changed
+- Prüfung `amdSec_13`: Das Fehler-Level der Prüfung ist von `warn`  auf `caution` geändert.
+- Die Lizenzen [Rechte vorbehalten – Freier Zugang](http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-fz/) und [Rechte vorbehalten – Zugang nach Autorisierung](http://www.deutsche-digitale-bibliothek.de/lizenzen/rv-ez/) sind aus der Liste der gültigen Lizenzen entfernt. Dies betrifft folgende Prüfungen
+    - `accessCondition_01` 
+    - `amdSec_05`
+    - `amdSec_13`
+    - `amdSec_14`
+    - `amdSec_16`
+    - `amdSec_17` 
+
+### Removed
+- Prüfung `relatedItem_08` entfernt: "Die Verknüpfung zur ZDB-Aufnahme der Druckausgabe ist nicht möglich"
+
 ## v2022-11-10T08:51:24
 
 ### Added
