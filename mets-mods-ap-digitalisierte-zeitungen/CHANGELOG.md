@@ -3,6 +3,32 @@ Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Ze
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+## v2024-02-29T15:26:03
+
+### Added
+
+- Prüfung `all_07` hinzugefügt: "Ungültiger Namensraum für METS-Elemente"
+- Prüfung `all_08` hinzugefügt: "Ungültiger Namensraum für MODS-Elemente"
+- Prüfung `all_09` hinzugefügt: "Ungültiger Namensraum für DFG-Viewer-Elemente (dv)"
+- Prüfung `structMapLogical_28` hinzugefügt: "Die Ebene des primären mets:div im mets:structMap\[@TYPE='LOGICAL'\] enthält weitere mets:div"
+- Prüfung `structLink_05` hinzugefügt: "Ungültiger Namensraum für XLink-Attribute von mets:smLink"
+
+### Changed
+
+- Selektion des primären `mets:div` Elements präzisiert. Dies betrifft folgende Prüfungen:
+    - `amdSec_04`
+    - `amdSec_05`
+    - `amdSec_13`
+    - `amdSec_14`
+    - `amdSec_17` 
+    - `structMapLogical_04`
+- Prüfung `structMapLogical_14`: Die Prüfung auf das primäre `mets:div` Element eingeschränkt
+- Prüfung `structMapLogical_15`: Die Prüfung auf das primäre `mets:div` Element eingeschränkt 
+
+### Removed
+
+- Prüfung `structMapLogical_18` entfernt: "Der Datensatz enthält mehrere primäre Strukturelemente" 
+
 ## v2023-05-05T15:51:41
 
 ### Added

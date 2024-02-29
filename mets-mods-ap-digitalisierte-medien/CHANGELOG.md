@@ -3,6 +3,28 @@ Changelog der Schematron-Validierung für das DDB-METS/MODS Anwendungsprofil fü
 
 Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+## v2024-02-29T15:50:50
+
+### Added
+
+- Prüfung `all_07` hinzugefügt: "Ungültiger Namensraum für METS-Elemente"
+- Prüfung `all_08` hinzugefügt: "Ungültiger Namensraum für MODS-Elemente"
+- Prüfung `all_09` hinzugefügt: "Ungültiger Namensraum für DFG-Viewer-Elemente (dv)"
+- Prüfung `titleInfo_09` hinzugefügt: "mods:titleInfo ist unvollständig"
+- Prüfung `relatedItem_12` hinzugefügt: "mods:relatedItem ist mit dem Attribut type mit dem Wert host mehrfach vorhanden"
+- Prüfung `structMapLogical_23` hinzugefügt: "Primäre mets:div in mets:structMap\[@TYPE='LOGICAL'\] hat Elternelement mets:div in Ankersatz"
+- Prüfung `structMapLogical_24` hinzugefügt: "Ungültiger Wert im Attribut TYPE des primären mets:div in mets:structMap\[@TYPE='LOGICAL'\] in Ankersatz"
+- Prüfung `structMapLogical_25` hinzugefügt: "Ungültiger Wert im Attribut TYPE des primären mets:div in mets:structMap\[@TYPE='LOGICAL'\] im Teil eines mehrteiligen Dokuments"
+- Prüfung `structMapLogical_26` hinzugefügt: "Ungültiger Wert im Attribut TYPE des primären mets:div in mets:structMap\[@TYPE='LOGICAL'\] in einteiligem Dokument"
+- Prüfung `structMapLogical_27` hinzugefügt: "Ungültiger Wert im Attribut TYPE vom mets:div in mets:structMap\[@TYPE='LOGICAL'\] unselbständiger Dokumente"
+- Prüfung `structMapLogical_28` hinzugefügt: "mets:mptr in mets:div innerhalb von mets:structMap\[@TYPE='LOGICAL'\] mehrfach vorhanden"
+- Prüfung `structLink_05` hinzugefügt: "Ungültiger Namensraum für XLink-Attribute von mets:smLink"
+
+### Changed
+
+- Prüfung `name_13`: Aktuelle [Liste MARC Relator Codes](http://id.loc.gov/vocabulary/relators) übernommen
+- Prüfung `structMapLogical_06`: Aktuelle Liste der Strukturtypen des Strukturdatensets des DFG-Viewers übernommen
+
 ## v2023-05-05T15:50:49
 
 ### Added

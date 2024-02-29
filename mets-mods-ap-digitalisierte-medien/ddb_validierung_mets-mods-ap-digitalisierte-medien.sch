@@ -2,9 +2,9 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2023-05-05T15:50:49"
+            schemaVersion="v2024-02-29T15:50:50"
             queryBinding="xslt2">
-   <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS Anwendungsprofil für digitalisierte Medien</sch:title>
+   <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das Anwendungsprofil für die Verwendung von METS/MODS in der DDB</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>
    <sch:ns prefix="mods" uri="http://www.loc.gov/mods/v3"/>
    <sch:ns prefix="xlink" uri="http://www.w3.org/1999/xlink"/>
@@ -786,6 +786,7 @@
          <marc_relator_code>adi</marc_relator_code>
          <marc_relator_code>adp</marc_relator_code>
          <marc_relator_code>aft</marc_relator_code>
+         <marc_relator_code>anc</marc_relator_code>
          <marc_relator_code>anl</marc_relator_code>
          <marc_relator_code>anm</marc_relator_code>
          <marc_relator_code>ann</marc_relator_code>
@@ -804,11 +805,14 @@
          <marc_relator_code>att</marc_relator_code>
          <marc_relator_code>auc</marc_relator_code>
          <marc_relator_code>aud</marc_relator_code>
+         <marc_relator_code>aue</marc_relator_code>
          <marc_relator_code>aui</marc_relator_code>
+         <marc_relator_code>aup</marc_relator_code>
          <marc_relator_code>aus</marc_relator_code>
          <marc_relator_code>aut</marc_relator_code>
          <marc_relator_code>bdd</marc_relator_code>
          <marc_relator_code>bjd</marc_relator_code>
+         <marc_relator_code>bka</marc_relator_code>
          <marc_relator_code>bkd</marc_relator_code>
          <marc_relator_code>bkp</marc_relator_code>
          <marc_relator_code>blw</marc_relator_code>
@@ -817,6 +821,7 @@
          <marc_relator_code>brd</marc_relator_code>
          <marc_relator_code>brl</marc_relator_code>
          <marc_relator_code>bsl</marc_relator_code>
+         <marc_relator_code>cad</marc_relator_code>
          <marc_relator_code>cas</marc_relator_code>
          <marc_relator_code>ccp</marc_relator_code>
          <marc_relator_code>chr</marc_relator_code>
@@ -834,6 +839,7 @@
          <marc_relator_code>col</marc_relator_code>
          <marc_relator_code>com</marc_relator_code>
          <marc_relator_code>con</marc_relator_code>
+         <marc_relator_code>cop</marc_relator_code>
          <marc_relator_code>cor</marc_relator_code>
          <marc_relator_code>cos</marc_relator_code>
          <marc_relator_code>cot</marc_relator_code>
@@ -859,13 +865,16 @@
          <marc_relator_code>ctt</marc_relator_code>
          <marc_relator_code>cur</marc_relator_code>
          <marc_relator_code>cwt</marc_relator_code>
+         <marc_relator_code>dbd</marc_relator_code>
          <marc_relator_code>dbp</marc_relator_code>
          <marc_relator_code>dfd</marc_relator_code>
          <marc_relator_code>dfe</marc_relator_code>
          <marc_relator_code>dft</marc_relator_code>
+         <marc_relator_code>dgc</marc_relator_code>
          <marc_relator_code>dgg</marc_relator_code>
          <marc_relator_code>dgs</marc_relator_code>
          <marc_relator_code>dis</marc_relator_code>
+         <marc_relator_code>djo</marc_relator_code>
          <marc_relator_code>dln</marc_relator_code>
          <marc_relator_code>dnc</marc_relator_code>
          <marc_relator_code>dnr</marc_relator_code>
@@ -881,6 +890,7 @@
          <marc_relator_code>dto</marc_relator_code>
          <marc_relator_code>dub</marc_relator_code>
          <marc_relator_code>edc</marc_relator_code>
+         <marc_relator_code>edd</marc_relator_code>
          <marc_relator_code>edm</marc_relator_code>
          <marc_relator_code>edt</marc_relator_code>
          <marc_relator_code>egr</marc_relator_code>
@@ -900,8 +910,10 @@
          <marc_relator_code>fmo</marc_relator_code>
          <marc_relator_code>fmp</marc_relator_code>
          <marc_relator_code>fnd</marc_relator_code>
+         <marc_relator_code>fon</marc_relator_code>
          <marc_relator_code>fpy</marc_relator_code>
          <marc_relator_code>frg</marc_relator_code>
+         <marc_relator_code>gdv</marc_relator_code>
          <marc_relator_code>gis</marc_relator_code>
          <marc_relator_code>his</marc_relator_code>
          <marc_relator_code>hnr</marc_relator_code>
@@ -938,6 +950,7 @@
          <marc_relator_code>med</marc_relator_code>
          <marc_relator_code>mfp</marc_relator_code>
          <marc_relator_code>mfr</marc_relator_code>
+         <marc_relator_code>mka</marc_relator_code>
          <marc_relator_code>mod</marc_relator_code>
          <marc_relator_code>mon</marc_relator_code>
          <marc_relator_code>mrb</marc_relator_code>
@@ -945,14 +958,19 @@
          <marc_relator_code>msd</marc_relator_code>
          <marc_relator_code>mte</marc_relator_code>
          <marc_relator_code>mtk</marc_relator_code>
+         <marc_relator_code>mup</marc_relator_code>
          <marc_relator_code>mus</marc_relator_code>
+         <marc_relator_code>mxe</marc_relator_code>
+         <marc_relator_code>nan</marc_relator_code>
          <marc_relator_code>nrt</marc_relator_code>
+         <marc_relator_code>onp</marc_relator_code>
          <marc_relator_code>opn</marc_relator_code>
          <marc_relator_code>org</marc_relator_code>
          <marc_relator_code>orm</marc_relator_code>
          <marc_relator_code>osp</marc_relator_code>
          <marc_relator_code>oth</marc_relator_code>
          <marc_relator_code>own</marc_relator_code>
+         <marc_relator_code>pad</marc_relator_code>
          <marc_relator_code>pan</marc_relator_code>
          <marc_relator_code>pat</marc_relator_code>
          <marc_relator_code>pbd</marc_relator_code>
@@ -985,6 +1003,7 @@
          <marc_relator_code>pth</marc_relator_code>
          <marc_relator_code>ptt</marc_relator_code>
          <marc_relator_code>pup</marc_relator_code>
+         <marc_relator_code>rap</marc_relator_code>
          <marc_relator_code>rbr</marc_relator_code>
          <marc_relator_code>rcd</marc_relator_code>
          <marc_relator_code>rce</marc_relator_code>
@@ -1005,12 +1024,15 @@
          <marc_relator_code>rst</marc_relator_code>
          <marc_relator_code>rth</marc_relator_code>
          <marc_relator_code>rtm</marc_relator_code>
+         <marc_relator_code>rxa</marc_relator_code>
          <marc_relator_code>sad</marc_relator_code>
          <marc_relator_code>sce</marc_relator_code>
          <marc_relator_code>scl</marc_relator_code>
          <marc_relator_code>scr</marc_relator_code>
+         <marc_relator_code>sde</marc_relator_code>
          <marc_relator_code>sds</marc_relator_code>
          <marc_relator_code>sec</marc_relator_code>
+         <marc_relator_code>sfx</marc_relator_code>
          <marc_relator_code>sgd</marc_relator_code>
          <marc_relator_code>sgn</marc_relator_code>
          <marc_relator_code>sht</marc_relator_code>
@@ -1026,10 +1048,14 @@
          <marc_relator_code>stm</marc_relator_code>
          <marc_relator_code>stn</marc_relator_code>
          <marc_relator_code>str</marc_relator_code>
+         <marc_relator_code>swd</marc_relator_code>
+         <marc_relator_code>tau</marc_relator_code>
          <marc_relator_code>tcd</marc_relator_code>
          <marc_relator_code>tch</marc_relator_code>
          <marc_relator_code>ths</marc_relator_code>
          <marc_relator_code>tld</marc_relator_code>
+         <marc_relator_code>tlg</marc_relator_code>
+         <marc_relator_code>tlh</marc_relator_code>
          <marc_relator_code>tlp</marc_relator_code>
          <marc_relator_code>trc</marc_relator_code>
          <marc_relator_code>trl</marc_relator_code>
@@ -1038,6 +1064,7 @@
          <marc_relator_code>uvp</marc_relator_code>
          <marc_relator_code>vac</marc_relator_code>
          <marc_relator_code>vdg</marc_relator_code>
+         <marc_relator_code>vfx</marc_relator_code>
          <marc_relator_code>wac</marc_relator_code>
          <marc_relator_code>wal</marc_relator_code>
          <marc_relator_code>wam</marc_relator_code>
@@ -1201,6 +1228,39 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/element()[local-name() = 'mets']">
+            <!-- 
+               Ungültiger Namensraum für METS-Elemente
+             -->
+         <sch:assert id="all_07"
+                     role="fatal"
+                     test="./namespace-uri() = 'http://www.loc.gov/METS/'">Der Datensatz verwendet einen ungültigen Namensraum für METS-Elemente. Der korrekte Namensraum für METS-Elemente ist <sch:span class="monotype">http://www.loc.gov/METS/</sch:span>.
+Verwenden die METS-Elemente einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/mets:mets/mets:dmdSec[1]/mets:mdWrap/mets:xmlData/element()[local-name() = 'mods']">
+            <!-- 
+               Ungültiger Namensraum für MODS-Elemente
+             -->
+         <sch:assert id="all_08"
+                     role="fatal"
+                     test="./namespace-uri() = 'http://www.loc.gov/mods/v3'">Der Datensatz verwendet einen ungültigen Namensraum für MODS-Elemente. Der korrekte Namensraum für MODS-Elemente ist <sch:span class="monotype">http://www.loc.gov/mods/v3</sch:span>.
+Verwenden die MODS-Elemente einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/mets:mets/mets:amdSec[1]/mets:rightsMD/mets:mdWrap/mets:xmlData/element()[local-name() = 'rights']">
+            <!-- 
+               Ungültiger Namensraum für DFG-Viewer-Elemente (dv)
+             -->
+         <sch:assert id="all_09"
+                     role="fatal"
+                     test="./namespace-uri() = 'http://dfg-viewer.de/'">Der Datensatz verwendet einen ungültigen Namensraum für DFG-Viewer-Elemente (<sch:span class="monotype">dv</sch:span>). Der korrekte Namensraum für DFG-Viewer-Elemente ist <sch:span class="monotype">http://dfg-viewer.de/</sch:span>.
+Verwenden die DFG-Viewer-Elemente einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
       <sch:rule context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods">
             <!-- 
                mods:titleInfo fehlt in im primären mets:dmdSec
@@ -1294,6 +1354,19 @@ Ist dies nicht der Fall, wird <sch:span class="monotype">mods:titleInfo</sch:spa
 Bitte beachten Sie dazu, dass in der DDB jedes <sch:span class="monotype">mets:dmdSec</sch:span>-Element ein Objekt erzeugt. Der Wert in <sch:span class="monotype">mods:title</sch:span> wird prominent und ggf. unabhängig vom Gesamtobjekt in der Trefferliste angezeigt. Daher erschweren nicht aussagekräftige Objekttitel die Nutzung Ihrer Objekte in der DDB.
 Handelt es sich bei dem Text in <sch:span class="monotype">mods:title</sch:span> um eine Abkürzung, verwenden Sie bitte das Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">abbreviated</sch:span> im Elternelement <sch:span class="monotype">mods:titleInfo</sch:span>. Enthält <sch:span class="monotype">mods:title</sch:span> eine Bandzählung geben Sie diese im Element <sch:span class="monotype">mods:part</sch:span> an.
 Nicht aussagekräftige Titel verhindern nicht das Einspielen Ihrer Daten in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich tatsächlich um einen Titel handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mods:titleInfo">
+            <!-- 
+               mods:titleInfo ist unvollständig
+             -->
+         <sch:assert id="titleInfo_09"
+                     role="error"
+                     test="mods:title[string-length(text()[1]) &gt; 0]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/titleInfo">Das Element <sch:span class="monotype">mods:titleInfo</sch:span> muss das Element <sch:span class="monotype">mods:title</sch:span> enthalten.
+Ist dies nicht der Fall, wird <sch:span class="monotype">mods:titleInfo</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1589,7 +1662,7 @@ Wird eines der o. g. Elemente mit dem identischen Wert in <sch:span class="monot
                      test="mods:originInfo[@eventType='digitization' or mods:edition[text()[1] = '[Electronic ed.]']][2]"
                      properties="dmd_id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/originInfo">Das Element <sch:span class="monotype">mods:originInfo</sch:span> innerhalb des Elements <sch:span class="monotype">mets:dmdSec</sch:span> darf mit dem Attribut <sch:span class="monotype">eventType</sch:span> mit dem Wert <sch:span class="monotype">digitization</sch:span> bzw. mit <sch:span class="monotype">mods:edition</sch:span> mit dem Wert <sch:span class="monotype">[Electronic ed.]</sch:span> nicht wiederholt werden.
-Enthält <sch:span class="monotype">mets:dmdSec</sch:span> mehr als ein <sch:span class="monotype">mods:originInfo</sch:span> mit dem Attribut <sch:span class="monotype">eventType</sch:span> mit dem Wert <sch:span class="monotype">digitization</sch:span> bzw. mit <sch:span class="monotype">mods:edition</sch:span> mit dem Wert <sch:span class="monotype">[Electronic ed.]</sch:span>, wird bei der Transformation des Datensatzes das erste entsperchende Vorkommen von <sch:span class="monotype">mods:originInfo</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:originInfo</sch:span> werden entfernt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
+Enthält <sch:span class="monotype">mets:dmdSec</sch:span> mehr als ein <sch:span class="monotype">mods:originInfo</sch:span> mit dem Attribut <sch:span class="monotype">eventType</sch:span> mit dem Wert <sch:span class="monotype">digitization</sch:span> bzw. mit <sch:span class="monotype">mods:edition</sch:span> mit dem Wert <sch:span class="monotype">[Electronic ed.]</sch:span>, wird bei der Transformation des Datensatzes das erste entsprechende Vorkommen von <sch:span class="monotype">mods:originInfo</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:originInfo</sch:span> werden entfernt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1775,6 +1848,19 @@ Fehlt <sch:span class="monotype">type</sch:span> bzw. enthält es einen ungülti
                      properties="dmd_id"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Das Element <sch:span class="monotype">mods:relatedItem</sch:span> mit dem Wert <sch:span class="monotype">series</sch:span> im Attribut <sch:span class="monotype">type</sch:span> muss mindestens ein Element <sch:span class="monotype">mods:titleInfo</sch:span>-Element mit dem Unterelement <sch:span class="monotype">mods:title</sch:span> enthalten.
 Ist dies nicht der Fall, wird <sch:span class="monotype">mods:relatedItem</sch:span> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:xmlData/mods:mods">
+            <!-- 
+               mods:relatedItem ist mit dem Attribut type mit dem Wert host mehrfach vorhanden
+             -->
+         <sch:report id="relatedItem_12"
+                     role="error"
+                     test="mods:relatedItem[@type='host'][mods:recordInfo/mods:recordIdentifier][2]"
+                     properties="dmd_id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/relatedItem">Das Element <sch:span class="monotype">mods:relatedItem</sch:span> innerhalb des Elements <sch:span class="monotype">mets:dmdSec</sch:span> darf mit dem Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">host</sch:span> nicht wiederholt werden, da die DDB zurzeit keine Polyhierarchie unterstützt.
+Enthält <sch:span class="monotype">mets:dmdSec</sch:span> mehr als ein <sch:span class="monotype">mods:relatedItem</sch:span> mit dem Attribut <sch:span class="monotype">type</sch:span> mit dem Wert <sch:span class="monotype">host</sch:span>, wird bei der Transformation des Datensatzes das erste Vorkommen von <sch:span class="monotype">mods:relatedItem</sch:span> übernommen, alle anderen <sch:span class="monotype">mods:relatedItem</sch:span> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -2431,13 +2517,13 @@ Eine fehlende Referenzierung verhindert nicht das Einspielen des Datensatzes in 
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss das Attribut <sch:span class="monotype">TYPE</sch:span> mit einem Wert aus dem Strukturdatenset des DFG-Viewers (https://dfg-viewer.de/strukturdatenset/) (Spalte "XML") enthalten.
 Fehlt das Attribut <sch:span class="monotype">TYPE</sch:span> in <sch:span class="monotype">mets:div</sch:span>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</sch:assert>
       </sch:rule>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]">
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[not( @TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'inventory', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'ephemera', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'subinventory', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' ) )]">
             <!-- 
                Ungültiger Wert im Attribut TYPE von mets:div in mets:structMap[@TYPE='LOGICAL']
              -->
          <sch:assert id="structMapLogical_06"
                      role="error"
-                     test="@TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' )"
+                     test="@TYPE = ( 'section', 'file', 'album', 'register', 'annotation', 'address', 'article', 'atlas', 'issue', 'bachelor_thesis', 'volume', 'contained_work', 'additional', 'report', 'official_notification', 'provenance', 'inventory', 'image', 'collation', 'ornament', 'letter', 'cover', 'cover_front', 'cover_back', 'diploma_thesis', 'doctoral_thesis', 'document', 'printers_mark', 'printed_archives', 'binding', 'entry', 'corrigenda', 'bookplate', 'fascicle', 'leaflet', 'research_paper', 'photograph', 'fragment', 'land_register', 'ground_plan', 'habilitation_thesis', 'manuscript', 'illustration', 'imprint', 'contents', 'initial_decoration', 'year', 'chapter', 'map', 'cartulary', 'colophon', 'ephemera', 'engraved_titlepage', 'magister_thesis', 'folder', 'master_thesis', 'multivolume_work', 'month', 'monograph', 'musical_notation', 'periodical', 'poster', 'plan', 'privileges', 'index', 'spine', 'scheme', 'edge', 'seal', 'paste_down', 'stamp', 'study', 'table', 'day', 'proceeding', 'text', 'title_page', 'subinventory', 'act', 'judgement', 'verse', 'note', 'preprint', 'dossier', 'lecture', 'endsheet', 'paper', 'preface', 'dedication', 'newspaper' )"
                      properties="id TYPE"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:div</sch:span> im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> muss im Attribut <sch:span class="monotype">TYPE</sch:span> einem Wert aus dem Strukturdatenset des DFG-Viewers (https://dfg-viewer.de/strukturdatenset/) (Spalte "XML") enthalten.
 Enthält das Attribut <sch:span class="monotype">TYPE</sch:span> von <sch:span class="monotype">mets:div</sch:span> einen ungültigen Wert, wird er bei der Transformation des Datensatzes durch den Wert <sch:span class="monotype">section</sch:span> ersetzt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</sch:assert>
@@ -2590,6 +2676,94 @@ Fehlt diese Referenz, kann <sch:span class="monotype">mets:div</sch:span> für d
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID = $work_dmdid]">
+            <!-- 
+               Primäre mets:div in mets:structMap[@TYPE='LOGICAL'] hat Elternelement mets:div in Ankersatz
+             -->
+         <sch:report id="structMapLogical_23"
+                     role="fatal"
+                     test="$is_anchor and ./parent::mets:div"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz besitzt kein <sch:span class="monotype">mets:fileSec</sch:span>-Element mit dem Unterelement <sch:span class="monotype">mets:fileGrp[@USE='DEFAULT']</sch:span> bzw. das Element <sch:span class="monotype">mets:structLink</sch:span> und beschreibt daher einen Ankersatz. Dadurch darf das primäre <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> kein <sch:span class="monotype">mets:div</sch:span>-Elternelement besitzen und muss die oberste logische Ebene darstellen.
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Aufbau eines Ankersatzes (https://wiki.deutsche-digitale-bibliothek.de/x/SgGuB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']/mets:div">
+            <!-- 
+               Ungültiger Wert im Attribut TYPE des primären mets:div in mets:structMap[@TYPE='LOGICAL'] in Ankersatz
+             -->
+         <sch:report id="structMapLogical_24"
+                     role="warn"
+                     test="$is_anchor and not(@TYPE = ('multivolume_work', 'periodical', 'newspaper'))"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz beschreibt ein Mehrteiliges Dokument (Ankersatz) und muss daher im Attribut <sch:span class="monotype">TYPE</sch:span> des primären <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> einen der folgenden Werte im Attribut <sch:span class="monotype">TYPE</sch:span> enthalten:
+ * <sch:span class="monotype">multivolume_work</sch:span>
+ * <sch:span class="monotype">newspaper</sch:span>
+ * <sch:span class="monotype">periodical</sch:span>
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']/mets:div/mets:div[tokenize(@DMDID, ' ') = $work_dmdid]">
+            <!-- 
+               Ungültiger Wert im Attribut TYPE des primären mets:div in mets:structMap[@TYPE='LOGICAL'] im Teil eines mehrteiligen Dokuments
+             -->
+         <sch:report id="structMapLogical_25"
+                     role="warn"
+                     test="not($is_anchor) and not(@TYPE = ('volume', 'additional', 'illustration', 'map', 'folder', 'musical_notation', 'part'))"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz beschreibt einen Teil eines mehrteiligen Dokuments und muss daher im Attribut <sch:span class="monotype">TYPE</sch:span> des primären <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> einen der folgenden Werte im Attribut <sch:span class="monotype">TYPE</sch:span> enthalten:
+ * <sch:span class="monotype">additional</sch:span>
+ * <sch:span class="monotype">folder</sch:span>
+ * <sch:span class="monotype">illustration</sch:span>
+ * <sch:span class="monotype">map</sch:span>
+ * <sch:span class="monotype">musical_notation</sch:span>
+ * <sch:span class="monotype">part</sch:span>
+ * <sch:span class="monotype">volume</sch:span>
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']/mets:div[tokenize(@DMDID, ' ') = $work_dmdid]">
+            <!-- 
+               Ungültiger Wert im Attribut TYPE des primären mets:div in mets:structMap[@TYPE='LOGICAL'] in einteiligem Dokument
+             -->
+         <sch:report id="structMapLogical_26"
+                     role="warn"
+                     test="not($is_anchor) and not(@TYPE = ( 'letter', 'fascicle', 'fragment', 'manuscript', 'illustration', 'map', 'bundle', 'folder', 'monograph', 'musical_notation', 'privilege', 'text', 'verse' ))"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Der Datensatz beschreibt ein einteiliges Dokument und muss daher im Attribut <sch:span class="monotype">TYPE</sch:span> des primären <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> einen entsprechenden Wert aus der Tabelle der Hierarchietypen in METS/MODS (Spalte B) (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB) enthalten.
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[tokenize(@DMDID, ' ') = $work_dmdid]//mets:div">
+            <!-- 
+               Ungültiger Wert im Attribut TYPE vom mets:div in mets:structMap[@TYPE='LOGICAL'] unselbständiger Dokumente
+             -->
+         <sch:report id="structMapLogical_27"
+                     role="warn"
+                     test="not($is_anchor) and not(@TYPE = ( 'additional', 'address', 'annotation', 'appendix', 'article', 'binding', 'bookplate', 'chapter', 'contained_work', 'dedication', 'entry', 'illustration', 'index', 'issue', 'letter', 'map', 'musical_notation', 'part', 'preface', 'printers_mark', 'privilege', 'review', 'section', 'stamp', 'contents', 'text', 'title_page', 'verse' ))"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Ein <sch:span class="monotype">mets:div</sch:span>-Element im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span>, das ein unselbständiges Dokument beschreibt, muss im Attribut <sch:span class="monotype">TYPE</sch:span> entsprechenden Wert aus der Tabelle der Hierarchietypen in METS/MODS (Spalte B) (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB) enthalten.
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div">
+            <!-- 
+               mets:mptr in mets:div innerhalb von mets:structMap[@TYPE='LOGICAL'] mehrfach vorhanden
+             -->
+         <sch:report id="structMapLogical_28"
+                     role="fatal"
+                     test="mets:mptr[2]"
+                     properties="id"
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structMap">Das Element <sch:span class="monotype">mets:mptr</sch:span> im Element <sch:span class="monotype">mets:div</sch:span> innerhalb des Elements <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> darf nicht wiederholt werden.
+Enthält <sch:span class="monotype">mets:div</sch:span> mehr als ein <sch:span class="monotype">mets:mptr</sch:span> wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
       <sch:rule context="mets:mets">
             <!-- 
                mets:structMap[@TYPE='PHYSICAL'] fehlt
@@ -2724,6 +2898,17 @@ Fehlen diese Attribute, wird der Datensatz nicht in die DDB eingespielt.Weitere 
                      test="key('structMap_PHYSICAL_ids', @xlink:to)"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/structLink">Das Attribut <sch:span class="monotype">xlink:to</sch:span> des Elements <sch:span class="monotype">mets:smLink</sch:span> muss den Wert des Attributs <sch:span class="monotype">ID</sch:span> eines <sch:span class="monotype">mets:div</sch:span>-Elements im Element <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> referenzieren.
 Enthält ein <sch:span class="monotype">xlink:to</sch:span> eine ungültige Referenz, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen, ihren Attributen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/mets:mets/mets:structLink/mets:smLink[1]">
+            <!-- 
+               Ungültiger Namensraum für XLink-Attribute von mets:smLink
+             -->
+         <sch:assert id="structLink_05"
+                     role="fatal"
+                     test="@*[local-name() = 'from'][namespace-uri() = 'http://www.w3.org/1999/xlink']">Die Attribute <sch:span class="monotype">xlink:from</sch:span> und <sch:span class="monotype">xlink:to</sch:span> des Elements <sch:span class="monotype">mets:smLink</sch:span> verwenden einen ungültigen Namensraum. Der korrekte Namensraum für diese XLink-Attribute ist <sch:span class="monotype">http://www.w3.org/1999/xlink</sch:span>.
+Verwenden die Attribute einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
       </sch:rule>
    </sch:pattern>
 </sch:schema>

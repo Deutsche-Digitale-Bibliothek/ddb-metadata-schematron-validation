@@ -2,7 +2,7 @@
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             xmlns:xs="http://www.w3.org/2001/XMLSchema"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            schemaVersion="v2023-05-05T15:51:41"
+            schemaVersion="v2024-02-29T15:26:03"
             queryBinding="xslt2">
    <sch:title>Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS-Anwendungsprofil für Zeitungen</sch:title>
    <sch:ns prefix="mets" uri="http://www.loc.gov/METS/"/>
@@ -814,7 +814,7 @@
    <sch:let name="is_anchor"
             value="if ( //mets:mets/mets:structLink or //mets:mets/mets:fileSec/mets:fileGrp[@USE='DEFAULT'] ) then false() else true()"/>
    <sch:let name="work_amdid"
-            value="//mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID = $work_dmdid]/@ADMID"/>
+            value="//mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID[tokenize(., ' ') = $work_dmdid]]/@ADMID"/>
    <xsl:key name="mets_ids" match="mets:*[@ID]" use="@ID"/>
    <xsl:key name="dmdsec_ids" match="mets:dmdSec" use="@ID"/>
    <xsl:key name="structLink_from_ids"
@@ -908,6 +908,39 @@
                      role="error"
                      test="matches(substring-after(@valueURI, '/gnd/'), '^[0-9]*-[0-9xX]{1}$|^[0-9xX]*$')"
                      properties="dmd_id">Der Datensatz enthält valueURI Attribute mit einer ungültigen GND-URI. Diese valueURI-Attribute werden bei der Transformation der Daten entfernt.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/element()[local-name() = 'mets']">
+            <!-- 
+               Ungültiger Namensraum für METS-Elemente
+             -->
+         <sch:assert id="all_07"
+                     role="fatal"
+                     test="./namespace-uri() = 'http://www.loc.gov/METS/'">Der Datensatz verwendet einen ungültigen Namensraum für METS-Elemente. Der korrekte Namensraum für METS-Elemente ist <sch:span class="monotype">http://www.loc.gov/METS/</sch:span>.
+Verwenden die METS-Elemente einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/mets:mets/mets:dmdSec[1]/mets:mdWrap/mets:xmlData/element()[local-name() = 'mods']">
+            <!-- 
+               Ungültiger Namensraum für MODS-Elemente
+             -->
+         <sch:assert id="all_08"
+                     role="fatal"
+                     test="./namespace-uri() = 'http://www.loc.gov/mods/v3'">Der Datensatz verwendet einen ungültigen Namensraum für MODS-Elemente. Der korrekte Namensraum für MODS-Elemente ist <sch:span class="monotype">http://www.loc.gov/mods/v3</sch:span>.
+Verwenden die MODS-Elemente einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/mets:mets/mets:amdSec[1]/mets:rightsMD/mets:mdWrap/mets:xmlData/element()[local-name() = 'rights']">
+            <!-- 
+               Ungültiger Namensraum für DFG-Viewer-Elemente (dv)
+             -->
+         <sch:assert id="all_09"
+                     role="fatal"
+                     test="./namespace-uri() = 'http://dfg-viewer.de/'">Der Datensatz verwendet einen ungültigen Namensraum für DFG-Viewer-Elemente (<sch:span class="monotype">dv</sch:span>). Der korrekte Namensraum für DFG-Viewer-Elemente ist <sch:span class="monotype">http://dfg-viewer.de/</sch:span>.
+Verwenden die DFG-Viewer-Elemente einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1332,7 +1365,7 @@ Fehlen diese Angaben wird bei der Transformation der Daten in dem vorhandenen <s
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID=$work_dmdid]//mets:div | mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID=$work_dmdid]">
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID[tokenize(., ' ') = $work_dmdid]]//mets:div | mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID[tokenize(., ' ') = $work_dmdid]]">
             <!-- 
                Notwendiger Identifier der logischen Strukturebene fehlt im mets:structLink
              -->
@@ -1408,7 +1441,7 @@ Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Tran
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@TYPE=('issue', 'additional')]">
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID[tokenize(., ' ') = $work_dmdid]]">
             <!-- 
                Ausgabe enthält mets:mptr zur Ausgabe
              -->
@@ -1420,7 +1453,7 @@ Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Tran
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@TYPE=('issue', 'additional')]">
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID[tokenize(., ' ') = $work_dmdid]]">
             <!-- 
                Das Attribut DMDID des mets:div der Ausgabe bzw. Beilage fehlt
              -->
@@ -1444,15 +1477,15 @@ Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Tran
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']">
+      <sch:rule context="mets:mets/mets:structMap[@TYPE='LOGICAL']/descendant-or-self::*[mets:div[@DMDID[tokenize(., ' ') = $work_dmdid]]]/mets:div[@DMDID[tokenize(., ' ') != $work_dmdid] or not (@DMDID)]">
             <!-- 
-               Der Datensatz enthält mehrere primäre Strukturelemente
+               Die Ebene des primären mets:div im mets:structMap[@TYPE='LOGICAL'] enthält weitere mets:div
              -->
-         <sch:report id="structMapLogical_18"
+         <sch:report id="structMapLogical_28"
                      role="fatal"
-                     test="count(//mets:div[@TYPE = ('issue', 'additional')]) &gt; 1"
+                     test="true()"
                      properties="id"
-                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet in der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> darf nur ein <sch:span class="monotype">mets:div[@TYPE='issue']</sch:span> oder ein <sch:span class="monotype">mets:div[@TYPE='additional']</sch:span> vorhanden sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</sch:report>
+                     see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structMapTYPE=%22LOGICAL%22">Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet auf der Ebene des primären <sch:span class="monotype">mets:div</sch:span>-Elements im Element <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> dürfen keine weiteren <sch:span class="monotype">mets:div</sch:span>-Elemente vorhanden sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -1584,6 +1617,17 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</sch:a
                      role="fatal"
                      test="key('structMap_PHYSICAL_ids', @xlink:to)"
                      see="https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Beispielmets:structLink">Die Verknüpfung zwischen den logischen Ebenen der <sch:span class="monotype">mets:structMap[@TYPE='LOGICAL']</sch:span> und den dazugehörigen Seiten in der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> erfolgt im <sch:span class="monotype">mets:structLink</sch:span> in den Unterelementen <sch:span class="monotype">mets:smLink</sch:span> über die Attribute <sch:span class="monotype">xlink:from</sch:span> und <sch:span class="monotype">xlink:to</sch:span>. Dafür muss jeder Identifier, der in einem <sch:span class="monotype">mets:smLink</sch:span> steht einem <sch:span class="monotype">mets:div/@ID</sch:span> in der <sch:span class="monotype">mets:structMap[@TYPE='PHYSICAL']</sch:span> entsprechen. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern>
+      <sch:rule context="oai:record/oai:metadata/mets:mets/mets:structLink/mets:smLink[1]">
+            <!-- 
+               Ungültiger Namensraum für XLink-Attribute von mets:smLink
+             -->
+         <sch:assert id="structLink_05"
+                     role="fatal"
+                     test="@*[local-name() = 'from'][namespace-uri() = 'http://www.w3.org/1999/xlink']">Die Attribute <sch:span class="monotype">xlink:from</sch:span> und <sch:span class="monotype">xlink:to</sch:span> des Elements <sch:span class="monotype">mets:smLink</sch:span> verwenden einen ungültigen Namensraum. Der korrekte Namensraum für diese XLink-Attribute ist <sch:span class="monotype">http://www.w3.org/1999/xlink</sch:span>.
+Verwenden die Attribute einen ungültigen Namensraum ist eine Verarbeitung des Datensatzes nicht möglich und er wird nicht in die DDB eingespielt.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
