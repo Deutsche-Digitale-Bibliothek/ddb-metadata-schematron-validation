@@ -2103,7 +2103,7 @@
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Der Datensatz verwendet Elemente in der obersten MODS-Ebene, die dort nicht zulässig sind. Da diese zu Problemen in der Verarbeitung des Datensatzes führen können, wird der Datensatz nicht in die DDB eingespielt.Eine Liste der zulässigen MODS-Elemente auf der obersten Ebene finden sie in den MODS User Guidelines (https://www.loc.gov/standards/mods/userguide/generalapp.html#top_level).</svrl:text>
+               <svrl:text>Der Datensatz verwendet Elemente in der obersten MODS-Ebene, die dort nicht zulässig sind. Da diese zu Problemen in der Verarbeitung des Datensatzes führen können, wird der Datensatz nicht in die DDB eingespielt. Eine Liste der zulässigen MODS-Elemente auf der obersten Ebene finden sie in den MODS User Guidelines (https://www.loc.gov/standards/mods/userguide/generalapp.html#top_level).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2317,7 +2317,7 @@ Verwenden die DFG-Viewer-Elemente einen ungültigen Namensraum ist eine Verarbei
                </xsl:attribute>
                <svrl:text>Das primäre <xsl:text/>mets:dmdSec<xsl:text/>-Element von Einteiligen Dokumenten muss ein <xsl:text/>mods:titleInfo<xsl:text/>-Element ohne Attribut <xsl:text/>type<xsl:text/> oder mit <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>uniform<xsl:text/> besitzen. Darüber hinaus muss das <xsl:text/>mods:titleInfo<xsl:text/> das Unterelement <xsl:text/>mods:title<xsl:text/> enthalten.
 Teile von Mehrteiligen Dokumenten können alternativ ein <xsl:text/>mods:relatedItem<xsl:text/>-Element mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>host<xsl:text/> enthalten, das auf den Ankersatz des Mehrteiligen Dokuments verweist.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2350,7 +2350,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jedes nicht-primäre <xsl:text/>mets:dmdSec<xsl:text/>-Element muss mindestens ein <xsl:text/>mods:titleInfo<xsl:text/>-Element mit einem mindestens drei Zeichen langem Text im Unterelement <xsl:text/>mods:title<xsl:text/> enthalten.
-Ist dies nicht der Fall, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und METS/MODS für Unselbständige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/BgKuB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und METS/MODS für Unselbständige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/BgKuB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2381,7 +2381,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transfor
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mets:dmdSec<xsl:text/> muss genau ein <xsl:text/>mods:titleInfo<xsl:text/>-Element enthalten. Dieses muss entweder genau ein <xsl:text/>mods:titleInfo<xsl:text/> ohne das Attribut <xsl:text/>type<xsl:text/> enthalten oder kein <xsl:text/>mods:titleInfo<xsl:text/> ohne <xsl:text/>type<xsl:text/> und genau ein <xsl:text/>mods:titleInfo<xsl:text/> mit <xsl:text/>type<xsl:text/> und dem Wert <xsl:text/>uniform<xsl:text/>.
-Ist dies nicht der Fall, kann die DDB keinen eindeutigen Objekttitel für die Anzeige des Datensatzes in der DDB ermitteln. Bei der Transformation des Datensatzes werden daher alle weiteren Vorkommen von <xsl:text/>mods:titleInfo<xsl:text/> ohne <xsl:text/>type<xsl:text/> bzw. <xsl:text/>mods:titleInfo<xsl:text/> mit <xsl:text/>type<xsl:text/> und dem Wert <xsl:text/>uniform<xsl:text/> entfernt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ist dies nicht der Fall, kann die DDB keinen eindeutigen Objekttitel für die Anzeige des Datensatzes in der DDB ermitteln. Bei der Transformation des Datensatzes werden daher alle weiteren Vorkommen von <xsl:text/>mods:titleInfo<xsl:text/> ohne <xsl:text/>type<xsl:text/> bzw. <xsl:text/>mods:titleInfo<xsl:text/> mit <xsl:text/>type<xsl:text/> und dem Wert <xsl:text/>uniform<xsl:text/> entfernt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2417,7 +2417,7 @@ Ist dies nicht der Fall, kann die DDB keinen eindeutigen Objekttitel für die An
  * <xsl:text/>translated<xsl:text/>
  * <xsl:text/>alternative<xsl:text/>
  * <xsl:text/>uniform<xsl:text/>
-Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Bereinigung des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Bereinigung des Datensatzes entfernt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2449,7 +2449,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Berei
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>mods:titleInfo<xsl:text/> darf das Element <xsl:text/>mods:title<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:titleInfo<xsl:text/> mehr als ein <xsl:text/>mods:title<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:title<xsl:text/> übernommen, alle anderen <xsl:text/>mods:title<xsl:text/> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>mods:titleInfo<xsl:text/> darf das Element <xsl:text/>mods:title<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:titleInfo<xsl:text/> mehr als ein <xsl:text/>mods:title<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:title<xsl:text/> übernommen, alle anderen <xsl:text/>mods:title<xsl:text/> werden entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2477,7 +2477,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Berei
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>mods:titleInfo<xsl:text/> darf das Element <xsl:text/>mods:nonSort<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:titleInfo<xsl:text/> mehr als ein <xsl:text/>mods:nonSort<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:nonSort<xsl:text/> übernommen, alle anderen <xsl:text/>mods:nonSort<xsl:text/> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>mods:titleInfo<xsl:text/> darf das Element <xsl:text/>mods:nonSort<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:titleInfo<xsl:text/> mehr als ein <xsl:text/>mods:nonSort<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:nonSort<xsl:text/> übernommen, alle anderen <xsl:text/>mods:nonSort<xsl:text/> werden entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2511,7 +2511,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Berei
                <svrl:text>Der Text im Element <xsl:text/>mods:title<xsl:text/> im Element <xsl:text/>mods:titleInfo<xsl:text/> besteht aus weniger als drei Zeichen und ist daher wenig aussagekräftig.
 Bitte beachten Sie dazu, dass in der DDB jedes <xsl:text/>mets:dmdSec<xsl:text/>-Element ein Objekt erzeugt. Der Wert in <xsl:text/>mods:title<xsl:text/> wird prominent und ggf. unabhängig vom Gesamtobjekt in der Trefferliste angezeigt. Daher erschweren nicht aussagekräftige Objekttitel die Nutzung Ihrer Objekte in der DDB.
 Handelt es sich bei dem Text in <xsl:text/>mods:title<xsl:text/> um eine Abkürzung, verwenden Sie bitte das Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>abbreviated<xsl:text/> im Elternelement <xsl:text/>mods:titleInfo<xsl:text/>. Enthält <xsl:text/>mods:title<xsl:text/> eine Bandzählung geben Sie diese im Element <xsl:text/>mods:part<xsl:text/> an.
-Nicht aussagekräftige Titel verhindern nicht das Einspielen Ihrer Daten in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich tatsächlich um einen Titel handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Nicht aussagekräftige Titel verhindern nicht das Einspielen Ihrer Daten in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich tatsächlich um einen Titel handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2541,7 +2541,7 @@ Nicht aussagekräftige Titel verhindern nicht das Einspielen Ihrer Daten in die 
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:titleInfo<xsl:text/> muss das Element <xsl:text/>mods:title<xsl:text/> enthalten.
-Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:titleInfo (https://wiki.deutsche-digitale-bibliothek.de/x/xcIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2573,7 +2573,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mods:titleInfo<xsl:text/> bei der Trans
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:name<xsl:text/> muss das Element <xsl:text/>mods:displayForm<xsl:text/> enthalten.
 Enthält <xsl:text/>mods:name<xsl:text/> mindestens ein <xsl:text/>mods:namePart<xsl:text/>-Element, wird bei der Bereinigung des Datensatzes aus den entsprechenden <xsl:text/>mods:namePart<xsl:text/> ein <xsl:text/>mods:displayForm<xsl:text/> generiert.
-Enthält <xsl:text/>mods:name<xsl:text/> weder <xsl:text/>mods:displayForm<xsl:text/> noch ein <xsl:text/>mods:namePart<xsl:text/> wird <xsl:text/>mods:name<xsl:text/> bei der Bereinigung des Datensatzes entfernt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Enthält <xsl:text/>mods:name<xsl:text/> weder <xsl:text/>mods:displayForm<xsl:text/> noch ein <xsl:text/>mods:namePart<xsl:text/> wird <xsl:text/>mods:name<xsl:text/> bei der Bereinigung des Datensatzes entfernt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2600,7 +2600,7 @@ Enthält <xsl:text/>mods:name<xsl:text/> weder <xsl:text/>mods:displayForm<xsl:t
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>mods:name<xsl:text/> darf das Element <xsl:text/>mods:displayForm<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:name<xsl:text/> mehr als ein <xsl:text/>mods:displayForm<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:displayForm<xsl:text/> übernommen, alle anderen <xsl:text/>mods:displayForm<xsl:text/> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>mods:name<xsl:text/> darf das Element <xsl:text/>mods:displayForm<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:name<xsl:text/> mehr als ein <xsl:text/>mods:displayForm<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:displayForm<xsl:text/> übernommen, alle anderen <xsl:text/>mods:displayForm<xsl:text/> werden entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2629,7 +2629,7 @@ Enthält <xsl:text/>mods:name<xsl:text/> weder <xsl:text/>mods:displayForm<xsl:t
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:name<xsl:text/> enthält im Unterelement <xsl:text/>mods:namePart<xsl:text/> bzw. im Unterelement <xsl:text/>mods:displayForm<xsl:text/> ein <xsl:text/>;<xsl:text/> (Semikolon). Dies ist ein Hinweis, dass die Elemente eine Aufzählung enthalten und damit mehrere Personen bzw. Organisationen beschreiben.
 Jede Person bzw. Organisation muss in einem eigenen <xsl:text/>mods:name<xsl:text/> mit entsprechenden Unterelementen beschrieben sein. Ist dies nicht der Fall, kann dies zu Fehldarstellungen in der DDB führen.
-Ein Semikolon in den o. g. Elementen verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um eine Aufzählung handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Ein Semikolon in den o. g. Elementen verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um eine Aufzählung handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2664,7 +2664,7 @@ Ein Semikolon in den o. g. Elementen verhindert nicht das Einspielen des Datensa
  * <xsl:text/>corporate<xsl:text/> (Organisation)
  * <xsl:text/>family<xsl:text/> (Familie)
  * <xsl:text/>conference<xsl:text/> (Konferenz)
-Das Fehlen von <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Das Fehlen von <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2694,7 +2694,7 @@ Das Fehlen von <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Da
  * <xsl:text/>corporate<xsl:text/> (Organisation)
  * <xsl:text/>family<xsl:text/> (Familie)
  * <xsl:text/>conference<xsl:text/> (Konferenz)
-Die Verwendung falscher Attributwerte verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Die Verwendung falscher Attributwerte verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2734,7 +2734,7 @@ Die Verwendung falscher Attributwerte verhindert nicht das Einspielen des Datens
  * <xsl:text/>termsOfAddress<xsl:text/> (Titel und andere Namenszusätze)
  * <xsl:text/>date<xsl:text/> (Lebensdaten der Person)
 Sollen die Bestandteile eines Namens in der DDB in einer bestimmten Reihenfolge angezeigt werden, verwenden Sie bitte das Element <xsl:text/>mods:displayForm<xsl:text/>.
-Das Fehlen von <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und den genannten Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Das Fehlen von <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und den genannten Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2766,7 +2766,7 @@ Das Fehlen von <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Da
  * <xsl:text/>given<xsl:text/> (Vorname)
  * <xsl:text/>termsOfAddress<xsl:text/> (Titel und andere Namenszusätze)
  * <xsl:text/>date<xsl:text/> (Lebensdaten der Person)
-Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods:namePart<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods:namePart<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2800,7 +2800,7 @@ Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods
             </xsl:attribute>
             <svrl:text>Das Attribut <xsl:text/>valueURI<xsl:text/> ist in Unterelementen des Elements <xsl:text/>mods:name<xsl:text/> nicht zulässig. Bitte verwenden Sie <xsl:text/>valueURI<xsl:text/> nur in <xsl:text/>mods:name<xsl:text/>.
 Enthält ein Unterelement von <xsl:text/>mods:name<xsl:text/>
-               <xsl:text/>valueURI<xsl:text/> wird <xsl:text/>valueURI<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+               <xsl:text/>valueURI<xsl:text/> wird <xsl:text/>valueURI<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2826,7 +2826,7 @@ Enthält ein Unterelement von <xsl:text/>mods:name<xsl:text/>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die DDB wertet das Attribut <xsl:text/>valueURI<xsl:text/> im Element <xsl:text/>mods:name<xsl:text/> nur aus, wenn es im einen GND-URI enthält. Ist dies nicht der Fall, wird <xsl:text/>valueURI<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+               <svrl:text>Die DDB wertet das Attribut <xsl:text/>valueURI<xsl:text/> im Element <xsl:text/>mods:name<xsl:text/> nur aus, wenn es im einen GND-URI enthält. Ist dies nicht der Fall, wird <xsl:text/>valueURI<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2858,7 +2858,7 @@ Enthält ein Unterelement von <xsl:text/>mods:name<xsl:text/>
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:name<xsl:text/> muss mindestens ein <xsl:text/>mods:role<xsl:text/>-Element mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> mit einem gültigen MARC Relator Code (http://id.loc.gov/vocabulary/relators) enthalten.
-Fehlt <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> wird bei der Transformation des Datensatzes ein <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> mit dem Wert <xsl:text/>ctb<xsl:text/> (contributor) erzeugt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Fehlt <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> wird bei der Transformation des Datensatzes ein <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> mit dem Wert <xsl:text/>ctb<xsl:text/> (contributor) erzeugt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2886,7 +2886,7 @@ Fehlt <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleT
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:name<xsl:text/> muss mindestens ein <xsl:text/>mods:role<xsl:text/>-Element mit einem gültigen Unterelement <xsl:text/>mods:roleTerm<xsl:text/> enthalten. Ein gültiges <xsl:text/>mods:roleTerm<xsl:text/> muss die Attribute <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>code<xsl:text/> und <xsl:text/>authority<xsl:text/> mit dem Wert <xsl:text/>marcrelator<xsl:text/> enthalten.
-Ist dies nicht der Fall, wird <xsl:text/>mods:role<xsl:text/> bei der Transformation des Datensatzes entfernt und ein <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> mit dem Wert <xsl:text/>ctb<xsl:text/> (contributor) erzeugt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mods:role<xsl:text/> bei der Transformation des Datensatzes entfernt und ein <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> mit dem Wert <xsl:text/>ctb<xsl:text/> (contributor) erzeugt. Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2914,7 +2914,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mods:role<xsl:text/> bei der Transforma
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:role<xsl:text/> muss ein <xsl:text/>mods:roleTerm<xsl:text/>-Element mit einem Wert aus dem MARC Relator Code Vokabular (http://id.loc.gov/vocabulary/relators) enthalten.
-Ist dies nicht der Fall, wird <xsl:text/>mods:role<xsl:text/> bei der Transformation des Datensatzes entfernt und ein <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> mit dem Wert <xsl:text/>ctb<xsl:text/> (contributor) erzeugt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mods:role<xsl:text/> bei der Transformation des Datensatzes entfernt und ein <xsl:text/>mods:role<xsl:text/> mit dem Unterelement <xsl:text/>mods:roleTerm<xsl:text/> mit dem Wert <xsl:text/>ctb<xsl:text/> (contributor) erzeugt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:name (https://wiki.deutsche-digitale-bibliothek.de/x/ycIeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2981,7 +2981,7 @@ Bitte nutzen Sie für Zeitangaben in textlicher Form das Element <xsl:text/>mods
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:originInfo<xsl:text/>, das nicht die Angaben zur Digitalisierung des Dokuments enthält, muss das Element <xsl:text/>mods:dateIssued<xsl:text/> oder das Element <xsl:text/>mods:dateCreated<xsl:text/> mit einem ISO 8601-konformen Wert enthalten.
-Das Fehlen eines ISO 8601-konformen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, führt aber u. a. zu Problemen bei der Filterung von Suchergebnissen nach Datumsangabe zu Problemen. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+Das Fehlen eines ISO 8601-konformen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, führt aber u. a. zu Problemen bei der Filterung von Suchergebnissen nach Datumsangabe zu Problemen. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3009,7 +3009,7 @@ Das Fehlen eines ISO 8601-konformen Wertes verhindert nicht das Einspielen des D
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die Elemente <xsl:text/>mods:dateIssued<xsl:text/> bzw. <xsl:text/>mods:dateCreated<xsl:text/> müssen einen ISO 8601-konformen Wert enthalten. Bitte nutzen Sie für unsichere bzw. ungenaue Zeitangaben in textlicher Form das Element <xsl:text/>mods:displayDate<xsl:text/>.
-Die Verwendung von nicht ISO 8601-konformen Werten in <xsl:text/>mods:dateIssued<xsl:text/> bzw. <xsl:text/>mods:dateCreated<xsl:text/> kann zu Informationsverlusten und Einschränkungen in der Suche in der DDB führen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+Die Verwendung von nicht ISO 8601-konformen Werten in <xsl:text/>mods:dateIssued<xsl:text/> bzw. <xsl:text/>mods:dateCreated<xsl:text/> kann zu Informationsverlusten und Einschränkungen in der Suche in der DDB führen. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3040,7 +3040,7 @@ Die Verwendung von nicht ISO 8601-konformen Werten in <xsl:text/>mods:dateIssued
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:place<xsl:text/> enthält im Unterelement <xsl:text/>mods:placeTerm<xsl:text/> ein <xsl:text/>;<xsl:text/> (Semikolon). Dies ist ein Hinweis, dass das Element eine Aufzählung enthält und damit mehrere Orte beschreibt.
 Jeder Ort muss in einem eigenen <xsl:text/>mods:place<xsl:text/> mit dem Unterelement <xsl:text/>mods:placeTerm<xsl:text/> beschrieben sein. Ist dies nicht der Fall, kann dies zu Fehldarstellungen in der DDB führen.
-Ein Semikolon im <xsl:text/>mods:placeTerm<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um eine Aufzählung handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+Ein Semikolon im <xsl:text/>mods:placeTerm<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um eine Aufzählung handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3071,7 +3071,7 @@ Ein Semikolon im <xsl:text/>mods:placeTerm<xsl:text/> verhindert nicht das Einsp
             <svrl:text>Das Element <xsl:text/>mods:place<xsl:text/> enthält im Unterelement <xsl:text/>mods:placeTerm<xsl:text/> einen <xsl:text/>:<xsl:text/> (Doppelpunkt). Dies ist ein Hinweis, dass das Element auch Angaben zu Verlegern enthält.
 <xsl:text/>mods:place<xsl:text/> darf nur Angaben zu einem Ort enthalten. Verwenden Sie für Informationen zu einem Verleger das Element <xsl:text/>mods:publisher<xsl:text/> und wiederholen Sie es ggf. für weitere Verleger.
 Angaben zu Verlegen in <xsl:text/>mods:placeTerm<xsl:text/> können zu Fehldarstellungen in der DDB führen.
-Ein Doppelpunkt im <xsl:text/>mods:placeTerm<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um Angaben zu Verlegern handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+Ein Doppelpunkt im <xsl:text/>mods:placeTerm<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch zu prüfen, ob es sich um Angaben zu Verlegern handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3104,7 +3104,7 @@ Ein Doppelpunkt im <xsl:text/>mods:placeTerm<xsl:text/> verhindert nicht das Ein
                </xsl:attribute>
                <svrl:text>Der Wert im Unterelement <xsl:text/>mods:dateIssued<xsl:text/> bzw. im Unterelement <xsl:text/>mods:dateCreated<xsl:text/> von <xsl:text/>mods:originInfo<xsl:text/> enthält das Jahr 2000 oder später. Dies deutet darauf hin, dass sich <xsl:text/>mods:originInfo<xsl:text/> nicht auf die Veröffentlichung bzw. Entstehung sondern die Digitalisierung des Dokuments bezieht.
 Bitte verwenden Sie für die Angaben zur Digitalisierung ein eigenes  <xsl:text/>mods:originInfo<xsl:text/> mit dem Attribut <xsl:text/>eventType<xsl:text/> mit dem Wert <xsl:text/>digitization<xsl:text/> sowie dem Unterelement <xsl:text/>mods:edition<xsl:text/> mit dem Wert <xsl:text/>[Electronic ed.]<xsl:text/>.
-Dieser Fehler verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, zu prüfen, ob es sich tatsächlich um die richtige Datumsangabe handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+Dieser Fehler verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, zu prüfen, ob es sich tatsächlich um die richtige Datumsangabe handelt und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3136,7 +3136,7 @@ Dieser Fehler verhindert nicht das Einspielen des Datensatzes in die DDB, wir bi
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Das Element <xsl:text/>mods:place<xsl:text/> muss das Unterelement <xsl:text/>mods:placeTerm<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>text<xsl:text/> enthalten. Ist dies nicht der Fall, wird <xsl:text/>mods:place<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und dem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+               <svrl:text>Das Element <xsl:text/>mods:place<xsl:text/> muss das Unterelement <xsl:text/>mods:placeTerm<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>text<xsl:text/> enthalten. Ist dies nicht der Fall, wird <xsl:text/>mods:place<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesen Elementen und dem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3169,7 +3169,7 @@ Dieser Fehler verhindert nicht das Einspielen des Datensatzes in die DDB, wir bi
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Die Unterelemente <xsl:text/>mods:dateIssued<xsl:text/>, <xsl:text/>mods:dateCreated<xsl:text/> und <xsl:text/>mods:dateOther<xsl:text/> im Element <xsl:text/>mods:originInfo<xsl:text/> dürfen nicht mit dem gleichen Wert im Attribut <xsl:text/>point<xsl:text/> wiederholt werden.
-Wird eines der o. g. Elemente mit dem identischen Wert in <xsl:text/>point<xsl:text/> wiederholt, werden alle weiteren Vorkommen (XML-Reihenfolge) bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+Wird eines der o. g. Elemente mit dem identischen Wert in <xsl:text/>point<xsl:text/> wiederholt, werden alle weiteren Vorkommen (XML-Reihenfolge) bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3195,7 +3195,7 @@ Wird eines der o. g. Elemente mit dem identischen Wert in <xsl:text/>point<xsl:t
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>mods:displayDate<xsl:text/> darf innerhalb des Elements <xsl:text/>mods:originInfo<xsl:text/> nicht wiederholt werden. Enthält <xsl:text/>mods:originInfo<xsl:text/> mehr als ein <xsl:text/>mods:displayDate<xsl:text/>, wird das erste Vorkommen (XML-Reihenfolge) übernommen, alle anderen werden bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>mods:displayDate<xsl:text/> darf innerhalb des Elements <xsl:text/>mods:originInfo<xsl:text/> nicht wiederholt werden. Enthält <xsl:text/>mods:originInfo<xsl:text/> mehr als ein <xsl:text/>mods:displayDate<xsl:text/>, wird das erste Vorkommen (XML-Reihenfolge) übernommen, alle anderen werden bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3223,7 +3223,7 @@ Wird eines der o. g. Elemente mit dem identischen Wert in <xsl:text/>point<xsl:t
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:originInfo<xsl:text/> innerhalb des Elements <xsl:text/>mets:dmdSec<xsl:text/> darf mit dem Attribut <xsl:text/>eventType<xsl:text/> mit dem Wert <xsl:text/>digitization<xsl:text/> bzw. mit <xsl:text/>mods:edition<xsl:text/> mit dem Wert <xsl:text/>[Electronic ed.]<xsl:text/> nicht wiederholt werden.
-Enthält <xsl:text/>mets:dmdSec<xsl:text/> mehr als ein <xsl:text/>mods:originInfo<xsl:text/> mit dem Attribut <xsl:text/>eventType<xsl:text/> mit dem Wert <xsl:text/>digitization<xsl:text/> bzw. mit <xsl:text/>mods:edition<xsl:text/> mit dem Wert <xsl:text/>[Electronic ed.]<xsl:text/>, wird bei der Transformation des Datensatzes das erste entsprechende Vorkommen von <xsl:text/>mods:originInfo<xsl:text/> übernommen, alle anderen <xsl:text/>mods:originInfo<xsl:text/> werden entfernt.Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
+Enthält <xsl:text/>mets:dmdSec<xsl:text/> mehr als ein <xsl:text/>mods:originInfo<xsl:text/> mit dem Attribut <xsl:text/>eventType<xsl:text/> mit dem Wert <xsl:text/>digitization<xsl:text/> bzw. mit <xsl:text/>mods:edition<xsl:text/> mit dem Wert <xsl:text/>[Electronic ed.]<xsl:text/>, wird bei der Transformation des Datensatzes das erste entsprechende Vorkommen von <xsl:text/>mods:originInfo<xsl:text/> übernommen, alle anderen <xsl:text/>mods:originInfo<xsl:text/> werden entfernt. Weitere Informationen zu diesen Elementen und Attributen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:originInfo (https://wiki.deutsche-digitale-bibliothek.de/x/DcMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3290,7 +3290,7 @@ Darüber hinaus gelten im Kontext der DDB und Europeana auch Noten als Textdokum
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:languageTerm<xsl:text/> im Element <xsl:text/>mods:language<xsl:text/> muss einen ISO 639-2b (https://id.loc.gov/vocabulary/iso639-2)-konformen Wert enthalten.
 Bitte beachten Sie, dass wiederholte Sprachangaben innerhalb von <xsl:text/>mods:language<xsl:text/> bzw. im Wert von <xsl:text/>mods:languageTerm<xsl:text/> nicht zulässig sind. Verwenden Sie für jede Sprachangabe jeweils ein <xsl:text/>mods:language<xsl:text/> mit <xsl:text/>mods:languageTerm<xsl:text/>.
-Enthält <xsl:text/>mods:language<xsl:text/> kein <xsl:text/>mods:languageTerm<xsl:text/> mit einem ISO 639-2b (https://id.loc.gov/vocabulary/iso639-2)-konformen Wert wird <xsl:text/>mods:language<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:language (https://wiki.deutsche-digitale-bibliothek.de/x/F8MeB).</svrl:text>
+Enthält <xsl:text/>mods:language<xsl:text/> kein <xsl:text/>mods:languageTerm<xsl:text/> mit einem ISO 639-2b (https://id.loc.gov/vocabulary/iso639-2)-konformen Wert wird <xsl:text/>mods:language<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:language (https://wiki.deutsche-digitale-bibliothek.de/x/F8MeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3324,7 +3324,7 @@ Enthält <xsl:text/>mods:language<xsl:text/> kein <xsl:text/>mods:languageTerm<x
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:extent<xsl:text/> im Element <xsl:text/>mods:physicalDescription<xsl:text/> enthält die Begriffe <xsl:text/>online<xsl:text/> bzw. <xsl:text/>electronic<xsl:text/> und beschreibt damit das Digitalisat.
-Da <xsl:text/>mods:extent<xsl:text/> aber nur zur Beschreibung des originalen Dokuments dient, wird es bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:physicalDescription (https://wiki.deutsche-digitale-bibliothek.de/x/G8MeB).</svrl:text>
+Da <xsl:text/>mods:extent<xsl:text/> aber nur zur Beschreibung des originalen Dokuments dient, wird es bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:physicalDescription (https://wiki.deutsche-digitale-bibliothek.de/x/G8MeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3355,7 +3355,7 @@ Da <xsl:text/>mods:extent<xsl:text/> aber nur zur Beschreibung des originalen Do
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Top-Level-Element <xsl:text/>mods:note<xsl:text/> bzw. <xsl:text/>mods:note<xsl:text/> im Element <xsl:text/>mods:physicalDescription<xsl:text/> muss das Attribut <xsl:text/>type<xsl:text/> mit einem Wert aus der Liste der MODS &lt;note&gt; Types (https://www.loc.gov/standards/mods/mods-notes.html) enthalten.
-Fehlt <xsl:text/>type<xsl:text/> in <xsl:text/>mods:note<xsl:text/> wird <xsl:text/>mods:note<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:note (https://wiki.deutsche-digitale-bibliothek.de/x/IcMeB) und mods:physicalDescription (https://wiki.deutsche-digitale-bibliothek.de/x/G8MeB).</svrl:text>
+Fehlt <xsl:text/>type<xsl:text/> in <xsl:text/>mods:note<xsl:text/> wird <xsl:text/>mods:note<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mods:note (https://wiki.deutsche-digitale-bibliothek.de/x/IcMeB) und mods:physicalDescription (https://wiki.deutsche-digitale-bibliothek.de/x/G8MeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3383,7 +3383,7 @@ Fehlt <xsl:text/>type<xsl:text/> in <xsl:text/>mods:note<xsl:text/> wird <xsl:te
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Attribut <xsl:text/>type<xsl:text/> im Element <xsl:text/>mods:note<xsl:text/> darf nur einem Wert aus der Liste der MODS &lt;note&gt; Types (https://www.loc.gov/standards/mods/mods-notes.html) enthalten.
-Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods:note<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:note (https://wiki.deutsche-digitale-bibliothek.de/x/IcMeB).</svrl:text>
+Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods:note<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:note (https://wiki.deutsche-digitale-bibliothek.de/x/IcMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3418,7 +3418,7 @@ Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die DDB berücksichtigt das Element <xsl:text/>mods:subject<xsl:text/> nur, wenn es Schlagworte aus der GND (https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), Wikidata (https://www.wikidata.org), Geonames (https://sws.geonames.org) oder dem AAT (https://www.getty.edu/research/tools/vocabularies/aat/) enthält. Diese müssen in dem Unterelement zu <xsl:text/>mods:subject<xsl:text/> stehen und dort mittels einer entsprechenden URIs der o. g. Normdaten in dem Attribut <xsl:text/>valueURI<xsl:text/> eindeutig identifiziert werden.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</svrl:text>
+               <svrl:text>Die DDB berücksichtigt das Element <xsl:text/>mods:subject<xsl:text/> nur, wenn es Schlagworte aus der GND (https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), Wikidata (https://www.wikidata.org), Geonames (https://sws.geonames.org) oder dem AAT (https://www.getty.edu/research/tools/vocabularies/aat/) enthält. Diese müssen in dem Unterelement zu <xsl:text/>mods:subject<xsl:text/> stehen und dort mittels einer entsprechenden URIs der o. g. Normdaten in dem Attribut <xsl:text/>valueURI<xsl:text/> eindeutig identifiziert werden. Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3449,7 +3449,7 @@ Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die DDB berücksichtigt das Element <xsl:text/>mods:titleInfo<xsl:text/> im Element <xsl:text/>mods:subject<xsl:text/> nur, wenn es das Element <xsl:text/>mods:title<xsl:text/> enthält.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</svrl:text>
+               <svrl:text>Die DDB berücksichtigt das Element <xsl:text/>mods:titleInfo<xsl:text/> im Element <xsl:text/>mods:subject<xsl:text/> nur, wenn es das Element <xsl:text/>mods:title<xsl:text/> enthält. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3478,7 +3478,7 @@ Enthält <xsl:text/>type<xsl:text/> einen ungültigen Wert, wird <xsl:text/>mods
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Die DDB berücksichtigt das Element <xsl:text/>mods:name<xsl:text/> im Element <xsl:text/>mods:subject<xsl:text/> nur, wenn es das Element <xsl:text/>mods:displayForm<xsl:text/> enthält.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</svrl:text>
+               <svrl:text>Die DDB berücksichtigt das Element <xsl:text/>mods:name<xsl:text/> im Element <xsl:text/>mods:subject<xsl:text/> nur, wenn es das Element <xsl:text/>mods:displayForm<xsl:text/> enthält. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:subject (https://wiki.deutsche-digitale-bibliothek.de/x/JMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3642,7 +3642,7 @@ Ist dies nicht der Fall besteht keine Referenzierung zwischen den Datensätzen u
                <svrl:text>Das Element <xsl:text/>mods:relatedItem<xsl:text/> muss das Attribut <xsl:text/>type<xsl:text/> mit einem der folgenden Werte enthalten:
  * <xsl:text/>host<xsl:text/>
  * <xsl:text/>series<xsl:text/>
-Fehlt <xsl:text/>type<xsl:text/> bzw. enthält es einen ungültigen Wert, wird <xsl:text/>mods:relatedItem<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</svrl:text>
+Fehlt <xsl:text/>type<xsl:text/> bzw. enthält es einen ungültigen Wert, wird <xsl:text/>mods:relatedItem<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3675,7 +3675,7 @@ Fehlt <xsl:text/>type<xsl:text/> bzw. enthält es einen ungültigen Wert, wird <
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:relatedItem<xsl:text/> mit dem Wert <xsl:text/>series<xsl:text/> im Attribut <xsl:text/>type<xsl:text/> muss mindestens ein Element <xsl:text/>mods:titleInfo<xsl:text/>-Element mit dem Unterelement <xsl:text/>mods:title<xsl:text/> enthalten.
-Ist dies nicht der Fall, wird <xsl:text/>mods:relatedItem<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mods:relatedItem<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3704,7 +3704,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mods:relatedItem<xsl:text/> bei der Tra
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:relatedItem<xsl:text/> innerhalb des Elements <xsl:text/>mets:dmdSec<xsl:text/> darf mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>host<xsl:text/> nicht wiederholt werden, da die DDB zurzeit keine Polyhierarchie unterstützt.
-Enthält <xsl:text/>mets:dmdSec<xsl:text/> mehr als ein <xsl:text/>mods:relatedItem<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>host<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:relatedItem<xsl:text/> übernommen, alle anderen <xsl:text/>mods:relatedItem<xsl:text/> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</svrl:text>
+Enthält <xsl:text/>mets:dmdSec<xsl:text/> mehr als ein <xsl:text/>mods:relatedItem<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>host<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:relatedItem<xsl:text/> übernommen, alle anderen <xsl:text/>mods:relatedItem<xsl:text/> werden entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:relatedItem (https://wiki.deutsche-digitale-bibliothek.de/x/K8MeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3736,7 +3736,7 @@ Enthält <xsl:text/>mets:dmdSec<xsl:text/> mehr als ein <xsl:text/>mods:relatedI
                </xsl:attribute>
                <svrl:text>Der Datensatz enthält das Element <xsl:text/>mods:relatedItem<xsl:text/> mit dem Wert <xsl:text/>host<xsl:text/> im Attribut <xsl:text/>type<xsl:text/> und beschreibt daher den Teil eines Mehrteiligen Dokuments.
 Diese müssen im Element <xsl:text/>mods:part<xsl:text/> Informationen zur Bandzählung enthalten. Die textliche Angabe erfolgt im Unterelement <xsl:text/>mods:number<xsl:text/> des Unterelements <xsl:text/>mods:detail<xsl:text/> und die maschienenlesbare Form (als Integer) im Attribut <xsl:text/>order<xsl:text/> von <xsl:text/>mods:part<xsl:text/>.
-Das Fehlen von <xsl:text/>mods:part<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
+Das Fehlen von <xsl:text/>mods:part<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3764,7 +3764,7 @@ Das Fehlen von <xsl:text/>mods:part<xsl:text/> verhindert nicht das Einspielen d
                </xsl:attribute>
                <svrl:text>Der Datensatz enthält das Element <xsl:text/>mods:relatedItem<xsl:text/> mit dem Wert <xsl:text/>host<xsl:text/> im Attribut <xsl:text/>type<xsl:text/> und beschreibt daher den Teil eines Mehrteiligen Dokuments.
 Das Element <xsl:text/>mods:part<xsl:text/> muss mindestens daher das Attribut <xsl:text/>mods:order<xsl:text/> enthalten. Der Wert dient zur Anzeige von Bänden in der richtigen Reihenfolge uns muss als Zahl in maschinenlesbarer Form (als Integer) vorliegen.
-Das Fehlen von <xsl:text/>order<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
+Das Fehlen von <xsl:text/>order<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3792,7 +3792,7 @@ Das Fehlen von <xsl:text/>order<xsl:text/> verhindert nicht das Einspielen des D
                </xsl:attribute>
                <svrl:text>Der Datensatz enthält das Element <xsl:text/>mods:relatedItem<xsl:text/> mit dem Wert <xsl:text/>host<xsl:text/> im Attribut <xsl:text/>type<xsl:text/> und beschreibt daher den Teil eines Mehrteiligen Dokuments.
 Das Attribut <xsl:text/>mods:order<xsl:text/> im Element <xsl:text/>mods:part<xsl:text/> muss mindestens daher die Bandzählung in maschinenlesbarer Form (als Integer) enthalten.
-Das Fehlen der maschinenlesbaren Form der Bandzählung in <xsl:text/>order<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
+Das Fehlen der maschinenlesbaren Form der Bandzählung in <xsl:text/>order<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3824,7 +3824,7 @@ Das Fehlen der maschinenlesbaren Form der Bandzählung in <xsl:text/>order<xsl:t
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:part<xsl:text/> muss das Element <xsl:text/>mods:detail<xsl:text/> mit dem Unterelement <xsl:text/>mods:number<xsl:text/> enthalten. <xsl:text/>mods:number<xsl:text/> enthält die textliche Zählung des Teils eines Mehrteiligen Dokuments.
-Fehlt <xsl:text/>mods:detail<xsl:text/> mit dem Unterelement <xsl:text/>mods:number<xsl:text/> in <xsl:text/>mods:part<xsl:text/>, wird <xsl:text/>mods:part<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
+Fehlt <xsl:text/>mods:detail<xsl:text/> mit dem Unterelement <xsl:text/>mods:number<xsl:text/> in <xsl:text/>mods:part<xsl:text/>, wird <xsl:text/>mods:part<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3854,7 +3854,7 @@ Fehlt <xsl:text/>mods:detail<xsl:text/> mit dem Unterelement <xsl:text/>mods:num
                <svrl:text>Das Element <xsl:text/>mods:detail<xsl:text/> muss das Attribut <xsl:text/>type<xsl:text/> mit einem der folgenden Werte enthalten:
  * <xsl:text/>volume<xsl:text/>
  * <xsl:text/>issue<xsl:text/>
-Das Fehlen vom <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
+Das Fehlen vom <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB) und der Seite METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3882,7 +3882,7 @@ Das Fehlen vom <xsl:text/>type<xsl:text/> verhindert nicht das Einspielen des Da
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:part<xsl:text/> darf das Element <xsl:text/>mods:detail<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>volume<xsl:text/> nur einmal enthalten.
-Enthält <xsl:text/>mods:part<xsl:text/> mehr als ein entsprechendes <xsl:text/>mods:detail<xsl:text/>, werden bei der Transformation des Datensatzes alle entsprechenden Vorkommen von <xsl:text/>mods:detail<xsl:text/> im ersten Vorkommen von <xsl:text/>mods:detail<xsl:text/> zusammengefasst.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB).</svrl:text>
+Enthält <xsl:text/>mods:part<xsl:text/> mehr als ein entsprechendes <xsl:text/>mods:detail<xsl:text/>, werden bei der Transformation des Datensatzes alle entsprechenden Vorkommen von <xsl:text/>mods:detail<xsl:text/> im ersten Vorkommen von <xsl:text/>mods:detail<xsl:text/> zusammengefasst. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:part (https://wiki.deutsche-digitale-bibliothek.de/x/ScMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3924,7 +3924,7 @@ Enthält <xsl:text/>mods:part<xsl:text/> mehr als ein entsprechendes <xsl:text/>
  * <xsl:text/>vd17<xsl:text/>
  * <xsl:text/>vd18<xsl:text/>
  * <xsl:text/>zdb<xsl:text/>
-Fehlt <xsl:text/>type<xsl:text/> in <xsl:text/>mods:identifier<xsl:text/> bzw. enthält es einen ungültigen Wert, wird <xsl:text/>mods:identifier<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:identifier (https://wiki.deutsche-digitale-bibliothek.de/x/N8MeB).</svrl:text>
+Fehlt <xsl:text/>type<xsl:text/> in <xsl:text/>mods:identifier<xsl:text/> bzw. enthält es einen ungültigen Wert, wird <xsl:text/>mods:identifier<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:identifier (https://wiki.deutsche-digitale-bibliothek.de/x/N8MeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3959,7 +3959,7 @@ Fehlt <xsl:text/>type<xsl:text/> in <xsl:text/>mods:identifier<xsl:text/> bzw. e
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:location<xsl:text/> muss das Element <xsl:text/>mods:physicalLocation<xsl:text/> oder das Element <xsl:text/>mods:url<xsl:text/> enthalten.
-Ist dies nicht der Fall, wird <xsl:text/>mods:location<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mods:location<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -3992,7 +3992,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mods:location<xsl:text/> bei der Transf
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das primäre <xsl:text/>mets:dmdSec<xsl:text/>-Element muss das Element <xsl:text/>mods:location<xsl:text/> mit dem Unterelement <xsl:text/>mods:physicalLocation<xsl:text/> enthalten.
-Das Fehlen von <xsl:text/>mods:physicalLocation<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, Ihr Objekt wird dort aber ohne Standorts angezeigt. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
+Das Fehlen von <xsl:text/>mods:physicalLocation<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, Ihr Objekt wird dort aber ohne Standorts angezeigt. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4026,7 +4026,7 @@ Das Fehlen von <xsl:text/>mods:physicalLocation<xsl:text/> verhindert nicht das 
                </xsl:attribute>
                <svrl:text>Enthält das Element <xsl:text/>mods:physicalLocation<xsl:text/> im Element <xsl:text/>mods:location<xsl:text/> als Wert einen ISIL, muss das Attribut <xsl:text/>valueURI<xsl:text/> von <xsl:text/>mods:physicalLocation<xsl:text/> einen entsprenden URI der ISIL enthalten.
 Die DDB unterstützt entsprechende URI der Deutschen ISIL-Agentur und Sigelstelle (https://sigel.staatsbibliothek-berlin.de) (z. B. <xsl:text/>https://ld.zdb-services.de/resource/organisations/DE-7<xsl:text/>) und lobid (http://lobid.org/organisations) (z. B. <xsl:text/>https://lobid.org/organisations/DE-7<xsl:text/>).
-Das Fehlen von <xsl:text/>valueURI<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
+Das Fehlen von <xsl:text/>valueURI<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4055,7 +4055,7 @@ Das Fehlen von <xsl:text/>valueURI<xsl:text/> verhindert nicht das Einspielen de
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>mods:location<xsl:text/> darf das Element <xsl:text/>mods:physicalLocation<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:titleInfo<xsl:text/> mehr als ein <xsl:text/>mods:physicalLocation<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:physicalLocation<xsl:text/> übernommen, alle anderen <xsl:text/>mods:physicalLocation<xsl:text/> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>mods:location<xsl:text/> darf das Element <xsl:text/>mods:physicalLocation<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:titleInfo<xsl:text/> mehr als ein <xsl:text/>mods:physicalLocation<xsl:text/>, wird bei der Transformation des Datensatzes das erste Vorkommen von <xsl:text/>mods:physicalLocation<xsl:text/> übernommen, alle anderen <xsl:text/>mods:physicalLocation<xsl:text/> werden entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4122,7 +4122,7 @@ Perspektivisch unterstützt die DDB <xsl:text/>mods:url<xsl:text/> nur mit dem A
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Der Datensatz enthält <xsl:text/>mods:location<xsl:text/>-Elemente mit unterschiedlichen Werten im Unterelement <xsl:text/>mods:physicalLocation<xsl:text/>.
-Ein Dokument kann nicht mehrere Standorte besitzen und daher werden bei der Transformation des Datensatzes die weiteren Vorkommen (XML-Reihenfolge) von <xsl:text/>mods:physicalLocation<xsl:text/> innerhalb von <xsl:text/>mods:location<xsl:text/> bzw. die entsprechenden weiteren Vorkommen von <xsl:text/>mods:location<xsl:text/> entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
+Ein Dokument kann nicht mehrere Standorte besitzen und daher werden bei der Transformation des Datensatzes die weiteren Vorkommen (XML-Reihenfolge) von <xsl:text/>mods:physicalLocation<xsl:text/> innerhalb von <xsl:text/>mods:location<xsl:text/> bzw. die entsprechenden weiteren Vorkommen von <xsl:text/>mods:location<xsl:text/> entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:location (https://wiki.deutsche-digitale-bibliothek.de/x/PMMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4154,7 +4154,7 @@ Ein Dokument kann nicht mehrere Standorte besitzen und daher werden bei der Tran
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Attribut <xsl:text/>href<xsl:text/> im Element <xsl:text/>mods:accessCondition<xsl:text/> muss zum Namensraum <xsl:text/>http://www.w3.org/1999/xlink<xsl:text/> gehören.
-Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs <xsl:text/>href<xsl:text/> in den Namensraum <xsl:text/>http://www.w3.org/1999/xlink<xsl:text/> gesetzt und entsprechend ausgewertet.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB).</svrl:text>
+Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Attributs <xsl:text/>href<xsl:text/> in den Namensraum <xsl:text/>http://www.w3.org/1999/xlink<xsl:text/> gesetzt und entsprechend ausgewertet. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4187,7 +4187,7 @@ Ist dies nicht der Fall, wird bei der Transformation das erste Vorkommen des Att
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das primäre <xsl:text/>mets:dmdSec<xsl:text/>-Element muss das Element <xsl:text/>mods:recordInfo<xsl:text/> mit dem Unterelement <xsl:text/>mods:recordIdentifier<xsl:text/> enthalten. <xsl:text/>mods:recordIdentifier<xsl:text/> muss darüber hinaus das Attribut <xsl:text/>source<xsl:text/> enthalten um eindeutig identifizierbar sein.
-Fehlt <xsl:text/>mods:recordIdentifier<xsl:text/> mit dem Attribut <xsl:text/>source<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
+Fehlt <xsl:text/>mods:recordIdentifier<xsl:text/> mit dem Attribut <xsl:text/>source<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4220,7 +4220,7 @@ Fehlt <xsl:text/>mods:recordIdentifier<xsl:text/> mit dem Attribut <xsl:text/>so
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:recordIdentifier<xsl:text/> im Element <xsl:text/>mods:recordInfo<xsl:text/> muss das Attribut <xsl:text/>source<xsl:text/> enthalten, damit der Wert in <xsl:text/>mods:recordIdentifier<xsl:text/> eindeutig identifizierbar ist.
-Fehlt <xsl:text/>source<xsl:text/> in <xsl:text/>mods:recordIdentifier<xsl:text/> wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
+Fehlt <xsl:text/>source<xsl:text/> in <xsl:text/>mods:recordIdentifier<xsl:text/> wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4249,7 +4249,7 @@ Fehlt <xsl:text/>source<xsl:text/> in <xsl:text/>mods:recordIdentifier<xsl:text/
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:recordInfo<xsl:text/> darf das Element <xsl:text/>mods:recordIdentifier<xsl:text/> nur einmal enthalten.
-Enthält <xsl:text/>mods:recordInfo<xsl:text/> mehr als ein <xsl:text/>mods:recordIdentifier<xsl:text/>, teilen Sie uns bitte mit welches <xsl:text/>mods:recordIdentifier<xsl:text/> in Abhängigkeit des Wertes im Attribut <xsl:text/>source<xsl:text/> bei der Transformation des Datensatzes erhalten bleibt. Alle anderen Vorkommen von <xsl:text/>mods:recordIdentifier<xsl:text/> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
+Enthält <xsl:text/>mods:recordInfo<xsl:text/> mehr als ein <xsl:text/>mods:recordIdentifier<xsl:text/>, teilen Sie uns bitte mit welches <xsl:text/>mods:recordIdentifier<xsl:text/> in Abhängigkeit des Wertes im Attribut <xsl:text/>source<xsl:text/> bei der Transformation des Datensatzes erhalten bleibt. Alle anderen Vorkommen von <xsl:text/>mods:recordIdentifier<xsl:text/> werden entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4280,7 +4280,7 @@ Enthält <xsl:text/>mods:recordInfo<xsl:text/> mehr als ein <xsl:text/>mods:reco
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Der Wert im Element <xsl:text/>mods:recordIdentifier<xsl:text/> enthält Leer- und / oder Sonderzeichen. Dies kann zu Problemen bei der Verarbeitung in der DDB führen, daher wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
+               <svrl:text>Der Wert im Element <xsl:text/>mods:recordIdentifier<xsl:text/> enthält Leer- und / oder Sonderzeichen. Dies kann zu Problemen bei der Verarbeitung in der DDB führen, daher wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4307,7 +4307,7 @@ Enthält <xsl:text/>mods:recordInfo<xsl:text/> mehr als ein <xsl:text/>mods:reco
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>mods:mods<xsl:text/> darf das Element <xsl:text/>mods:recordInfo<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:mods<xsl:text/> mehr als ein <xsl:text/>mods:recordInfo<xsl:text/>, werden bei der Bereinigung des Datensatzes die Unterelemente aller <xsl:text/>mods:recordInfo<xsl:text/> im erste Vorkommen zusammengefasst und die weiteren Vorkommen von <xsl:text/>mods:recordInfo<xsl:text/> entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>mods:mods<xsl:text/> darf das Element <xsl:text/>mods:recordInfo<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>mods:mods<xsl:text/> mehr als ein <xsl:text/>mods:recordInfo<xsl:text/>, werden bei der Bereinigung des Datensatzes die Unterelemente aller <xsl:text/>mods:recordInfo<xsl:text/> im erste Vorkommen zusammengefasst und die weiteren Vorkommen von <xsl:text/>mods:recordInfo<xsl:text/> entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://wiki.deutsche-digitale-bibliothek.de/x/TMMeB).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4340,7 +4340,7 @@ Die Selektion des primären <xsl:text/>mets:dmdSec<xsl:text/> erfolgt über ein 
  * <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> enthält kein <xsl:text/>mets:div<xsl:text/> mit dem Unterelement <xsl:text/>mets:mptr<xsl:text/>: Das Kind von <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/>
  * <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> enthält ein <xsl:text/>mets:div<xsl:text/> mit dem Unterelement <xsl:text/>mets:mptr<xsl:text/>: Das Kind des <xsl:text/>mets:div<xsl:text/> mit dem Unterelement <xsl:text/>mets:mptr<xsl:text/>
 Das nach den o. g. Kriterien selektierte <xsl:text/>mets:div<xsl:text/> referenziert über sein Attribut <xsl:text/>DMDID<xsl:text/> das Attribut <xsl:text/>ID<xsl:text/> des primären <xsl:text/>mets:dmdSec<xsl:text/>.
-Fehlt das primäre <xsl:text/>mets:dmdSec<xsl:text/> bzw. ist keine eindeutige Selektion möglich, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Fehlt das primäre <xsl:text/>mets:dmdSec<xsl:text/> bzw. ist keine eindeutige Selektion möglich, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -4367,7 +4367,7 @@ Fehlt das primäre <xsl:text/>mets:dmdSec<xsl:text/> bzw. ist keine eindeutige S
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:dmdSec<xsl:text/> muss das Unterelement <xsl:text/>mets:mdWrap<xsl:text/> mit dem Unterelement <xsl:text/>mets:xmlData<xsl:text/> enthalten, welches ein Unterelement <xsl:text/>mods:mods<xsl:text/> besitzt.
-Ist dies nicht der Fall, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB).</svrl:text>
+Ist dies nicht der Fall, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -4396,7 +4396,7 @@ Ist dies nicht der Fall, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transfor
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:dmdSec<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4423,7 +4423,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:dmdSec<xsl:text/> muss genau einmal von einem <xsl:text/>mets:div<xsl:text/>-Element innerhalb des Elements <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> referenziert werden.
 Die Referenzierung erfolgt über einen Wert im Attribut <xsl:text/>DMDID<xsl:text/> von <xsl:text/>mets:div<xsl:text/> auf das Attribut <xsl:text/>ID<xsl:text/> des Elements <xsl:text/>mets:dmdSec<xsl:text/>.
-Fehlt diese Referenz, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Fehlt diese Referenz, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesen Elementen und Ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:dmdSec (https://wiki.deutsche-digitale-bibliothek.de/x/mMIeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -4450,7 +4450,7 @@ Fehlt diese Referenz, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformat
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ein Datensatz muss das Element <xsl:text/>mets:amdSec<xsl:text/> enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+               <svrl:text>Ein Datensatz muss das Element <xsl:text/>mets:amdSec<xsl:text/> enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4471,7 +4471,7 @@ Fehlt diese Referenz, wird <xsl:text/>mets:dmdSec<xsl:text/> bei der Transformat
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:amdSec<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
-Das Fehlen von <xsl:text/>ID<xsl:text/> bzw. ungültige Zeichen in Attribut <xsl:text/>ID<xsl:text/> verhindern nicht das Einspielen Ihrer Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB).</svrl:text>
+Das Fehlen von <xsl:text/>ID<xsl:text/> bzw. ungültige Zeichen in Attribut <xsl:text/>ID<xsl:text/> verhindern nicht das Einspielen Ihrer Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Element und Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -4506,7 +4506,7 @@ Das Fehlen von <xsl:text/>ID<xsl:text/> bzw. ungültige Zeichen in Attribut <xsl
 Alternativ zu diesem Element kann die Rechteinformation auch im Attribut <xsl:text/>xlink:href<xsl:text/> des Elements <xsl:text/>mods:accessCondition<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> und dem Wert <xsl:text/>use and reproduction<xsl:text/> angegeben werden.
 Die Rechteinformation muss im o. g. Element bzw. Attribut in Form eines URI gemäß den Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) vorliegen. Im <xsl:text/>dv:license<xsl:text/> können darüber hinaus die kodierten Werte aus dem METS-Anwendungsprofil (Kapitel 2.7.2.11) (https://dfg-viewer.de/fileadmin/groups/dfgviewer/METS-Anwendungsprofil_2.3.1.pdf) verwendet werden. Bitte beachten Sie hierbei, dass die DDB die CC-Lizenz-Werte als Version 4.0 und den Wert <xsl:text/>reserved<xsl:text/> als Urheberrechtsschutz nicht bewertet (Europeana Rightstatement "CNE") (http://rightsstatements.org/vocab/CNE/1.0/) interpretiert.
 Ist im Datensatz keine Rechteinformation wie oben beschrieben vorhanden, kann bei der Transformation des Datensatzes eine von Ihnen bestimmte Standard-URI von der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) gesetzt werden, die für alle Ihre Datensätze gilt. Bitte teilen Sie diese der Fachstelle Bibliothek mit.
-Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB) und mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB). Informationen zu den möglichen Rechte-URI finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek).</svrl:text>
+Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB) und mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB). Informationen zu den möglichen Rechte-URI finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4533,7 +4533,7 @@ Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datens
 Alternativ zu diesem Element kann die Rechteinformation auch im Attribut <xsl:text/>xlink:href<xsl:text/> des Elements <xsl:text/>mods:accessCondition<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> und dem Wert <xsl:text/>use and reproduction<xsl:text/> angegeben werden.
 Die Rechteinformation muss im o. g. Element bzw. Attribut in Form eines URI gemäß den Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) vorliegen. Im <xsl:text/>dv:license<xsl:text/> können darüber hinaus die kodierten Werte aus dem METS-Anwendungsprofil (Kapitel 2.7.2.11) (https://dfg-viewer.de/fileadmin/groups/dfgviewer/METS-Anwendungsprofil_2.3.1.pdf) verwendet werden. Bitte beachten Sie hierbei, dass die DDB die CC-Lizenz-Werte als Version 4.0 und den Wert <xsl:text/>reserved<xsl:text/> als Urheberrechtsschutz nicht bewertet (Europeana Rightstatement "CNE") (http://rightsstatements.org/vocab/CNE/1.0/) interpretiert.
 Ist im Datensatz keine Rechteinformation wie oben beschrieben vorhanden, kann bei der Transformation des Datensatzes eine von Ihnen bestimmte Standard-URI von der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) gesetzt werden, die für alle Ihre Datensätze gilt. Bitte teilen Sie diese der Fachstelle Bibliothek mit.
-Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB) und mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB). Informationen zu den möglichen Rechte-URI finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek).</svrl:text>
+Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB) und mods:accessCondition (https://wiki.deutsche-digitale-bibliothek.de/x/Q8MeB). Informationen zu den möglichen Rechte-URI finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4563,7 +4563,7 @@ Liegt der der Fachstelle Bibliothek auch keine Standard-URI vor, wird der Datens
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:amdSec<xsl:text/>, das über sein Attribut <xsl:text/>ID<xsl:text/> vom primären <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> über dessen Attribut <xsl:text/>ADMID<xsl:text/> referenziert wird, muss das Unterelement <xsl:text/>mets:digiprovMD<xsl:text/> enthalten.
 Dieses muss auf der untersten Ebene das Element <xsl:text/>dv:presentation<xsl:text/> oder das Element <xsl:text/>dv:reference<xsl:text/> mit einem http- oder https-URI enthalten, der auf die Anzeige des Digitalisats bei Ihrer Institution, bzw. das Katalogisat in Ihrem Katalog referenziert.
-Fehlt sowohl <xsl:text/>dv:presentation<xsl:text/> als auch <xsl:text/>dv:reference<xsl:text/> bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird <xsl:text/>mets:digiprovMD<xsl:text/> bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:digiprovMD (https://wiki.deutsche-digitale-bibliothek.de/x/tsIeB).</svrl:text>
+Fehlt sowohl <xsl:text/>dv:presentation<xsl:text/> als auch <xsl:text/>dv:reference<xsl:text/> bzw. enthält keines dieser Elemente einen http- bzw. https-URI, wird <xsl:text/>mets:digiprovMD<xsl:text/> bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:digiprovMD (https://wiki.deutsche-digitale-bibliothek.de/x/tsIeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -4591,7 +4591,7 @@ Fehlt sowohl <xsl:text/>dv:presentation<xsl:text/> als auch <xsl:text/>dv:refere
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>dv:rights<xsl:text/> darf das Element <xsl:text/>dv:owner<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>dv:rights<xsl:text/> mehr als ein <xsl:text/>dv:owner<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>dv:rights<xsl:text/> darf das Element <xsl:text/>dv:owner<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>dv:rights<xsl:text/> mehr als ein <xsl:text/>dv:owner<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -4620,7 +4620,7 @@ Fehlt sowohl <xsl:text/>dv:presentation<xsl:text/> als auch <xsl:text/>dv:refere
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das primäre <xsl:text/>mets:div<xsl:text/>-Element im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> referenziert im Attribut <xsl:text/>ADMID<xsl:text/> mehrere <xsl:text/>mets:amdSec<xsl:text/>-Elemente.
-Dadurch ist keine eindeutige Zuordnung der adminstrativen Metadaten für den Datensatz möglich und er wird nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB). Informationen zum Kontext der Elemente finden Sie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Dadurch ist keine eindeutige Zuordnung der adminstrativen Metadaten für den Datensatz möglich und er wird nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB). Informationen zum Kontext der Elemente finden Sie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M101"/>
@@ -4661,7 +4661,7 @@ Enthält ein Datensatz kein <xsl:text/>mets:amdSec<xsl:text/>, das vom primären
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das primäre <xsl:text/>mets:div<xsl:text/>-Element im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss im Attribut <xsl:text/>ADMID<xsl:text/> genau ein <xsl:text/>mets:amdSec<xsl:text/>-Element über dessen Attribut <xsl:text/>ID<xsl:text/> referenzieren.
-Ist dies nicht der Fall und der Datensatz verfügt nur über genau ein <xsl:text/>mets:amdSec<xsl:text/>, wird eine Referenz auf dieses bei Transformation des Datensatzes erzeugt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB). Informationen zum Kontext der Elemente finden Sie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ist dies nicht der Fall und der Datensatz verfügt nur über genau ein <xsl:text/>mets:amdSec<xsl:text/>, wird eine Referenz auf dieses bei Transformation des Datensatzes erzeugt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB). Informationen zum Kontext der Elemente finden Sie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4688,7 +4688,7 @@ Ist dies nicht der Fall und der Datensatz verfügt nur über genau ein <xsl:text
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Der Datensatz enthält <xsl:text/>mets:amdSec<xsl:text/>-Elemente, die im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> von dem primären <xsl:text/>mets:div<xsl:text/>-Element untergeordneten <xsl:text/>mets:div<xsl:text/>-Elementen referenziert werden.
-Die DDB berücksichtigt zurzeit nur das <xsl:text/>mets:amdSec<xsl:text/>, das von primären <xsl:text/>mets:div<xsl:text/> referenziert wird.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Die DDB berücksichtigt zurzeit nur das <xsl:text/>mets:amdSec<xsl:text/>, das von primären <xsl:text/>mets:div<xsl:text/> referenziert wird. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:amdSec (https://wiki.deutsche-digitale-bibliothek.de/x/r8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M102"/>
@@ -4712,7 +4712,7 @@ Die DDB berücksichtigt zurzeit nur das <xsl:text/>mets:amdSec<xsl:text/>, das v
             <xsl:attribute name="location">
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
-            <svrl:text>Das Element <xsl:text/>dv:rights<xsl:text/> darf das Element <xsl:text/>dv:license<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>dv:rights<xsl:text/> mehr als ein <xsl:text/>dv:license<xsl:text/>, wird bei der Bereinigung des Datensatzes das erste Vorkommen von <xsl:text/>dv:license<xsl:text/> mit gültigem Rechte-URI übernommen, alle anderen <xsl:text/>dv:license<xsl:text/> werden entfernt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</svrl:text>
+            <svrl:text>Das Element <xsl:text/>dv:rights<xsl:text/> darf das Element <xsl:text/>dv:license<xsl:text/> nur einmal enthalten. Enthält <xsl:text/>dv:rights<xsl:text/> mehr als ein <xsl:text/>dv:license<xsl:text/>, wird bei der Bereinigung des Datensatzes das erste Vorkommen von <xsl:text/>dv:license<xsl:text/> mit gültigem Rechte-URI übernommen, alle anderen <xsl:text/>dv:license<xsl:text/> werden entfernt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M103"/>
@@ -4739,7 +4739,7 @@ Die DDB berücksichtigt zurzeit nur das <xsl:text/>mets:amdSec<xsl:text/>, das v
             </xsl:attribute>
             <svrl:text>Die Lizenzen aus dem Lizenzkorb der DDB (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek) können nur für Materialien genutzt werden, an denen Urheberrechte nach § 2 UrhG oder Lichtbildrechte nach § 72 UrhG bestehen.
 Der Scan oder die Fotografie von typischen Bibliotheksbeständen (Bücher, Zeitschriften und andere Schriftwerke) lässt solche Rechte in Fällen, in denen eine möglichst originalgetreue Reproduktion erzeugt werden soll, nicht entstehen. Daher kommt bei Scans / Fotos gemeinfreier Vorlagen in aller Regel nur der ebenfalls im "Lizenzkorb" enthaltene Rechtehinweis "Public Domain Mark" in Frage.
-Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung.Weitere Informationen zu Rechteangaben in der DDB finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek). Bei Fragen wenden Sie sich bitte an Armin Talke (https://pro.deutsche-digitale-bibliothek.de/ueber-uns/ansprechpartner_innen/armin-talke).</svrl:text>
+Dies ist nur ein Hinweis auf die Rechtslage in Verbindung mit der Bitte um Prüfung, ob Sie – dem entsprechend – in den Rechteangaben zu Ihren Digitalisaten den richtigen Rechtehinweis vergeben haben. Die Rechteangaben bleiben jedoch – wie im Kooperationsvertrag geregelt – in der Verantwortung Ihrer Einrichtung. Weitere Informationen zu Rechteangaben in der DDB finden Sie auf der Seite Rechteangaben in der Deutschen Digitalen Bibliothek (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/teilnahmekriterien/rechtliches/lizenzen-und-rechtehinweise-der-lizenzkorb-der-deutschen-digitalen-bibliothek). Bei Fragen wenden Sie sich bitte an Armin Talke (https://pro.deutsche-digitale-bibliothek.de/ueber-uns/ansprechpartner_innen/armin-talke).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -4846,7 +4846,7 @@ Bei der Transformation des Datensatzes übernimmt die DDB in diesem Fall die Rec
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:amdSec<xsl:text/> muss das Unterelement <xsl:text/>mets:digiprovMD<xsl:text/> enthalten.
 Dieses muss auf der untersten Ebene das Element <xsl:text/>dv:presentation<xsl:text/> enthalten, das einen http- bzw. https-URI enthält, der auf die Anzeige des Digitalisats bei Ihrer Institution referenziert.
-Fehlt <xsl:text/>dv:presentation<xsl:text/> im Datensatz wird in der DDB der Button "Objekt anzeigen" ausgeblendet.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:digiprovMD (https://wiki.deutsche-digitale-bibliothek.de/x/tsIeB).</svrl:text>
+Fehlt <xsl:text/>dv:presentation<xsl:text/> im Datensatz wird in der DDB der Button "Objekt anzeigen" ausgeblendet. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:digiprovMD (https://wiki.deutsche-digitale-bibliothek.de/x/tsIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4873,7 +4873,7 @@ Fehlt <xsl:text/>dv:presentation<xsl:text/> im Datensatz wird in der DDB der But
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:amdSec<xsl:text/> muss das Unterelement <xsl:text/>mets:rightsMD<xsl:text/> enthalten.
 Dieses muss auf der untersten Ebene das Element <xsl:text/>dv:ownerSiteURL<xsl:text/> enthalten, das einen http- bzw. https-URI enthält, der auf die Webseite Ihrer Institution referenziert.
-Fehlt <xsl:text/>dv:ownerSiteURL<xsl:text/> im Datensatz, ist der Datengeber-Link im Buchviewer der DDB ohne Referenz.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</svrl:text>
+Fehlt <xsl:text/>dv:ownerSiteURL<xsl:text/> im Datensatz, ist der Datengeber-Link im Buchviewer der DDB ohne Referenz. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:rightsMD (https://wiki.deutsche-digitale-bibliothek.de/x/ssIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4898,7 +4898,7 @@ Fehlt <xsl:text/>dv:ownerSiteURL<xsl:text/> im Datensatz, ist der Datengeber-Lin
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Datensätze, die Einteilige Dokumente oder Teile von Mehrteiligen Dokumenten beschreiben, müssen das Element <xsl:text/>mets:fileSec<xsl:text/> enthalten. Fehlt <xsl:text/>mets:fileSec<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB) und in den entsprechenden Unterseiten der Seite Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+               <svrl:text>Datensätze, die Einteilige Dokumente oder Teile von Mehrteiligen Dokumenten beschreiben, müssen das Element <xsl:text/>mets:fileSec<xsl:text/> enthalten. Fehlt <xsl:text/>mets:fileSec<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB) und in den entsprechenden Unterseiten der Seite Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4922,7 +4922,7 @@ Fehlt <xsl:text/>dv:ownerSiteURL<xsl:text/> im Datensatz, ist der Datengeber-Lin
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Beschreibt der Datensatz Einteilige Dokumente oder Teile von Mehrteiligen Dokumenten, muss das Element <xsl:text/>mets:fileSec<xsl:text/> das Element <xsl:text/>mets:fileGrp<xsl:text/> mit dem Attribut <xsl:text/>USE<xsl:text/> mit dem Wert <xsl:text/>DEFAULT<xsl:text/> enthalten.
-Fehlt ein entsprechendes <xsl:text/>mets:fileGrp<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
+Fehlt ein entsprechendes <xsl:text/>mets:fileGrp<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4944,7 +4944,7 @@ Fehlt ein entsprechendes <xsl:text/>mets:fileGrp<xsl:text/>, wird der Datensatz 
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mets:fileGrp<xsl:text/> mit dem Attribut <xsl:text/>USE<xsl:text/> mit dem Wert <xsl:text/>DEFAULT<xsl:text/> muss mindestens ein <xsl:text/>mets:file<xsl:text/>-Element enthalten. Dieses muss das Unterelement <xsl:text/>mets:FLocat<xsl:text/> mit dem Attribut <xsl:text/>xlink:href<xsl:text/> besitzen.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M108"/>
@@ -4972,7 +4972,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:file<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
-Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
+Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5000,7 +5000,7 @@ Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen,
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mets:file<xsl:text/> muss das Attribut <xsl:text/>MIMETYPE<xsl:text/> besitzen. Der Datensatz enthält mindestens ein <xsl:text/>mets:file<xsl:text/> ohne das Attribut <xsl:text/>MIMETYPE<xsl:text/>.
-Das Fehlen des Attributs <xsl:text/>MIMETYPE<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
+Das Fehlen des Attributs <xsl:text/>MIMETYPE<xsl:text/> verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M110"/>
@@ -5028,7 +5028,7 @@ Das Fehlen des Attributs <xsl:text/>MIMETYPE<xsl:text/> verhindert nicht das Ein
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:file<xsl:text/> muss über sein Attribut <xsl:text/>ID<xsl:text/> mit einem <xsl:text/>mets:fptr<xsl:text/>-Element im Element <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> über dessen Attribut <xsl:text/>FILEID<xsl:text/> referenziert werden.
-Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB) und mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
+Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:fileSec (https://wiki.deutsche-digitale-bibliothek.de/x/asIeB) und mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5057,7 +5057,7 @@ Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt.Weit
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Datensatz muss das Element <xsl:text/>mets:structMap<xsl:text/> mit dem Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>LOGICAL<xsl:text/> enthalten.
-Fehlt ein entsprechendes <xsl:text/>mets:structMap<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Fehlt ein entsprechendes <xsl:text/>mets:structMap<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -5080,7 +5080,7 @@ Fehlt ein entsprechendes <xsl:text/>mets:structMap<xsl:text/>, wird der Datensat
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:structMap<xsl:text/> mit dem Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>LOGICAL<xsl:text/> muss mindestens ein <xsl:text/>mets:div<xsl:text/>-Element enthalten. Dieses muss das Unterelement <xsl:text/>mets:FLocat<xsl:text/> mit dem Attribut <xsl:text/>xlink:href<xsl:text/> besitzen.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -5109,7 +5109,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
-Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
+Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5141,7 +5141,7 @@ Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen,
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> mit dem Attribut <xsl:text/>DMDID<xsl:text/> muss über sein Attribut <xsl:text/>ID<xsl:text/> von mindestens einem <xsl:text/>mets:smLink<xsl:text/>-Element im Element <xsl:text/>mets:structLink<xsl:text/> über dessen Attribut <xsl:text/>xlink:from<xsl:text/> referenziert werden.
-Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB).</svrl:text>
+Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5168,7 +5168,7 @@ Fehlt diese Referenzierung, wird der Datensatz nicht in die DDB eingespielt.Weit
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss über sein Attribut <xsl:text/>ID<xsl:text/> von mindestens einem <xsl:text/>mets:smLink<xsl:text/>-Element im Element <xsl:text/>mets:structLink<xsl:text/> über dessen Attribut <xsl:text/>xlink:from<xsl:text/> referenziert werden.
-Eine fehlende Referenzierung verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen im Viewer führen. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB).</svrl:text>
+Eine fehlende Referenzierung verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen im Viewer führen. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesen Elementen finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5199,7 +5199,7 @@ Eine fehlende Referenzierung verhindert nicht das Einspielen des Datensatzes in 
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss das Attribut <xsl:text/>TYPE<xsl:text/> mit einem Wert aus dem Strukturdatenset des DFG-Viewers (https://dfg-viewer.de/strukturdatenset/) (Spalte "XML") enthalten.
-Fehlt das Attribut <xsl:text/>TYPE<xsl:text/> in <xsl:text/>mets:div<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
+Fehlt das Attribut <xsl:text/>TYPE<xsl:text/> in <xsl:text/>mets:div<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5226,7 +5226,7 @@ Fehlt das Attribut <xsl:text/>TYPE<xsl:text/> in <xsl:text/>mets:div<xsl:text/>,
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss im Attribut <xsl:text/>TYPE<xsl:text/> einem Wert aus dem Strukturdatenset des DFG-Viewers (https://dfg-viewer.de/strukturdatenset/) (Spalte "XML") enthalten.
-Enthält das Attribut <xsl:text/>TYPE<xsl:text/> von <xsl:text/>mets:div<xsl:text/> einen ungültigen Wert, wird er bei der Transformation des Datensatzes durch den Wert <xsl:text/>section<xsl:text/> ersetzt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
+Enthält das Attribut <xsl:text/>TYPE<xsl:text/> von <xsl:text/>mets:div<xsl:text/> einen ungültigen Wert, wird er bei der Transformation des Datensatzes durch den Wert <xsl:text/>section<xsl:text/> ersetzt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5258,7 +5258,7 @@ Enthält das Attribut <xsl:text/>TYPE<xsl:text/> von <xsl:text/>mets:div<xsl:tex
  * <xsl:text/>month<xsl:text/>
  * <xsl:text/>day<xsl:text/>
 Diese Werte sind nur in Datensätzen, die für das Zeitungsportal bestimmt sind, gültig und werden daher nicht in die DDB eingespielt.
-Wenn Sie den Datensatz in das Zeitungsportal einspielen möchten (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/lieferung-subportale/lieferungen-an-das-deutsche-zeitungsportal), teilen Sie dies bitte der Fachstelle Bibliothek (mailto:bibliothek@deutsche-digitale-bibliothek.de) mit.Weitere Informationen zur Struktur von Datensätzen für das Zeitungsportal finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite Aufbau für Zeitungsausgaben (https://wiki.deutsche-digitale-bibliothek.de/x/ugGuB).</svrl:text>
+Wenn Sie den Datensatz in das Zeitungsportal einspielen möchten (https://pro.deutsche-digitale-bibliothek.de/daten-liefern/lieferung-subportale/lieferungen-an-das-deutsche-zeitungsportal), teilen Sie dies bitte der Fachstelle Bibliothek (mailto:bibliothek@deutsche-digitale-bibliothek.de) mit. Weitere Informationen zur Struktur von Datensätzen für das Zeitungsportal finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite Aufbau für Zeitungsausgaben (https://wiki.deutsche-digitale-bibliothek.de/x/ugGuB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5296,7 +5296,7 @@ Wenn Sie den Datensatz in das Zeitungsportal einspielen möchten (https://pro.de
  * <xsl:text/>musical_notation<xsl:text/>
  * <xsl:text/>part<xsl:text/>
  * <xsl:text/>volume<xsl:text/>
-Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</svrl:text>
+Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5331,7 +5331,7 @@ Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Date
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Datensatz enthält im primären <xsl:text/>mets:dmdSec<xsl:text/>-Element das Element <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> und beschreibt damit den Teil eines Mehrteiligen Dokuments. Daher muss das Elternelement <xsl:text/>mets:div<xsl:text/> des primären <xsl:text/>mets:div<xsl:text/>-Elements im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> das Unterelement <xsl:text/>mets:mptr<xsl:text/> enthalten.
-Ist dies nicht der Fall, fehlt dem Datensatz die Referenz auf den Ankersatz des Mehrteiligen Dokuments und er wird nicht in die DDB eingespielt.Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
+Ist dies nicht der Fall, fehlt dem Datensatz die Referenz auf den Ankersatz des Mehrteiligen Dokuments und er wird nicht in die DDB eingespielt. Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich METS/MODS für Mehrteilige Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/RgGuB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5363,7 +5363,7 @@ Ist dies nicht der Fall, fehlt dem Datensatz die Referenz auf den Ankersatz des 
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Attribut <xsl:text/>DMDID<xsl:text/> des <xsl:text/>mets:div<xsl:text/>-Elements im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss den Wert des Attributs <xsl:text/>ID<xsl:text/> eines <xsl:text/>mets:dmdSec<xsl:text/>-Elements referenzieren.
-Fehlt ein <xsl:text/>mets:dmdSec<xsl:text/> mit einem entsprechendem Wert im Attribut <xsl:text/>ID<xsl:text/>, wird das Attribut <xsl:text/>DMDID<xsl:text/> des <xsl:text/>mets:div<xsl:text/> bei der Transformation des Datensatz entfernt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
+Fehlt ein <xsl:text/>mets:dmdSec<xsl:text/> mit einem entsprechendem Wert im Attribut <xsl:text/>ID<xsl:text/>, wird das Attribut <xsl:text/>DMDID<xsl:text/> des <xsl:text/>mets:div<xsl:text/> bei der Transformation des Datensatz entfernt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5393,7 +5393,7 @@ Fehlt ein <xsl:text/>mets:dmdSec<xsl:text/> mit einem entsprechendem Wert im Att
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> beschreibt das Element <xsl:text/>mets:div<xsl:text/>, das das Unterelement <xsl:text/>mets:mptr<xsl:text/> enthält, das Mehrteilige Dokument des im Datensatz beschriebenen Teils eines Mehrteiligen Dokuments. <xsl:text/>mets:mptr<xsl:text/> dient dabei zur Referenzierung des entsprechenden Ankersatzes. Alle Nachkommen dieses <xsl:text/>mets:div<xsl:text/> beschreiben den Teil des Mehrteiligen Dokuments bzw. Unselbständige Dokumente innerhalb desselben und dürfen daher keine <xsl:text/>mets:mptr<xsl:text/> enthalten.
-Gibt es <xsl:text/>mets:div<xsl:text/>-Nachkommen eines <xsl:text/>mets:div<xsl:text/> mit <xsl:text/>mets:mptr<xsl:text/>, die <xsl:text/>mets:mptr<xsl:text/> enthalten, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</svrl:text>
+Gibt es <xsl:text/>mets:div<xsl:text/>-Nachkommen eines <xsl:text/>mets:div<xsl:text/> mit <xsl:text/>mets:mptr<xsl:text/>, die <xsl:text/>mets:mptr<xsl:text/> enthalten, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5484,7 +5484,7 @@ Bitte verwenden Sie im Attribut <xsl:text/>TYPE<xsl:text/> des primären <xsl:te
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Attribut <xsl:text/>xlink:href<xsl:text/> des <xsl:text/>mets:mptr<xsl:text/>-Elements im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss einen validen http-URL enthalten.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und der Seite Aufbau für Teile Mehrteiliger Dokumente (https://wiki.deutsche-digitale-bibliothek.de/x/jwGuB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5515,7 +5515,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
             </xsl:attribute>
             <svrl:text>Der Datensatz enthält im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/>
                <xsl:text/>mets:div<xsl:text/>-Elemente, die über ihr Attribut <xsl:text/>DMDID<xsl:text/> dasselbe <xsl:text/>mets:dmdSec<xsl:text/>-Element über dessen Attribut <xsl:text/>ID<xsl:text/> referenzieren.
-Ein <xsl:text/>mets:dmdSec<xsl:text/> darf nur von genau einem <xsl:text/>mets:div<xsl:text/> in <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> referenziert werden, daher wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ein <xsl:text/>mets:dmdSec<xsl:text/> darf nur von genau einem <xsl:text/>mets:div<xsl:text/> in <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> referenziert werden, daher wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5551,7 +5551,7 @@ Ein <xsl:text/>mets:dmdSec<xsl:text/> darf nur von genau einem <xsl:text/>mets:d
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Datensatz beschreibt ein Einteiliges Dokument bzw. einen Teil eines Mehrteiligen Dokuments und daher muss das Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> über die Elemente <xsl:text/>mets:structLink<xsl:text/> und <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> mindestens ein <xsl:text/>mets:file<xsl:text/>-Element im Element <xsl:text/>mets:fileGrp[@USE='DEFAULT']<xsl:text/> referenzieren.
-Fehlt diese Referenz, kann <xsl:text/>mets:div<xsl:text/> für die Anzeige in der DDB kein Bild zugewiesen werden und es wird mit allen anderen Referenzen bei der Transformation des Datensatzes entfernt.Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Fehlt diese Referenz, kann <xsl:text/>mets:div<xsl:text/> für die Anzeige in der DDB kein Bild zugewiesen werden und es wird mit allen anderen Referenzen bei der Transformation des Datensatzes entfernt. Weitere Informationen zu diesem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5581,7 +5581,7 @@ Fehlt diese Referenz, kann <xsl:text/>mets:div<xsl:text/> für die Anzeige in de
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Der Datensatz besitzt kein <xsl:text/>mets:fileSec<xsl:text/>-Element mit dem Unterelement <xsl:text/>mets:fileGrp[@USE='DEFAULT']<xsl:text/> bzw. das Element <xsl:text/>mets:structLink<xsl:text/> und beschreibt daher einen Ankersatz. Dadurch darf das primäre <xsl:text/>mets:div<xsl:text/>-Element im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> kein <xsl:text/>mets:div<xsl:text/>-Elternelement besitzen und muss die oberste logische Ebene darstellen.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Aufbau eines Ankersatzes (https://wiki.deutsche-digitale-bibliothek.de/x/SgGuB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Aufbau eines Ankersatzes (https://wiki.deutsche-digitale-bibliothek.de/x/SgGuB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5613,7 +5613,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
  * <xsl:text/>multivolume_work<xsl:text/>
  * <xsl:text/>newspaper<xsl:text/>
  * <xsl:text/>periodical<xsl:text/>
-Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5649,7 +5649,7 @@ Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatz
  * <xsl:text/>musical_notation<xsl:text/>
  * <xsl:text/>part<xsl:text/>
  * <xsl:text/>volume<xsl:text/>
-Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5678,7 +5678,7 @@ Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatz
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Der Datensatz beschreibt ein einteiliges Dokument und muss daher im Attribut <xsl:text/>TYPE<xsl:text/> des primären <xsl:text/>mets:div<xsl:text/>-Element im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> einen entsprechenden Wert aus der Tabelle der Hierarchietypen in METS/MODS (Spalte B) (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB) enthalten.
-Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5707,7 +5707,7 @@ Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatz
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Ein <xsl:text/>mets:div<xsl:text/>-Element im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/>, das ein unselbständiges Dokument beschreibt, muss im Attribut <xsl:text/>TYPE<xsl:text/> entsprechenden Wert aus der Tabelle der Hierarchietypen in METS/MODS (Spalte B) (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB) enthalten.
-Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
+Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatzes in die DDB zurzeit noch nicht, eine Verschärfung dieser Anforderungen ist aber perspektivisch geplant. Wir bitten Sie daher, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und Hierarchietypen in METS/MODS (https://wiki.deutsche-digitale-bibliothek.de/x/KAGuB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5735,7 +5735,7 @@ Die Verwendung ungültiger Attributwerte verhindert das Einspielen des Datensatz
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mets:mptr<xsl:text/> im Element <xsl:text/>mets:div<xsl:text/> innerhalb des Elements <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> darf nicht wiederholt werden.
-Enthält <xsl:text/>mets:div<xsl:text/> mehr als ein <xsl:text/>mets:mptr<xsl:text/> wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
+Enthält <xsl:text/>mets:div<xsl:text/> mehr als ein <xsl:text/>mets:mptr<xsl:text/> wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -5763,7 +5763,7 @@ Enthält <xsl:text/>mets:div<xsl:text/> mehr als ein <xsl:text/>mets:mptr<xsl:te
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Datensatz beschreibt ein Einteiliges Dokument bzw. einen Teil eines Mehrteiligen Dokuments und muss daher das Element <xsl:text/>mets:structMap<xsl:text/> mit dem Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>PHYSICAL<xsl:text/> enthalten.
-Fehlt ein entsprechendes <xsl:text/>mets:structMap<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Fehlt ein entsprechendes <xsl:text/>mets:structMap<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -5787,7 +5787,7 @@ Fehlt ein entsprechendes <xsl:text/>mets:structMap<xsl:text/>, wird der Datensat
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:structMap<xsl:text/> mit dem Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>PHYSICAL<xsl:text/> muss das Unterelement <xsl:text/>mets:div<xsl:text/> mit dem Attribut <xsl:text/>TYPE<xsl:text/> den Wert <xsl:text/>physSequence<xsl:text/> enthalten.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -5811,7 +5811,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> mit dem Attribut <xsl:text/>TYPE<xsl:text/> dem Wert <xsl:text/>physSequence<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss mindestens ein <xsl:text/>mets:div<xsl:text/> mit dem Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>page<xsl:text/> enthalten.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -5840,7 +5840,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem im Datensatz eindeutigen Identifier enthalten. Dieser darf darüber hinaus keine ungültigen Zeichen enthalten.
-Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
+Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5871,7 +5871,7 @@ Fehlt das Attribut <xsl:text/>ID<xsl:text/> bzw. enthält es ungültige Zeichen,
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:div<xsl:text/> innerhalb des Elements <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/>, das das Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>page<xsl:text/> besitzt, muss auch das Attribut <xsl:text/>order<xsl:text/> enthalten.
-Fehlt das Attribut <xsl:text/>order<xsl:text/> verhindert dies nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
+Fehlt das Attribut <xsl:text/>order<xsl:text/> verhindert dies nicht das Einspielen des Datensatzes in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5897,7 +5897,7 @@ Fehlt das Attribut <xsl:text/>order<xsl:text/> verhindert dies nicht das Einspie
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Attribut <xsl:text/>order<xsl:text/> vom Element <xsl:text/>mets:div<xsl:text/> im Element <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/>muss als Wert einen Integer enthalten.
-Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
+Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Datensatzes in die DDB, kann aber zu Darstellungsproblemen führen. Wir bitten Sie daher den Sachverhalt zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5929,7 +5929,7 @@ Die Verwendung eines ungültigen Wertes verhindert nicht das Einspielen des Date
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:fptr<xsl:text/> im Element <xsl:text/>mets:div[@TYPE='page']<xsl:text/> muss das Attribut <xsl:text/>FILEID<xsl:text/> enthalten.
-Fehlt <xsl:text/>FILEID<xsl:text/> in <xsl:text/>mets:div[@TYPE='page']<xsl:text/> wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
+Fehlt <xsl:text/>FILEID<xsl:text/> in <xsl:text/>mets:div[@TYPE='page']<xsl:text/> wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5961,7 +5961,7 @@ Fehlt <xsl:text/>FILEID<xsl:text/> in <xsl:text/>mets:div[@TYPE='page']<xsl:text
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Datensatz enthält in mindestens einem <xsl:text/>mets:div[@TYPE='page']<xsl:text/>-Element im Element <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/>im Attribut <xsl:text/>CONTENTIDS<xsl:text/> einen URN. Ist dies der Fall, müssen alle <xsl:text/>mets:div[@TYPE='page']<xsl:text/> das Attribut <xsl:text/>CONTENTIDS<xsl:text/> mit einem URN besitzen.
-Fehlt <xsl:text/>CONTENTIDS<xsl:text/> mit einem URN in einem <xsl:text/>mets:div[@TYPE='page']<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
+Fehlt <xsl:text/>CONTENTIDS<xsl:text/> mit einem URN in einem <xsl:text/>mets:div[@TYPE='page']<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Attribut finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -5990,7 +5990,7 @@ Fehlt <xsl:text/>CONTENTIDS<xsl:text/> mit einem URN in einem <xsl:text/>mets:di
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Datensatz beschreibt ein Einteiliges Dokument bzw. einen Teil eines Mehrteiligen Dokuments und muss daher das Element <xsl:text/>mets:structLink<xsl:text/> enthalten.
-Fehlt <xsl:text/>mets:structLink<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Fehlt <xsl:text/>mets:structLink<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -6013,7 +6013,7 @@ Fehlt <xsl:text/>mets:structLink<xsl:text/>, wird der Datensatz nicht in die DDB
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:structLink<xsl:text/> muss mindestens ein <xsl:text/>mets:smLink<xsl:text/>-Element enthalten.
-Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -6037,7 +6037,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.Weitere
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mets:smLink<xsl:text/> muss die Attribute <xsl:text/>xlink:from<xsl:text/> und <xsl:text/>xlink:to<xsl:text/> enthalten.
-Fehlen diese Attribute, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesem Element, seinen Attributen und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Fehlen diese Attribute, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesem Element, seinen Attributen und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -6061,7 +6061,7 @@ Fehlen diese Attribute, wird der Datensatz nicht in die DDB eingespielt.Weitere 
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Attribut <xsl:text/>xlink:to<xsl:text/> des Elements <xsl:text/>mets:smLink<xsl:text/> muss den Wert des Attributs <xsl:text/>ID<xsl:text/> eines <xsl:text/>mets:div<xsl:text/>-Elements im Element <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> referenzieren.
-Enthält ein <xsl:text/>xlink:to<xsl:text/> eine ungültige Referenz, wird der Datensatz nicht in die DDB eingespielt.Weitere Informationen zu diesen Elementen, ihren Attributen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
+Enthält ein <xsl:text/>xlink:to<xsl:text/> eine ungültige Referenz, wird der Datensatz nicht in die DDB eingespielt. Weitere Informationen zu diesen Elementen, ihren Attributen und ihrem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf den Seiten mets:structLink (https://wiki.deutsche-digitale-bibliothek.de/x/q8IeB) und mets:structMap[@TYPE='PHYSICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/i8IeB) sowie im Bereich Aufbau einer METS/MODS-Datei für die DDB (https://wiki.deutsche-digitale-bibliothek.de/x/VcIeB).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
