@@ -3,6 +3,20 @@ Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Ze
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+
+## v2024-12-13T09:06:22
+
+### Added
+
+- Prüfung `structMapLogical_29` hinzugefügt: "mets:structMap\[@TYPE='LOGICAL'\] enthält mehrere primäre mets:div" 
+
+### Changed
+
+- Fehlende Leerzeichen in Meldungen ergänzt ([Pull Request #15](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/15))
+- Prüfung `language_02`: Die Prüfung ignoriert nun leere `mods:languageTemr`-Elemente
+- Prüfung `dmdSec_01`: Tippfehler korrigiert ([Pull Request #15](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/15))
+
+
 ## v2024-02-29T15:26:03
 
 ### Added

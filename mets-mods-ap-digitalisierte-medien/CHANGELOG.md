@@ -3,6 +3,23 @@ Changelog der Schematron-Validierung für das DDB-METS/MODS Anwendungsprofil fü
 
 Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+
+## v2024-12-13T09:06:12
+
+### Added
+
+- Prüfung `name_14` hinzugefügt: "Nicht untertützter Wert in mods:roleTerm"
+
+### Changed
+
+- Fehlende Leerzeichen in Meldungen ergänzt ([Pull Request #15](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/15))
+- Prüfung `name_13`: Die Prüfung ignoriert nun leere `mods:roleTerm`-Elemente
+- Prüfung `language_02`: Die Prüfung ignoriert nun leere `mods:languageTerm`-Elemente
+- Prüfung `fileSec_03`: Die Prüfung meldet nun auch leere `mets:fileGrp[@USE='DEFAULT']`
+- Prüfung `structMapLogical_05`: Meldungstext ergänzt
+- Prüfung `structMapLogical_06`: Die Sturkturtypen `part` und `review` als valide ergänzt
+- Prüfung `structMapLogical_07`: Property `type` korrigiert zu `TYPE`
+
 ## v2024-02-29T15:50:50
 
 ### Added
@@ -22,7 +39,7 @@ Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden S
 
 ### Changed
 
-- Prüfung `name_13`: Aktuelle [Liste MARC Relator Codes](http://id.loc.gov/vocabulary/relators) übernommen
+- Prüfung `name_13`: Aktuelle [Liste der MARC Relator Codes](http://id.loc.gov/vocabulary/relators) übernommen
 - Prüfung `structMapLogical_06`: Aktuelle Liste der Strukturtypen des Strukturdatensets des DFG-Viewers übernommen
 
 ## v2023-05-05T15:50:49
