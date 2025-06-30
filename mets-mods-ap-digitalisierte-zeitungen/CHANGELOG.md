@@ -13,7 +13,7 @@ Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden S
 ### Changed
 
 - Fehlende Leerzeichen in Meldungen ergänzt ([Pull Request #15](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/15))
-- Prüfung `language_02`: Die Prüfung ignoriert nun leere `mods:languageTemr`-Elemente
+- Prüfung `language_02`: Die Prüfung ignoriert nun leere `mods:languageTerm`-Elemente
 - Prüfung `dmdSec_01`: Tippfehler korrigiert ([Pull Request #15](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/15))
 
 
