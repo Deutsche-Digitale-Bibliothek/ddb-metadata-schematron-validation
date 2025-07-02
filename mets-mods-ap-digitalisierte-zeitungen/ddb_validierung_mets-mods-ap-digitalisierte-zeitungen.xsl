@@ -2173,7 +2173,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der digtalen Ausgabe im Element <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen.
+               <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der digitalen Ausgabe im Element <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen.
 Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
