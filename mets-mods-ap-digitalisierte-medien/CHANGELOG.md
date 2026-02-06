@@ -4,10 +4,29 @@ Changelog der Schematron-Validierung für das DDB-METS/MODS Anwendungsprofil fü
 Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
 
+## v2026-02-06T08:12:14
+
+### Added
+- Prüfung `name_15` hinzugefügt: "mods:roleTerm\[@type='code'\]\[@authority='marcrelator'\] ist in mods:role mehrfach vorhanden"
+- Prüfung `name_16` hinzugefügt: "mods:roleTerm\[@type='text'\] ist in mods:role mehrfach vorhanden"
+- Prüfung `name_17` hinzugefügt: "Wert in mods:roleTerm entspricht nicht dem Wert im Attribut valueURI"
+- Prüfung `recordInfo_06` hinzugefügt:  "Ungültiger Wert in mods:recordIdentifier"
+
+### Changed
+- Alle Verweise (URLs) auf das „DDBinfo für Daten“-Wiki aktualisiert (Anwendungsprofil und Beispiele)
+- Prüfung `identifier_01`: Die DDB berücksichtigt nun die folgenden weiteren Typen von Identifiern und die Prüfung ist entsprechend angepasst:
+  - `rism`
+  - `kope`
+  - `qal`
+  - `hsp`
+  - `gw`
+- Prüfung `name_12`: Meldungstext an neue Bearbeitung angepasst
+- Prüfung `titleInfo_09`: Die Prüfung durch die Verwendung von `normalize-space`verschärft 
+- Prüfung `recordInfo_04`: Die Prüfung wurde präzisiert. Dabei wurden sowohl der XPath für zu testenden Elemente als auch der Regex zum Testen des Wertes angepasst.
+
 ## v2024-12-13T09:06:12
 
 ### Added
-
 - Prüfung `name_14` hinzugefügt: "Nicht untertützter Wert in mods:roleTerm"
 
 ### Changed
@@ -23,7 +42,6 @@ Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden S
 ## v2024-02-29T15:50:50
 
 ### Added
-
 - Prüfung `all_07` hinzugefügt: "Ungültiger Namensraum für METS-Elemente"
 - Prüfung `all_08` hinzugefügt: "Ungültiger Namensraum für MODS-Elemente"
 - Prüfung `all_09` hinzugefügt: "Ungültiger Namensraum für DFG-Viewer-Elemente (dv)"
@@ -38,7 +56,6 @@ Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden S
 - Prüfung `structLink_05` hinzugefügt: "Ungültiger Namensraum für XLink-Attribute von mets:smLink"
 
 ### Changed
-
 - Prüfung `name_13`: Aktuelle [Liste der MARC Relator Codes](http://id.loc.gov/vocabulary/relators) übernommen
 - Prüfung `structMapLogical_06`: Aktuelle Liste der Strukturtypen des Strukturdatensets des DFG-Viewers übernommen
 

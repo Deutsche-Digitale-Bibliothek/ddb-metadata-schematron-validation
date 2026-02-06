@@ -186,7 +186,7 @@
    <xsl:template match="/">
       <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                               title="Validierung der Fachstelle Bibliothek der Deutschen Digitalen Bibliothek für das METS/MODS-Anwendungsprofil für Zeitungen"
-                              schemaVersion="v2024-12-13T09:06:22">
+                              schemaVersion="v2026-02-06T08:12:23">
          <xsl:comment>
             <xsl:value-of select="$archiveDirParameter"/>   
 		 <xsl:value-of select="$archiveNameParameter"/>  
@@ -1694,7 +1694,7 @@ Verwenden die DFG-Viewer-Elemente einen ungültigen Namensraum ist eine Verarbei
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jede <xsl:text/>mets:dmdSec<xsl:text/> muss mindestens ein <xsl:text/>mods:typeOfResource<xsl:text/> enthalten. Ist dies nicht der Fall, wird bei der Bereinigung der Daten als Default-Wert <xsl:text/>mods:typeOfResource<xsl:text/> mit dem Wert text eingefügt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Medientyp).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1727,7 +1727,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/> der Ausgabe muss in <xsl:text/>mods:typeOfResource<xsl:text/> den Wert <xsl:text/>text<xsl:text/> enthalten. Ist dies nicht der Fall, dann wird bei der Bereinigung der Daten der vorhandene Wert durch den Wert text ersetzt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Medientyp).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Medientyp).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1760,7 +1760,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Es muss mindestens ein <xsl:text/>mods:originInfo[@eventType='publication']<xsl:text/> vorhanden sein. Ist dies nicht der Fall,kann die Ausgabe nicht in das Zeitungsportal übernommen werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Erscheinungsangaben).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Erscheinungsangaben).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1787,7 +1787,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/> der Ausgabe muss in <xsl:text/>mods:dateIssued<xsl:text/> das Erscheinungdatum enthalten. Ist dies nicht der Fall, kann die Ausgabe nicht in das Zeitungsportal übernommen werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Erscheinungsdatum-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1813,7 +1813,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
             </xsl:attribute>
             <svrl:text>
                <xsl:text/>mods:dateIssued<xsl:text/> darf innerhalb von <xsl:text/>mods:originInfo<xsl:text/> nicht wiederholt werden. Ist dies der Fall, wird bei der Transformation der Daten die erste Datumsangabe übernommen, alle anderen werden entfernt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Erscheinungsdatum-der-Ausgabe).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1847,7 +1847,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Wert in <xsl:text/>mods:dateIssued<xsl:text/> muss einem Tagesdatum nach dem ISO 8601 Standard entsprechen. Ist dies nicht der Fall, kann die Ausgabe nicht dem richtigen Datum im Kalender des Zeitungsportals zugeordnet werden und kann daher nicht in das Zeitungsportal übernommen werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Erscheinungsdatum-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1902,7 +1902,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Der Wert in <xsl:text/>mods:dateIssued<xsl:text/> liegt außerhalb des erwarteten Zeitraums (ab 1500) oder besitzt ungültige Monats- bzw. Tagesangaben. Die Ausgabe kann daher nicht ins Zeitungsportal übernommen werden, da dies dort zu Fehldarstellung führt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ErscheinungsdatumderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Erscheinungsdatum-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -1986,7 +1986,7 @@ Ist dies der Fall besteht von Ihrer Seite kein Handlungsbedarf. Sollten die betr
                <svrl:text>
                   <xsl:text/>mods:language/mods:languageTerm<xsl:text/> muss einen Code aus dem ISO 639-2b Standard (https://id.loc.gov/vocabulary/iso639-2) enthalten. Sollen mehrere Sprachen angegeben werden, muss <xsl:text/>mods:language/mods:languageTerm<xsl:text/> wiederholt werden. Die Angaben von mehreren Sprachen in einem mod:languageTerm Element ist nicht erlaubt.
 Handelt es sich bei dem Eintrag in <xsl:text/>mods:language/mods:languageTerm<xsl:text/> um einen anderen Wert als die oben genannten Codes bzw. sind mehrere Codes enthalten, wird <xsl:text/>mods:language<xsl:text/> bei der Bereinigung der Daten entfernt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Sprache).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2022,7 +2022,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die Sprache muss in <xsl:text/>mods:language/mods:languageTerm<xsl:text/> angegeben werden, wenn es sich bei der Ressource überwiegend um Text handelt. Dabei sind die Codes des ISO 639-2b Standards (https://id.loc.gov/vocabulary/iso639-2) zu verwenden. Fehlt die Angabe der Sprache bzw. entspricht die Sprachangabe nicht ISO 639-2b, können die betroffenen Datensätze nicht an Europeana weitergegeben werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Sprache).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Sprache).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2054,7 +2054,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
             </xsl:attribute>
             <svrl:text>
                <xsl:text/>mods:extent<xsl:text/> sollte die Umfangsangabe des digitalisierten Originals enthalten. Wenn in <xsl:text/>mods:extent<xsl:text/> Begriffe wie "Online" oder "Electronic" enthalten sind, wird davon ausgegangen, dass es sich um Angaben zum Digitalisat handelt. In diesem Fall wird <xsl:text/>mods:extent<xsl:text/> bei der Bereinigung der Daten entfernt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PhysischeBeschreibung).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Physische-Beschreibung).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2088,7 +2088,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <svrl:text>Ausgaben von Zeitungen werden über den Identifier des Datensatzes, der das gesamte Werk beschreibt (die sogenannte Gesamtaufnahme) mit dem übergeordneten Werk verknüpft. Aus diesem Grund muss die <xsl:text/>mets:dmdSec<xsl:text/>, die eine Ausgabe beschreibt, ein <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> enthalten, das den <xsl:text/>mods:recordInfo/mods:recordIdentifier<xsl:text/> der Gesamtaufnahme enthält.
 Zudem muss <xsl:text/>mods:recordIdentifier<xsl:text/> das Attribut source enthalten und der Wert in diesem Attribut muss dem Wert entsprechen, der auch in der Gesamtaufnahme in dem Element <xsl:text/>mods:recordIdentifier<xsl:text/> verwendet wird.
 Fehlt <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> oder <xsl:text/>mods:recordIdentifier<xsl:text/> oder das Attribut source, so lassen sich die Daten der Ausgaben nicht mit den Daten der Gesamtaufnahme verknüpfen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Beziehungen-zur-Gesamtaufnahme).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2121,7 +2121,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen. Enthält auch die Gesamtaufnahme keinen <xsl:text/>mods:identifier[@type='zdb']<xsl:text/>, so kann die Ausgabe nicht in die DDB eingespielt werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-BeziehungenzurGesamtaufnahme).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Beziehungen-zur-Gesamtaufnahme).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2147,7 +2147,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Innerhalb von <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> darf <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> nicht wiederholt werden. Ist mehr als ein <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> vorhanden, wird das erste Vorkommen bei der Transformation der Daten übernommen und alle weiteren Vorkommen entfernt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#ZDB-ID-der-digitalen-Ausgabe).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2174,7 +2174,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Ausgaben von Zeitungen werden im Zeitungsportal über den ZDB-Identifier der digitalen Ausgabe im Element <xsl:text/>mods:identifier[@type='zdb']<xsl:text/> in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit der Aufnahme aus der ZDB verknüpft. Fehlt der ZDB-Identifier in <xsl:text/>mods:relatedItem[@type='host']<xsl:text/>, wird er bei der Transformation der Daten aus der METS-Datei der Gesamtaufnahme in die Ausgabe übernommen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#ZDB-ID-der-digitalen-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2207,7 +2207,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Das Element <xsl:text/>mods:relatedItem[@type='host']<xsl:text/> mit den Informationen zur Zeitung muss einen Titel in <xsl:text/>mods:titleInfo/mods:title<xsl:text/> enthalten. Fehlt der Titel der Zeitung, wird er bei der Transformation der Daten aus der ZDB-Aufnahme der Online-Ausgabe übernommen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-TitelderZeitung).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Titel-der-Zeitung).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2244,7 +2244,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
  * <xsl:text/>purl<xsl:text/>
  * <xsl:text/>doi<xsl:text/>
  * <xsl:text/>handle<xsl:text/>
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-PersistenterURIderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Persistenter-URI-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2277,7 +2277,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die ZDB-ID der Zeitung darf nur aus maximal 10 Zahlen, optional gefolgt von einem Bindestrich und einer weiteren Zahl bzw. einem <xsl:text/>X<xsl:text/> bestehen. Entspricht die ZDB-ID nicht diesen Vorgaben, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#ZDB-ID-der-digitalen-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2305,7 +2305,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die ZDB-ID der Zeitung enthält an der letzten Stelle eine Prüfziffer, die durch einen Bindestrich eingeleitet werden kann. Da der Bindestrich für das Einspielen in das Deutsche Zeitungsportal erforderlich ist, wird er bei der Transformation der Daten ergänzt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-ZDB-IDderdigitalenAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#ZDB-ID-der-digitalen-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2338,7 +2338,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Wenn für die Angabe der Lizenz das Element <xsl:text/>mods:accessCondition<xsl:text/> verwendet wird, so sollte dies den Empfehlungen für Rechteinformationen in Metadaten der DINI AG KIM (https://wiki.dnb.de/pages/viewpage.action?pageId=148607377) entsprechend erfolgen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Rechteinformationen).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Rechteinformationen).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2400,7 +2400,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Das Element <xsl:text/>mods:part<xsl:text/> ist in Ausgaben von Zeitungen nicht wiederholbar. Gibt es in einem Datensatz mehr als ein <xsl:text/>mods:part<xsl:text/> ist die Sortierung der Ausgabe nicht mehr eindeutig und er kann daher nicht in das Zeitungsportal eingespielt werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Z%C3%A4hlung%2FBezeichnung-der-Ausgabe).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2428,7 +2428,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>Ausgaben von Zeitungen müssen Informationen zur Zählung enthalten, die im Zeitungsportal für die Anzeige der Ausgabe verwendet werden. Diese Information muss in <xsl:text/>mods:part/mods:detail/mods:number<xsl:text/> zur Verfügung gestellt werden.
 Fehlt <xsl:text/>mods:part<xsl:text/>, so wird der Inhalt des Elements <xsl:text/>mods:number<xsl:text/> bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. <xsl:text/>mods:dateIssued<xsl:text/>) generiert.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Z%C3%A4hlung%2FBezeichnung-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2456,7 +2456,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>Damit die Ausgaben in der richtigen Reihenfolge angezeigt werden muss <xsl:text/>mods:part<xsl:text/> das Attribut order enthalten. Der Wert in diesem Attribut muss dem Erscheinungsdatum in Form eines Integer (also <xsl:text/>YYYYMMDD<xsl:text/> ggf. mit angehängter zweistelliger Zählung) entsprechen.
 Fehlt das Attribut order in <xsl:text/>mods:part<xsl:text/>, so wird der Inhalt des Attributs bei der Transformation der Daten aus dem Erscheinungsdatum der Ausgabe (s. <xsl:text/>mods:dateIssued<xsl:text/>) generiert.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Z%C3%A4hlung%2FBezeichnung-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2484,7 +2484,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Aus diesem Grund muss <xsl:text/>mods:part<xsl:text/> das Attribut <xsl:text/>order<xsl:text/> enthalten, dessen Wert ein Integer ist. Handelt es sich um einen Wert, der nicht maschinenlesbar ist, so verhindert dies nicht das Einspielen der Daten in das Zeitungsportal, wir bitten Sie jedoch, die Daten zu prüfen und ggf. die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Z%C3%A4hlung%2FBezeichnung-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2512,7 +2512,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Um Ausgaben von Zeitungen in der richtigen Reihenfolge anzeigen zu können, muss die Ausgabezählung auch in maschinenlesbarer Form vorliegen. Der vorliegende Wert als Integer erfüllt die Anforderungen weicht aber in der Struktur von der Empfehlung im Anwendungsprofil (<xsl:text/>YYYYMMTT<xsl:text/> ggf. mit angehängter zweistelliger Zählung) ab. Wir empfehlen die empfohlene Struktur zu übernehmen um Sortierfehler im Zeitungsportal zu vermeiden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Z%C3%A4hlung%2FBezeichnung-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2546,7 +2546,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>In <xsl:text/>mods:part<xsl:text/> von Ausgaben von Zeitungen muss das Unterelement <xsl:text/>mods:detail<xsl:text/> ein Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>issue<xsl:text/> enthalten. Darüber hinaus muss das Element <xsl:text/>mods:detail<xsl:text/> ein Unterelement <xsl:text/>mods:number<xsl:text/> enthalten.
 Fehlen diese Angaben wird bei der Transformation der Daten in dem vorhandenen <xsl:text/>mods:part<xsl:text/> ein <xsl:text/>mods:detail<xsl:text/> mit dem Attribut <xsl:text/>type<xsl:text/> mit dem Wert <xsl:text/>issue<xsl:text/> erzeugt und der Wert für das Unterelement <xsl:text/>mods:number<xsl:text/> aus dem Erscheinungsdatum übernommen (s. <xsl:text/>mods:dateIssued<xsl:text/>).
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Z%C3%A4hlung/BezeichnungderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Z%C3%A4hlung%2FBezeichnung-der-Ausgabe).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2579,7 +2579,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/>, die das gesamte Werk beschreibt, muss ein <xsl:text/>mods:recordInfo<xsl:text/> mit dem Unterelement <xsl:text/>mods:recordIdentifier<xsl:text/> enthalten. Dieser <xsl:text/>mods:recordIdentifier<xsl:text/> muss durch den Wert im Attribut <xsl:text/>source<xsl:text/> eindeutig identifizierbar sein. Wenn <xsl:text/>mods:recordIdentifier<xsl:text/> und / oder das Attribut <xsl:text/>source<xsl:text/> fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zum-Datensatz).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2613,7 +2613,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>
                   <xsl:text/>mods:recordIdentifier<xsl:text/> muss das Attribut <xsl:text/>source<xsl:text/> enthalten. Der Wert dieses Attribut muss die Herkunft des Identifiers des Datensatzes eindeutig identifizieren. Wenn das Attribut <xsl:text/>source<xsl:text/> fehlt, lässt sich der METS-Datensatz nicht eindeutig identifizieren und kann nicht in die DDB eingespielt werden.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zum-Datensatz).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2643,7 +2643,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Jeder METS-Datensatz muss durch ein <xsl:text/>mods:recordIdentifier<xsl:text/> Element eindeutig identifiziert werden. Ist mehr als ein <xsl:text/>mods:recordIdentifier<xsl:text/> vorhanden, wird nach Rücksprache mit Ihnen anhand der im Attribut <xsl:text/>source<xsl:text/> genannten Quelle des Identifiers entschieden, welches <xsl:text/>mods:recordIdentifier<xsl:text/> bei der Bereinigung des Datensatzes erhalten bleibt. Alle anderen <xsl:text/>mods:recordIdentifier<xsl:text/> werden bei der Bereinigung des Datensatzes entfernt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zum-Datensatz).</svrl:text>
             <svrl:property id="dmd_id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                              select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2658,24 +2658,60 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
    </xsl:template>
    <!--PATTERN -->
    <!--RULE -->
-   <xsl:template match="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier"
+   <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[count(distinct-values(mods:recordInfo/mods:recordIdentifier[@source]/@source)) = 1]/mods:recordInfo[1]/mods:recordIdentifier[1]"
+                 priority="1001"
+                 mode="M56">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[count(distinct-values(mods:recordInfo/mods:recordIdentifier[@source]/@source)) = 1]/mods:recordInfo[1]/mods:recordIdentifier[1]"/>
+      <!--ASSERT fatal-->
+      <xsl:choose>
+         <xsl:when test="matches(text()[1], '^[a-zA-Z_0-9:\-.!]+$')"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="matches(text()[1], '^[a-zA-Z_0-9:\-.!]+$')">
+               <xsl:attribute name="id">recordInfo_04</xsl:attribute>
+               <xsl:attribute name="role">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>Der Wert im für den DDB-Identifier relevanten Vorkommen des Elements <xsl:text/>mods:recordIdentifier<xsl:text/> darf nur die folgenden Zeichen enthalten:
+ * Buchstaben
+ * Zahlen
+ * <xsl:text/>:<xsl:text/>
+ * <xsl:text/>.<xsl:text/>
+ * <xsl:text/>!<xsl:text/>
+ * <xsl:text/>-<xsl:text/>
+ * <xsl:text/>\<xsl:text/>
+Die DDB wertet für den DDB-Identifier das erste Vorkommen (XML-Reihenfolge) von <xsl:text/>mods:recordIdentifier<xsl:text/> aus.
+Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://deutsche-digitale-bibliothek.atlassian.net/wiki/x/eAjeAg).</svrl:text>
+               <svrl:property id="dmd_id">
+                  <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                                select="ancestor-or-self::mets:dmdSec/@ID"/>
+               </svrl:property>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M56"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[count(distinct-values(mods:recordInfo/mods:recordIdentifier[@source]/@source)) &gt; 1]/mods:recordInfo/mods:recordIdentifier"
                  priority="1000"
                  mode="M56">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier"/>
+                       context="mets:dmdSec[@ID=$work_dmdid]/mets:mdWrap/mets:xmlData/mods:mods[count(distinct-values(mods:recordInfo/mods:recordIdentifier[@source]/@source)) &gt; 1]/mods:recordInfo/mods:recordIdentifier"/>
       <!--ASSERT fatal-->
       <xsl:choose>
          <xsl:when test="matches(text()[1], '^[^ /]+$')"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                 test="matches(text()[1], '^[^ /]+$')">
-               <xsl:attribute name="id">recordInfo_04</xsl:attribute>
+               <xsl:attribute name="id">recordInfo_06</xsl:attribute>
                <xsl:attribute name="role">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>Damit die DDB Identifier verarbeiten kann, dürfen sie keine Leerzeichen und / oder Sonderzeichen enthalten. Ist dies der Fall, kann es Probleme bei der Verarbeitung geben. Daher werden Datensätze, deren Identifier Leerzeichen und / oder Sonderzeichen enthalten, nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzumDatensatz).</svrl:text>
+               <svrl:text>Der Wert im Element <xsl:text/>mods:recordIdentifier<xsl:text/> enthält Leer- und / oder Sonderzeichen. Dies kann zu Problemen bei der Verarbeitung in der DDB führen, daher wird der Datensatz nicht in die DDB eingespielt.
+Weitere Informationen zu diesem Element finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mods:recordInfo (https://deutsche-digitale-bibliothek.atlassian.net/wiki/x/eAjeAg).</svrl:text>
                <svrl:property id="dmd_id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                                 select="ancestor-or-self::mets:dmdSec/@ID"/>
@@ -2706,7 +2742,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>
                   <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> ist notwendig, um die logische Struktur eines Dokuments anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -2729,7 +2765,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> durch ineinander verschachtelte <xsl:text/>mets:div<xsl:text/> repräsentiert werden. Die <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> muss mindestens für die oberste dieser Ebenen eine <xsl:text/>mets:div<xsl:text/> enthalten, in der die oberste Ebene des Dokuments beschrieben wird. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -2758,7 +2794,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die logische Struktur eines Dokuments kann aus beliebig vielen Ebenen bestehen, die in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> durch ineinander verschachtelte <xsl:text/>mets:div<xsl:text/> repräsentiert werden. Jede dieser <xsl:text/>mets:div<xsl:text/> muss in dem Attribut <xsl:text/>ID<xsl:text/> einen eindeutigen Identifier enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2790,7 +2826,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Um die Beziehung zwischen der logischen Struktur eines Dokuments und den dazugehörigen Seiten herstellen zu können, muss jeder Identifier einer <xsl:text/>mets:div<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> im <xsl:text/>mets:structLink<xsl:text/> den jeweiligen Identifiern der Seiten zugeordnet werden. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2821,7 +2857,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der <xsl:text/>mets:div<xsl:text/> in dem Attribut <xsl:text/>TYPE<xsl:text/>. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen. Fehlt das Attribut <xsl:text/>TYPE<xsl:text/> in einem der <xsl:text/>mets:div<xsl:text/>, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2849,7 +2885,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>Jede Ebene innerhalb der logischen Struktur muss durch einen Strukturtyp spezifiziert werden. Der Strukturtyp steht in der <xsl:text/>mets:div<xsl:text/> in dem Attribut <xsl:text/>TYPE<xsl:text/>. Erlaubt sind hier nur Werte aus der Liste der DFG-Viewer Strukturtypen (https://dfg-viewer.de/strukturdatenset/) (s. dort die Spalte XML).
 Werden in dem Attribut <xsl:text/>TYPE<xsl:text/> andere Begriffe als die in der Liste vorgesehenen verwendet, wird er bei der Bereinigung der Daten durch den Strukturtyp <xsl:text/>section<xsl:text/> ersetzt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2884,7 +2920,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Ist das Attribut <xsl:text/>DMDID<xsl:text/> des Elements <xsl:text/>mets:div<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> vorhanden, muss es eine dazugehörige <xsl:text/>mets:dmdSec<xsl:text/> mit dem gleichen Wert im Attribut <xsl:text/>ID<xsl:text/> geben. Ist dies nicht der Fall, wird die Verknüpfung in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> entfernt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2918,7 +2954,7 @@ In der darunterliegenden <xsl:text/>mets:div<xsl:text/> wird auf die einzelnen M
 In der darunterliegenden <xsl:text/>mets:div<xsl:text/> wird auf das tägliche Erscheinen verwiesen, der Wert im Attribut <xsl:text/>TYPE<xsl:text/> muss <xsl:text/>day<xsl:text/> lauten.
 In der darunterliegenden <xsl:text/>mets:div<xsl:text/> wird auf die Ausgabe verwiesen, der Wert im Attribut <xsl:text/>TYPE<xsl:text/> muss <xsl:text/>issue<xsl:text/> lauten.
 Falls die Strukturtypen nicht entsprechend verwendet werden, werden bei der Transformation der Daten ggf. die entsprechenden Strukturtypen übernommen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2949,7 +2985,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die Ausgabe enthält keinen <xsl:text/>mets:mptr<xsl:text/>, der auf den METS-Datensatz des Jahrgangs verlinkt. Dieser Fehler verhindet nicht das Einspielen der Daten in die DDB, entspricht aber nicht den Vorgaben im METS/MODS-Anwendungsprofil für Zeitungen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -2978,7 +3014,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Im METS-Datensatz zu der Ausgabe einer Zeitung darf kein <xsl:text/>mets:mptr<xsl:text/> enhalten sein, der auf eben diesen METS-Datensatz verweist. Ist dies der Fall, wird der <xsl:text/>mets:mptr<xsl:text/> bei der Transformation der Daten entfernt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -3009,7 +3045,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jede Ausgabe bzw. Beilage muss eine <xsl:text/>mets:dmdSec<xsl:text/> enthalten, die die bibliographische Beschreibung der Ausgabe bzw. Beilage enthält. Diese <xsl:text/>mets:dmdSec<xsl:text/> muss durch einen Identifier eindeutig beschrieben werden, der in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> in der <xsl:text/>mets:div<xsl:text/> mit dem Strukturtyp <xsl:text/>issue<xsl:text/> bzw. <xsl:text/>additional<xsl:text/> in dem Attribut <xsl:text/>DMDID<xsl:text/> steht.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurlogischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-logischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3069,7 +3105,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet auf der Ebene des primären <xsl:text/>mets:div<xsl:text/>-Elements im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> dürfen keine weiteren <xsl:text/>mets:div<xsl:text/>-Elemente vorhanden sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Unterelemente-zu-mets%3AstructMap).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -3098,7 +3134,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Ein Datensatz muss entweder eine Ausgabe oder eine Beilage beschreiben. Das bedeutet er darf im Element <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> nur in einem Zweig ein primäres <xsl:text/>mets:div<xsl:text/>-Element enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://wiki.deutsche-digitale-bibliothek.de/x/o8IeB) und im Bereich Aufbau für Zeitungsausgaben (https://wiki.deutsche-digitale-bibliothek.de/x/ugGuB).</svrl:text>
+Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-METS/MODS-Anwendungsprofil auf der Seite mets:structMap[@TYPE='LOGICAL'] (https://deutsche-digitale-bibliothek.atlassian.net/wiki/x/bAXeAg) und im Bereich Aufbau für Zeitungsausgaben (https://deutsche-digitale-bibliothek.atlassian.net/wiki/x/5wHeAg).</svrl:text>
             <svrl:property id="id">
                <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
             </svrl:property>
@@ -3127,7 +3163,7 @@ Weitere Informationen zu diesem Element und seinem Kontext finden Sie im DDB-MET
                </xsl:attribute>
                <svrl:text>
                   <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> ist notwendig, um die Seiten des Dokuments in der richtigen Reihenfolge anzuzeigen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-physischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3152,7 +3188,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>
                   <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss auf der obersten Ebene immer eine <xsl:text/>mets:div<xsl:text/> enthalten, die in dem Attribut <xsl:text/>TYPE<xsl:text/> den Wert <xsl:text/>physSequence<xsl:text/> enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-physischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3177,7 +3213,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>
                   <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss mindestens eine <xsl:text/>mets:div<xsl:text/> enthalten, die in dem Attribut <xsl:text/>TYPE<xsl:text/> den Wert <xsl:text/>page<xsl:text/> enthält. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-physischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3206,7 +3242,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jede <xsl:text/>mets:div<xsl:text/> innerhalb von <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss in dem Attribut <xsl:text/>ID<xsl:text/> einen eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-physischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3237,7 +3273,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jede <xsl:text/>mets:div<xsl:text/> innerhalb von <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> die das Attribut <xsl:text/>TYPE<xsl:text/> mit dem Wert <xsl:text/>page<xsl:text/> enthält, muss auch ein Attribut order enthalten. Das Fehlen des Attributs order verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-physischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3264,7 +3300,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>In der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss der Wert in dem Attribut <xsl:text/>order<xsl:text/> innerhalb der <xsl:text/>mets:div[@TYPE='page']<xsl:text/> immer ein Integer sein.
 Ist dies nicht der Fall, verhindert es nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen, da es Probleme bei der Anzeige der Seiten im Viewer nach sich ziehen kann.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-physischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3296,7 +3332,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jede <xsl:text/>mets:div[@TYPE='page']<xsl:text/> innerhalb von <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> muss das Unterelement <xsl:text/>mets:fptr<xsl:text/> enthalten, das im Attribut <xsl:text/>FILEID<xsl:text/> den Identifier enthält, der auf die jeweiligen Bilder in der <xsl:text/>mets:fileSec<xsl:text/> verlinkt. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AngabenzurphysischenDokumentenstrukturderAusgabe).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Angaben-zur-physischen-Dokumentenstruktur-der-Ausgabe).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3357,7 +3393,7 @@ Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.</svrl:
                </xsl:attribute>
                <svrl:text>
                   <xsl:text/>mets:structLink<xsl:text/> ist notwendig, um die Ebenen der logischen Struktur mit den dazugehörigen Seiten zu verknüpfen. Fehlt diese Information, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Verkn%C3%BCpfung-von-logischer-und-physischer-Struktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3380,7 +3416,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> und den dazugehörigen Seiten in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> erfolgt im <xsl:text/>mets:structLink<xsl:text/> in den Unterelementen <xsl:text/>mets:smLink<xsl:text/>. Ist kein <xsl:text/>mets:smLink<xsl:text/> vorhanden, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Verkn%C3%BCpfung-von-logischer-und-physischer-Struktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3404,7 +3440,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> und den dazugehörigen Seiten in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> erfolgt im <xsl:text/>mets:structLink<xsl:text/> in den Unterelementen <xsl:text/>mets:smLink<xsl:text/> über die Attribute <xsl:text/>xlink:from<xsl:text/> und <xsl:text/>xlink:to<xsl:text/>. Fehlt eines dieser Attribute, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Verkn%C3%BCpfung-von-logischer-und-physischer-Struktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3428,7 +3464,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die Verknüpfung zwischen den logischen Ebenen der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> und den dazugehörigen Seiten in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> erfolgt im <xsl:text/>mets:structLink<xsl:text/> in den Unterelementen <xsl:text/>mets:smLink<xsl:text/> über die Attribute <xsl:text/>xlink:from<xsl:text/> und <xsl:text/>xlink:to<xsl:text/>. Dafür muss jeder Identifier, der in einem <xsl:text/>mets:smLink<xsl:text/> steht einem <xsl:text/>mets:div/@ID<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> entsprechen. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Verkn%C3%BCpfungvonlogischerundphysischerStruktur).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Verkn%C3%BCpfung-von-logischer-und-physischer-Struktur).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3482,7 +3518,7 @@ Verwenden die Attribute einen ungültigen Namensraum ist eine Verarbeitung des D
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:fileSec<xsl:text/> enthält die Links zu den digitalen Bildern. Fehlt die <xsl:text/>mets:fileSec<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zu-den-digitalen-Repr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3506,7 +3542,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:fileSec<xsl:text/> enthält die Links zu den digitalen Bildern in unterschiedlichen Auflösungen. Um welche Art von Auflösung es sich dabei handelt, wird über die <xsl:text/>mets:fileGrp<xsl:text/> angegeben. Jede Auflösung eines Bildes wird daher der entsprechenden <xsl:text/>mets:fileGrp<xsl:text/> zugeordnet. Eine <xsl:text/>mets:fileSec<xsl:text/> muss mindestens die <xsl:text/>mets:fileGrp[@USE='DEFAULT']<xsl:text/> enthalten. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zu-den-digitalen-Repr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3530,7 +3566,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>In der <xsl:text/>mets:fileSec<xsl:text/> sind innerhalb der <xsl:text/>mets:fileGrp<xsl:text/> die einzelnen Bilder gelistet. Die <xsl:text/>mets:fileGrp[@USE='DEFAULT']<xsl:text/> muss mindestens ein <xsl:text/>mets:file<xsl:text/> enthalten und dieses muss in dem Unterelement <xsl:text/>mets:FLocat<xsl:text/> das Attribut xlink:href enthalten, in der sich der Link zu dem digitalen Bild befindet. Fehlt <xsl:text/>mets:file<xsl:text/> mit dem Attribut <xsl:text/>xlink:href<xsl:text/> im Unterelement <xsl:text/>mets:FLocat<xsl:text/>, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zu-den-digitalen-Repr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3559,7 +3595,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jedes <xsl:text/>mets:file<xsl:text/> in der <xsl:text/>mets:fileSec<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Ist dies nicht der Fall, wird der METS-Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zu-den-digitalen-Repr%C3%A4sentationen).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3591,7 +3627,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>In der <xsl:text/>mets:fileSec<xsl:text/> wird innerhalb der <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> auf die Volltexte der einzelnen Seiten verlinkt. Die Bereitstellung von Volltexten ist für alle Zeitungsausgaben im Deutsche Zeitungsportal gewünscht, aber nicht verpflichtend. Die Volltextsuche ist der zentrale Einstieg zu den Inhalten des Zeitungsportals. Die Inhalte von Zeitungen ohne Volltext sind für NutzerInnen schwerer zugänglich.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zu-den-digitalen-Repr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3615,7 +3651,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> muss mindestens ein <xsl:text/>mets:file<xsl:text/> enthalten. Fehlt <xsl:text/>mets:file<xsl:text/> mit dem Attribut xlink:href im Unterelement <xsl:text/>mets:FLocat<xsl:text/>, wird der Datensatz nicht in das Deutsche Zeitungsportal eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzudendigitalenRepr%C3%A4sentationen).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zu-den-digitalen-Repr%C3%A4sentationen).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3643,7 +3679,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
             </xsl:attribute>
             <svrl:text>In der <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> fehlt mindestens einem enthaltenden <xsl:text/>mets:file<xsl:text/> das Attribut MIMETYPE mit dem Wert <xsl:text/>text/xml<xsl:text/>. Die <xsl:text/>mets:file<xsl:text/> in <xsl:text/>mets:fileGrp[@USE='FULLTEXT']<xsl:text/> müssen in ihrem Unterelement <xsl:text/>mets:FLocat<xsl:text/> im Attribut <xsl:text/>xlink:href<xsl:text/> auf eine ALTO-Datei verweisen.
 Fehlt das zur entsprechenden Auszeichung benötigte Attribut <xsl:text/>MIMETYPE<xsl:text/> in <xsl:text/>mets:file<xsl:text/> oder besitzt es einen anderen Wert als <xsl:text/>text/xml<xsl:text/>, geht das Zeitungsportal trotzdem davon aus, dass im Unterelement <xsl:text/>mets:FLocat<xsl:text/> im Attribut <xsl:text/>xlink:href<xsl:text/> eine ALTO-Datei referenziert wird.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zur-Datei).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M79"/>
@@ -3667,7 +3703,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <xsl:apply-templates select="." mode="schematron-select-full-path"/>
             </xsl:attribute>
             <svrl:text>Jedes <xsl:text/>mets:file<xsl:text/> Element im Element <xsl:text/>mets:fileSec<xsl:text/> muss das Attribut <xsl:text/>MIMETYPE<xsl:text/> besitzen. Der Datensatz enthält mindestens ein <xsl:text/>mets:file<xsl:text/> ohne das Attribut <xsl:text/>MIMETYPE<xsl:text/>. Da dies Auswirkungen auf die Anzeige in der DDB haben kann, bitten Sie den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zur-Datei).</svrl:text>
          </svrl:successful-report>
       </xsl:if>
       <xsl:apply-templates select="*" mode="M80"/>
@@ -3695,7 +3731,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jedes <xsl:text/>mets:file<xsl:text/> Element in einem <xsl:text/>mets:fileGrp<xsl:text/> Element mit einem der Werte <xsl:text/>DEFAULT<xsl:text/>, <xsl:text/>THUMBS<xsl:text/> oder <xsl:text/>FULLTEXT<xsl:text/> im Attribut <xsl:text/>USE<xsl:text/> muss von einem <xsl:text/>mets:fptr<xsl:text/> Element innerhalb des Elements <xsl:text/>mets:structMap[@TYPE='PHYSICAL']<xsl:text/> über dessen Attribut <xsl:text/>FILEID<xsl:text/> referenziert sein. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-InformationenzurDatei).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Informationen-zur-Datei).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3725,7 +3761,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:dmdSec<xsl:text/> der Ausgabe bzw. Beilage enthält ihre bibliographische Beschreibung. Sie muss mit dem <xsl:text/>mets:div[@TYPE='issue']<xsl:text/> bzw. <xsl:text/>mets:div[@TYPE='additional']<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> verlinkt sein.
 Ein Datensatz darf nur ein <xsl:text/>mets:div[@TYPE='issue']<xsl:text/> oder ein <xsl:text/>mets:div[@TYPE='additional']<xsl:text/> in der <xsl:text/>mets:structMap[@TYPE='LOGICAL']<xsl:text/> enthalten. Sind diese Voraussetzungen nicht erfüllt, wird der Datensatz nicht in das Zeitungsportal eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-Unterelementezumods:structMap).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Unterelemente-zu-mets%3AstructMap).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3832,7 +3868,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Die <xsl:text/>mets:amdSec<xsl:text/> enthält die administrativen Metadaten zum Digitalisat. Innerhalb eines METS-Datensatzes muss eine <xsl:text/>mets:amdSec<xsl:text/> für das primäre logische Strukturelement geben. Ist dies nicht der Fall, wird der Datensatz nicht in die DDB eingespielt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Administrative-Metadaten).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -3853,7 +3889,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>Jede <xsl:text/>mets:amdSec<xsl:text/> muss das Attribut <xsl:text/>ID<xsl:text/> mit einem eindeutigen Identifier enthalten. Der Identifier darf keine ungültigen Zeichen enthalten. Das Fehlen der <xsl:text/>ID<xsl:text/> verhindert nicht das Einspielen der Daten in die DDB, wir bitten Sie jedoch, den Sachverhalt zu prüfen und die nötigen Korrekturen bis zur nächsten Datenlieferung vorzunehmen.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Administrative-Metadaten).</svrl:text>
                <svrl:property id="id">
                   <xsl:value-of xmlns:sch="http://purl.oclc.org/dsdl/schematron" select="./@ID"/>
                </svrl:property>
@@ -3887,7 +3923,7 @@ Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil
                <svrl:text>Jeder Datensatz muss Informationen über die Rechte an den Digitalisaten enthalten, damit er in die DDB eingespielt werden kann. Der Link zu einer Lizenz bzw. einem Rightsstatement steht in der <xsl:text/>mets:rightsMD<xsl:text/> in dem Element <xsl:text/>dv:license<xsl:text/>, das ein Unterelement von <xsl:text/>dv:rights<xsl:text/>, das wiederum ein Unterelement von <xsl:text/>mets:xmlData<xsl:text/>, das wiederum ein Unterelement von <xsl:text/>mets:mdWrap<xsl:text/> ist.
 Ist die Verwendung von <xsl:text/>dv:license<xsl:text/> nicht möglich, muss die Lizenz bzw. das Rightsstatement in <xsl:text/>mods:accessCondition[@type='use and reproduction']<xsl:text/> stehen.
 Ist keines von beiden der Fall, wird nach Rücksprache mit dem Datengeber für alle Datensätze bei der Bereinigung der Daten eine Standard-Lizenz gesetzt.
-Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://wiki.deutsche-digitale-bibliothek.de/display/DFD/Ausgabe+Zeitung+1.0#AusgabeZeitung1.0-AdministrativeMetadaten).</svrl:text>
+Weitere Informationen zu diesem Element finden Sie im METS/MODS-Anwendungsprofil für Zeitungen (https://deutsche-digitale-bibliothek.atlassian.net/wiki/spaces/DFD/pages/48104247/Ausgabe+Zeitung+1.0#Administrative-Metadaten).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>

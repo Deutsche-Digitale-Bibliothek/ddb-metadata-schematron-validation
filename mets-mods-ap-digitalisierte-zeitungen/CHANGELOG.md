@@ -4,14 +4,21 @@ Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Ze
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
 
+## v2026-02-06T08:12:23
+
+### Added
+- Prüfung `recordInfo_06` hinzugefügt:  "Ungültiger Wert in mods:recordIdentifier"
+
+### Changed
+- Alle Verweise (URLs) auf das „DDBinfo für Daten“-Wiki aktualisiert (Anwendungsprofil und Beispiele)
+- Prüfung `recordInfo_04`: Die Prüfung wurde präzisiert. Dabei wurden sowohl der XPath für zu testenden Elemente als auch der Regex zum Testen des Wertes angepasst.
+
 ## v2024-12-13T09:06:22
 
 ### Added
-
 - Prüfung `structMapLogical_29` hinzugefügt: "mets:structMap\[@TYPE='LOGICAL'\] enthält mehrere primäre mets:div" 
 
 ### Changed
-
 - Fehlende Leerzeichen in Meldungen ergänzt ([Pull Request #15](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/15))
 - Prüfung `language_02`: Die Prüfung ignoriert nun leere `mods:languageTerm`-Elemente
 - Prüfung `dmdSec_01`: Tippfehler korrigiert ([Pull Request #15](https://github.com/Deutsche-Digitale-Bibliothek/ddb-metadata-schematron-validation/pull/15))
@@ -20,7 +27,6 @@ Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden S
 ## v2024-02-29T15:26:03
 
 ### Added
-
 - Prüfung `all_07` hinzugefügt: "Ungültiger Namensraum für METS-Elemente"
 - Prüfung `all_08` hinzugefügt: "Ungültiger Namensraum für MODS-Elemente"
 - Prüfung `all_09` hinzugefügt: "Ungültiger Namensraum für DFG-Viewer-Elemente (dv)"
@@ -28,7 +34,6 @@ Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden S
 - Prüfung `structLink_05` hinzugefügt: "Ungültiger Namensraum für XLink-Attribute von mets:smLink"
 
 ### Changed
-
 - Selektion des primären `mets:div` Elements präzisiert. Dies betrifft folgende Prüfungen:
     - `amdSec_04`
     - `amdSec_05`
@@ -40,13 +45,11 @@ Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden S
 - Prüfung `structMapLogical_15`: Die Prüfung auf das primäre `mets:div` Element eingeschränkt 
 
 ### Removed
-
 - Prüfung `structMapLogical_18` entfernt: "Der Datensatz enthält mehrere primäre Strukturelemente" 
 
 ## v2023-05-05T15:51:41
 
 ### Added
-
 - Prüfung `fileSec_09` hinzugefügt: "Nicht referenziertes mets:file"
 - Fehler-Level `caution` hinzugefügt: "Datensätze, bei denen ein Verdacht auf Fehler vorliegt"
 
