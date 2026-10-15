@@ -3,6 +3,131 @@ Changelog der Schematron-Validierung für das DDB-METS/MODS Anwendungsprofil fü
 
 Informationen zu den Schematron-Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+## v2026-10-15T08:13:09
+Im Zuge der Neuausrichtung der DDB als (nationale) Dateninfrastruktur und der angestrebten Nutzung der Daten durch Dritte hat die DDB entschieden, das Aufteilen von Werken (z. B. Monographien) in Strukturelemente wie z. B. Kapitel oder Illustrationen einzustellen. Künftig werden Werke nur noch als Ganzes angezeigt. 
+
+Diese Änderung führt zu zahlreichen Anpassungen, insbesondere zur Einschränkung von Prüfungen auf das primäre mets:dmdSec-Element. Die Details zu den konkreten Änderungen sind in den folgenden Abschnitten dokumentiert.
+
+### Added
+- Prüfung `all_10` hinzugefügt: "Ungültige Elemente in der obersten MODS-Ebene in einem nicht-primären mets:dmdSec-Element"
+- Prüfung `titleInfo_10` hinzugefügt: "Ungültiger Wert im Attribut type von mods:titleInfo in einem nicht-primären mets:dmdSec-Element"
+- Prüfung `name_18` hinzugefügt: "Ungültiger Wert im Attribut type von mods:namePart in einem nicht-primären mets:dmdSec-Element"
+- Prüfung `name_19` hinzugefügt: "Unterelemente von mods:name enthalten in einem nicht-primären mets:dmdSec-Element das Attribut valueURI"
+- Prüfung `subject_05` hinzugefügt: "Unvollständiges bzw. nicht unterstütztes mods:subject"
+- Prüfung `subject_06` hinzugefügt: "Unklare Zuordnung einer URI in mods:subject"
+- Prüfung `relatedItem_13` hinzugefügt: "Selbstreferenz in mods:relatedItem\[@type='host'\]"
+- Prüfung `amdSec_19` hinzugefügt: "Ungültiger URL in dv:presentation"
+- Prüfung `structMapLogical_29` hinzugefügt: "Nicht-primäre mets:dmdSec mit mehrfacher Referenzierung"
+- Prüfung `structMapPhysical_09` hinzugefügt: "mets:structMap\[@TYPE='PHYSICAL'\] enthält 3. mets:div-Ebene"
+
+### Changed
+- Tippfehler und Formulierungen in mehreren Prüfungen korrigiert bzw. angepasst
+- Die folgenden Prüfungen auf das primäre mets:dmdSec-Element beschränkt:
+  - `all_02`
+  - `all_03`
+  - `all_04`
+  - `all_05`
+  - `all_06`
+  - `titleInfo_03`
+  - `titleInfo_04`
+  - `titleInfo_06`
+  - `titleInfo_07`
+  - `titleInfo_08`
+  - `titleInfo_09`
+  - `name_01`
+  - `name_02`
+  - `name_04`
+  - `name_07`
+  - `name_08`
+  - `name_09`
+  - `name_10`
+  - `name_11`
+  - `name_12`
+  - `name_13`
+  - `name_14`
+  - `name_15`
+  - `name_16`
+  - `name_17`
+  - `originInfo_01`
+  - `originInfo_02`
+  - `originInfo_05`
+  - `originInfo_06`
+  - `originInfo_15`
+  - `originInfo_16`
+  - `originInfo_17`
+  - `originInfo_18`
+  - `language_02`
+  - `physicalDescription_01`
+  - `note_01`
+  - `note_02`
+  - `originInfo_18`
+  - `relatedItem_02`
+  - `relatedItem_03`
+  - `relatedItem_04`
+  - `relatedItem_05`
+  - `relatedItem_12`
+  - `identifier_01`
+  - `location_01`
+  - `location_04`
+  - `location_05`
+  - `location_06`
+  - `location_07`
+  - `accessCondition_02`
+  - `part_01`
+  - `part_02`
+  - `part_03`
+  - `part_04`
+  - `part_05`
+  - `part_12`
+  - `recordInfo_02`
+  - `recordInfo_03`
+  - `recordInfo_05`
+  - `amdSec_07`
+  - `amdSec_12`
+  - `amdSec_15`
+  - `amdSec_18`
+  - `structMapLogical_04`
+  - `structMapLogical_20`
+- Prüfung `name_04`: Die Prüfung vereinfacht
+- Prüfung `name_05`: Die Prüfung auf mods:name mit @type beschränkt
+- Prüfung `name_07`: Die Prüfung vereinfacht
+- Prüfung `name_08`: Die Prüfung auf mods:name mit @type beschränkt
+- Prüfung `name_11`: Das Meldungs-Level von `warn` auf `error` geändert
+- Prüfung `language_01`: Meldungstext präzisiert
+- Prüfung `relatedItem_02`: XPath präzisiert
+- Prüfung `relatedItem_04`: Unterstütze Werte für @type beschränkt und das Meldungs-Level von `error` auf `warn` geändert
+- Prüfung `relatedItem_05`: XPath präzisiert
+- Prüfung `part_01`: Die Prüfung vereinfacht
+- Prüfung `part_02`: Die Prüfung vereinfacht
+- Prüfung `part_03`: Das Meldungs-Level von `warn` auf `error` geändert und den Meldungstext angepasst
+- Prüfung `recordInfo_04`: Den Meldungstext präzisiert
+- Prüfung `recordInfo_06`: Den Meldungstext präzisiert
+- Prüfung `dmdSec_01`: Den XPath präzisiert und erweitert
+- Prüfung `dmdSec_02`: Das Meldungs-Level von `fatal` auf `warn` geändert
+- Prüfung `dmdSec_03`: Die Prüfung auf das nicht-primäre mets:dmdSec-Element beschränkt
+- Prüfung `dmdSec_04`: Die Prüfung auf das nicht-primäre mets:dmdSec-Element beschränkt und das Meldungs-Level von `error` auf `warn` geändert
+- Prüfung `amdSec_04`: Den Meldungstext präzisiert
+- Prüfung `amdSec_05`: Den Meldungstext präzisiert
+- Prüfung `amdSec_09`: XPath korrigiert (@ID anstatt @AMDID)
+- Prüfung `amdSec_14`: Den Meldungstext präzisiert
+- Prüfung `amdSec_16`: Den Meldungstext präzisiert
+- Prüfung `amdSec_17`: Den Meldungstext präzisiert
+- Prüfung `fileSec_08`: XPath präzisiert
+- Prüfung `structMapLogical_04`: Die Prüfung optimiert
+- Prüfung `structMapLogical_08`: Die Prüfung auf das erste Vorkommen beschränkt
+- Prüfung `structMapLogical_09`: Die Prüfung auf nicht-primäre mets:div beschränkt und das Meldungs-Level von `error` auf `warn` geändert
+- Prüfung `structMapLogical_21`: Die Prüfung auf nicht-primäre mets:div beschränkt
+- Prüfung `structMapLogical_22`: Den Meldungs-Level von `error` auf `warn` geändert und den Meldungstext angepasst
+- Prüfung `structMapPhysical_04`: Die Prüfung auf die obersten zwei Ebenen von `mets:div` eingeschränkt
+
+### Removed
+- Prüfung `titleInfo_02` entfernt: "mods:titleInfo fehlt in einem nicht-primären mets:dmdSec"
+- Prüfung `titleInfo_09` entfernt: "mods:titleInfo ist unvollständig"
+- Prüfung `subject_01` entfernt: "Das Attribut valueURI von mods:subject enthält keinen unterstützten URI"
+- Prüfung `subject_02` entfernt: "mods:title fehlt in mods:titleInfo"
+- Prüfung `subject_03` entfernt: "mods:displayForm fehlt in mods:name"
+- Prüfung `subject_04` entfernt: "Unterelemente fehlen in mods:cartographic"
+- Prüfung `dmdSec_02` entfernt: "mets:dmdSec ist unvollständig"
 
 ## v2026-02-06T08:12:14
 

@@ -1,8 +1,31 @@
 # Changelog
-Changelog der Schematron-Validierung für das METS/MODS-Anwendungsprofil für Zeitungen der Fachstelle Bibliothek.
+Changelog der Schematron-Validierung für das DDB-METS/MODS Anwendungsprofil für Zeitungen der Fachstelle Bibliothek.
 
 Informationen zu den Schematron Validierungen der Fachstelle Bibliothek finden Sie im [Wiki der Deutschen Digitalen Bibliothek](https://wiki.deutsche-digitale-bibliothek.de/x/q4aFAg).
 
+## v2026-10-15T08:13:20
+
+### Changed
+- Umfangreiche Überarbeitung der Meldungstexte 
+    - Die Links auf das Anwendungsprofil [Ausgabe Zeitung 1.0](https://deutsche-digitale-bibliothek.atlassian.net/wiki/x/NwPeAg) sind durch Links auf entsprechende Seiten des [DDB-METS/MODS Anwendungsprofils](https://wiki.deutsche-digitale-bibliothek.de/x/uwQiAQ) ersetzt
+    - Meldungstexte sind technischer formuliert
+    - Tippfehler und Zeichensetzung korrigiert
+    - Bezeichnungen vereinheitlicht
+- `language_03`: Prüfung präzisiert
+- `identifier_04`: Meldungslevel auf `error` erhöht
+
+### Removed
+- `typeOfResource_01` entfernt: "mods:typeOfResource fehlt"
+- `typeOfResource_02` entfernt: "Falscher Wert in mods:typeOfResource"
+- `physicalDescription_01` entfernt: "Die Angaben in mods:extent beziehen sich auf das Digitalisat"
+- `relatedItem_06` entfernt: "Der mods:recordIdentifier der Gesamtaufnahme fehlt in mods:relatedItem"
+- `identifier_02` entfernt: "Persistenter Identifier in mods:identifier fehlt" 
+- `amdSec_06` entfernt: "mets:digiprovMD ist unvollständig"
+- `structMapLogical_05` entfernt: "Das Attribut TYPE fehlt in mets:div in mets:structMap\[@TYPE='LOGICAL'\]"
+- `structMapLogical_06` entfernt: "Ungültiger Wert im Attribut TYPE von mets:div in mets:structMap\[@TYPE='LOGICAL'\]"
+- `structMapLogical_09` entfernt: "Ungültige Referenz im Attribut DMDID von mets:div in mets:structMap\[@TYPE='LOGICAL'\]"
+- `structMapLogical_12` entfernt: "Falsche Strukturtypen in der mets:div innerhalb von mets:structMap\[@TYPE='LOGICAL'\]"
+- `structMapLogical_13` entfernt: "mets:mptr zum Jahrgang fehlt"
 
 ## v2026-02-06T08:12:23
 
